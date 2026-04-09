@@ -1,0 +1,499 @@
+@import "tailwindcss";
+
+/* ============================================
+   DESIGN SYSTEM: The Scholarly Architect
+   Digital Quietude — calm, authoritative, paced
+   ============================================ */
+
+@theme inline {
+  /* Surface hierarchy — premium paper stack */
+  --color-surface: #f9f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f3f3fa;
+  --color-surface-container: #edecf4;
+  --color-surface-container-high: #e7e7ef;
+
+  /* Primary — deep professional blue */
+  --color-primary: #0051d3;
+  --color-primary-container: #2d6bf3;
+  --color-primary-fixed-dim: #003ea6;
+  --color-on-primary: #ffffff;
+
+  /* Secondary — sophisticated neutral */
+  --color-secondary: #5e5e62;
+  --color-on-secondary: #ffffff;
+
+  /* Tertiary — academic highlight gold */
+  --color-tertiary: #775600;
+  --color-tertiary-bright: #f4b400;
+
+  /* Text */
+  --color-on-surface: #1a1c20;
+  --color-on-surface-variant: #44464e;
+  --color-outline-variant: #c4c5d0;
+
+  /* Fonts */
+  --font-display: var(--font-newsreader);
+  --font-body: var(--font-lexend);
+  --font-label: var(--font-jakarta);
+}
+
+/* ============================================
+   BASE TYPOGRAPHY
+   ============================================ */
+
+body {
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   READING PROGRESS BAR
+   ============================================ */
+
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-tertiary), var(--color-tertiary-bright));
+  z-index: 100;
+  transition: width 50ms linear;
+}
+
+/* ============================================
+   PROSE STYLES — The Editorial Engine
+   ============================================ */
+
+.prose {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-on-surface);
+  max-width: 72ch;
+}
+
+.prose h1 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  color: var(--color-on-surface);
+}
+
+.prose h2 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-on-surface);
+}
+
+.prose h3 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-on-surface);
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+}
+
+.prose strong {
+  font-weight: 650;
+  color: var(--color-on-surface);
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose a:not(.heading-anchor) {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--color-primary);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 0.15s ease;
+}
+
+.prose a:not(.heading-anchor):hover {
+  text-decoration-color: var(--color-primary-container);
+}
+
+.prose .heading-anchor {
+  text-decoration: none;
+  color: inherit;
+}
+
+.prose .heading-anchor:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--color-outline-variant);
+  text-underline-offset: 4px;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose li::marker {
+  color: var(--color-secondary);
+}
+
+.prose blockquote {
+  padding-left: 1.25rem;
+  margin-left: 0;
+  margin-bottom: 1.25rem;
+  color: var(--color-on-surface-variant);
+  font-style: italic;
+  position: relative;
+}
+
+.prose blockquote::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+
+.prose hr {
+  border: none;
+  margin: 3rem 0;
+}
+
+.prose code {
+  font-size: 0.9em;
+  background: var(--color-surface-container);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+}
+
+.prose pre {
+  background: var(--color-surface-container-low);
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* ============================================
+   CALLOUT COMPONENTS
+   ============================================ */
+
+.callout {
+  margin: 2rem 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  position: relative;
+}
+
+.callout-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-label), var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.callout-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.callout-content {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.callout-content p {
+  margin-bottom: 0;
+}
+
+.callout-content p + p {
+  margin-top: 0.75rem;
+}
+
+/* Danger — red tones */
+.callout-danger {
+  background: #fef2f2;
+  color: #7f1d1d;
+}
+.callout-danger .callout-header {
+  color: #991b1b;
+}
+
+/* Caution — amber tones */
+.callout-caution {
+  background: #fffbeb;
+  color: #78350f;
+}
+.callout-caution .callout-header {
+  color: #92400e;
+}
+
+/* Important — blue tones */
+.callout-important {
+  background: #eff6ff;
+  color: #1e3a5f;
+}
+.callout-important .callout-header {
+  color: var(--color-primary);
+}
+
+/* Story — warm neutral */
+.callout-story {
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface-variant);
+}
+.callout-story .callout-header {
+  color: var(--color-tertiary);
+}
+
+/* ============================================
+   TABLE OF CONTENTS — Sidebar
+   ============================================ */
+
+.toc-link {
+  display: block;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--color-on-surface-variant);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+}
+
+.toc-link:hover {
+  color: var(--color-on-surface);
+  background: var(--color-surface-container);
+}
+
+.toc-link.active {
+  color: var(--color-primary);
+  background: var(--color-surface-container-low);
+  font-weight: 500;
+}
+
+.toc-part {
+  font-family: var(--font-label), var(--font-body), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-secondary);
+  padding: 1rem 0.75rem 0.25rem;
+}
+
+.toc-child {
+  padding-left: 1.5rem;
+  font-size: 0.75rem;
+}
+
+/* ============================================
+   SECTION CONTAINER
+   ============================================ */
+
+.section-container {
+  padding: 3rem 0;
+  scroll-margin-top: 1rem;
+}
+
+.section-container + .section-container {
+  position: relative;
+}
+
+.section-container + .section-container::before {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 1px;
+  background: var(--color-surface-container-high);
+  margin-bottom: 3rem;
+}
+
+.section-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+
+/* ============================================
+   EDIT / GITHUB LINKS
+   ============================================ */
+
+.edit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-label), var(--font-body), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-secondary);
+  text-decoration: none;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  background: var(--color-surface-container-low);
+  transition: all 0.15s ease;
+}
+
+.edit-link:hover {
+  color: var(--color-primary);
+  background: var(--color-surface-container);
+}
+
+/* ============================================
+   GLASSMORPHISM — Sticky elements
+   ============================================ */
+
+.glass {
+  background: rgba(249, 249, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ============================================
+   TEXT SELECTION HIGHLIGHT
+   ============================================ */
+
+::selection {
+  background: rgba(244, 180, 0, 0.25);
+  color: var(--color-on-surface);
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-container-high);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-outline-variant);
+}
+
+/* ============================================
+   WIP SECTIONS — Faded treatment
+   ============================================ */
+
+.section-wip {
+  opacity: 0.45;
+  transition: opacity 0.3s ease;
+}
+
+.section-wip:hover {
+  opacity: 0.7;
+}
+
+.wip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-label), var(--font-body), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-secondary);
+  background: var(--color-surface-container);
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+.wip-badge-icon {
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+
+.toc-wip {
+  opacity: 0.5;
+}
+
+.toc-wip.active {
+  opacity: 0.7;
+}
+
+.toc-wip-icon {
+  margin-left: 0.375rem;
+  font-size: 0.6875rem;
+}
+
+/* ============================================
+   PART DIVIDER
+   ============================================ */
+
+.part-header {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
+  padding: 2.5rem 0 1rem;
+  margin-top: 2rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .prose {
+    font-size: 1rem;
+  }
+
+  .prose h1 {
+    font-size: 1.625rem;
+  }
+
+  .prose h2 {
+    font-size: 1.3125rem;
+  }
+}
