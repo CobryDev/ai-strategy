@@ -1,5 +1,11 @@
 import fs from "fs";
 import path from "path";
+import {
+  type SectionBlame,
+  getBlameData,
+  getRevisionCount,
+  getSectionBlame,
+} from "./git";
 
 export interface Section {
   id: string;
@@ -12,6 +18,7 @@ export interface Section {
   level: "part" | "section" | "appendix";
   wip: boolean;
   subsections: { id: string; title: string }[];
+  blame: SectionBlame;
 }
 
 export interface TableOfContentsEntry {
@@ -171,6 +178,8 @@ export function parseContentIntoSections(): Section[] {
     }
   }
 
+  const blameMap = getBlameData();
+
   for (let i = 0; i < markers.length; i++) {
     const marker = markers[i];
     const nextMarker = markers[i + 1];
@@ -178,7 +187,6 @@ export function parseContentIntoSections(): Section[] {
     const endLine = nextMarker ? nextMarker.line - 1 : lines.length - 1;
 
     const sectionLines = lines.slice(startLine, endLine + 1);
-    // Trim trailing empty lines and horizontal rules
     while (
       sectionLines.length > 0 &&
       (sectionLines[sectionLines.length - 1].trim() === "" ||
@@ -192,17 +200,21 @@ export function parseContentIntoSections(): Section[] {
       ? slugify(`${marker.number} ${marker.title}`)
       : slugify(marker.title);
 
+    const start1 = startLine + 1;
+    const end1 = endLine + 1;
+
     sections.push({
       id,
       number: marker.number,
       title: marker.title,
       part: marker.part,
       content,
-      startLine: startLine + 1, // 1-indexed for GitHub
-      endLine: endLine + 1,
+      startLine: start1,
+      endLine: end1,
       level: marker.type,
       wip: marker.wip,
       subsections: extractSubsections(content),
+      blame: getSectionBlame(blameMap, start1, end1),
     });
   }
 
@@ -224,11 +236,15 @@ export function getGitHubEditUrl(
   startLine: number,
   endLine: number,
 ): string {
-  const repo = process.env.NEXT_PUBLIC_GITHUB_REPO || "your-org/holloway-cobry";
+  const repo = process.env.NEXT_PUBLIC_GITHUB_REPO || "CobryDev/ai-strategy";
   return `https://github.com/${repo}/edit/main/content.md#L${startLine}-L${endLine}`;
 }
 
 export function getGitHubHistoryUrl(): string {
-  const repo = process.env.NEXT_PUBLIC_GITHUB_REPO || "your-org/holloway-cobry";
+  const repo = process.env.NEXT_PUBLIC_GITHUB_REPO || "CobryDev/ai-strategy";
   return `https://github.com/${repo}/commits/main/content.md`;
+}
+
+export function getContentRevisionCount(): number {
+  return getRevisionCount();
 }

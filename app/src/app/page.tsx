@@ -1,4 +1,8 @@
-import { parseContentIntoSections, getTableOfContents } from "@/lib/content";
+import {
+  parseContentIntoSections,
+  getTableOfContents,
+  getContentRevisionCount,
+} from "@/lib/content";
 import { markdownToHtml } from "@/lib/markdown";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { TableOfContents } from "@/components/TableOfContents";
@@ -8,6 +12,7 @@ import { Header } from "@/components/Header";
 export default async function Home() {
   const sections = parseContentIntoSections();
   const toc = getTableOfContents();
+  const revisionCount = getContentRevisionCount();
 
   const sectionsWithHtml = await Promise.all(
     sections.map(async (section) => ({
@@ -24,7 +29,7 @@ export default async function Home() {
   return (
     <>
       <ReadingProgress />
-      <Header />
+      <Header revisionCount={revisionCount} />
 
       <div className="flex min-h-screen">
         <TableOfContents entries={toc} />

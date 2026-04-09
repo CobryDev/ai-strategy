@@ -1,0 +1,37 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - europe-west2-docker.pkg.dev/$PROJECT_ID/ai-strategy/app:$COMMIT_SHA
+      - -t
+      - europe-west2-docker.pkg.dev/$PROJECT_ID/ai-strategy/app:latest
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - --all-tags
+      - europe-west2-docker.pkg.dev/$PROJECT_ID/ai-strategy/app
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ai-strategy
+      - --image=europe-west2-docker.pkg.dev/$PROJECT_ID/ai-strategy/app:$COMMIT_SHA
+      - --region=europe-west2
+      - --platform=managed
+      - --allow-unauthenticated
+      - --port=8080
+      - --memory=512Mi
+      - --cpu=1
+      - --min-instances=0
+      - --max-instances=3
+
+images:
+  - europe-west2-docker.pkg.dev/$PROJECT_ID/ai-strategy/app
+
+options:
+  logging: CLOUD_LOGGING_ONLY

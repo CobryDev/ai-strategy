@@ -1,6 +1,10 @@
 import { getGitHubHistoryUrl } from "@/lib/content";
 
-export function Header() {
+interface Props {
+  revisionCount: number;
+}
+
+export function Header({ revisionCount }: Props) {
   const historyUrl = getGitHubHistoryUrl();
 
   return (
@@ -17,6 +21,28 @@ export function Header() {
         </span>
       </div>
       <div className="flex items-center gap-3">
+        <a
+          href={historyUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="revision-badge"
+          title={`${revisionCount} revision${revisionCount !== 1 ? "s" : ""} — view full history`}
+        >
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          Rev. {revisionCount}
+        </a>
         <a
           href={historyUrl}
           target="_blank"
