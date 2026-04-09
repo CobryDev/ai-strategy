@@ -9,6 +9,7 @@ import { TableOfContents } from "@/components/TableOfContents";
 import { SectionRenderer } from "@/components/SectionRenderer";
 import { Header } from "@/components/Header";
 import { SelectionBlameCard } from "@/components/SelectionBlameCard";
+import { CalloutLegend } from "@/components/CalloutLegend";
 
 export default async function Home() {
   const sections = parseContentIntoSections();
@@ -74,6 +75,7 @@ export default async function Home() {
 
           {/* Content */}
           <div className="max-w-3xl mx-auto px-6 sm:px-10 pb-24">
+            <CalloutLegend />
             {sectionsWithHtml.map(({ section, html }) => (
               <SectionRenderer
                 key={section.id}

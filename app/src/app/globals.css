@@ -217,29 +217,37 @@ body {
   margin: 2rem 0;
   padding: 1.25rem 1.5rem;
   border-radius: 8px;
-  position: relative;
+  background: var(--color-surface-container-low);
 }
 
 .callout-header {
-  display: flex;
+  margin-bottom: 0.625rem;
+}
+
+.callout-badge {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-  font-family: var(--font-label), var(--font-body), sans-serif;
-  font-weight: 600;
-  font-size: 0.8125rem;
+  gap: 0.3rem;
+  font-family: var(--font-label), var(--font-sans), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--color-secondary);
 }
 
 .callout-icon {
-  font-size: 1rem;
+  font-size: 0.875rem;
+  line-height: 1;
+}
+
+.callout-label {
   line-height: 1;
 }
 
 .callout-content {
   font-size: 0.9375rem;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
 .callout-content p {
@@ -250,41 +258,108 @@ body {
   margin-top: 0.75rem;
 }
 
-/* Danger — red tones */
+/* Important — blue */
+.callout-important {
+  background: #eff6ff;
+}
+.callout-important .callout-badge {
+  color: var(--color-primary);
+}
+
+/* Danger — red */
 .callout-danger {
   background: #fef2f2;
   color: #7f1d1d;
 }
-.callout-danger .callout-header {
+.callout-danger .callout-badge {
   color: #991b1b;
 }
 
-/* Caution — amber tones */
+/* Caution — amber */
 .callout-caution {
   background: #fffbeb;
   color: #78350f;
 }
-.callout-caution .callout-header {
+.callout-caution .callout-badge {
   color: #92400e;
-}
-
-/* Important — blue tones */
-.callout-important {
-  background: #eff6ff;
-  color: #1e3a5f;
-}
-.callout-important .callout-header {
-  color: var(--color-primary);
 }
 
 /* Story — warm neutral */
 .callout-story {
   background: var(--color-surface-container-low);
-  color: var(--color-on-surface-variant);
 }
-.callout-story .callout-header {
+.callout-story .callout-badge {
   color: var(--color-tertiary);
 }
+
+/* ============================================
+   CALLOUT LEGEND
+   ============================================ */
+
+.callout-legend {
+  margin: 2rem 0 3rem;
+}
+
+.callout-legend h2 {
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  color: var(--color-on-surface);
+}
+
+.callout-legend-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.callout-legend-item {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 0.875rem 0;
+  border-top: 1px solid var(--color-surface-container-high);
+}
+
+.callout-legend-item:last-child {
+  border-bottom: 1px solid var(--color-surface-container-high);
+}
+
+.callout-legend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  background: var(--color-surface-container);
+  font-family: var(--font-label), var(--font-sans), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 8.5rem;
+  color: var(--color-secondary);
+}
+
+.callout-legend-badge-icon {
+  font-size: 0.8125rem;
+  line-height: 1;
+}
+
+.callout-legend-desc {
+  font-family: var(--font-body), Georgia, serif;
+  font-size: 0.9375rem;
+  color: var(--color-on-surface-variant);
+  line-height: 1.5;
+}
+
+/* Legend badge color variants */
+.callout-legend-badge[data-type="important"] { color: var(--color-primary); }
+.callout-legend-badge[data-type="danger"] { color: #991b1b; background: #fef2f2; }
+.callout-legend-badge[data-type="caution"] { color: #92400e; background: #fffbeb; }
 
 /* ============================================
    TABLE OF CONTENTS — Sidebar
@@ -658,7 +733,7 @@ body {
 }
 
 .common-questions li::before {
-  content: "→ ";
+  content: "- ";
   color: var(--color-outline-variant);
   font-weight: 500;
 }
@@ -668,13 +743,15 @@ body {
    ============================================ */
 
 .part-header {
-  font-family: var(--font-display), Georgia, serif;
-  font-size: 1.125rem;
+  font-family: var(--font-label), var(--font-sans), sans-serif;
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--color-primary);
-  padding: 3.5rem 0 1rem;
-  margin-top: 3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-secondary);
+  padding: 0;
+  margin-top: 4rem;
+  margin-bottom: -3rem;
 }
 
 /* ============================================
