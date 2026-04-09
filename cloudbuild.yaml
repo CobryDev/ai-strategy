@@ -21,7 +21,7 @@ steps:
       - deploy
       - ai-strategy
       - --image=europe-west2-docker.pkg.dev/$PROJECT_ID/ai-strategy/app:$COMMIT_SHA
-      - --region=europe-west2
+      - --region=europe-west1
       - --platform=managed
       - --allow-unauthenticated
       - --port=8080

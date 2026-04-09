@@ -1790,8 +1790,6 @@ Use this as a starting structure. Adapt the sections, naming, and organization t
 - Next scheduled review: [Date]
 - Contribution channel: [Slack channel / form URL / email]
 - Content verification standard: all entries verified within the last 90 days; flagged entries archived after two review cycles
-## PART V: DOMAIN-SPECIFIC GUIDANCE 🧰
-
 ## PART V: DOMAIN-SPECIFIC GUIDANCE
 
 The previous sections apply to everyone. This part applies to your team specifically. Each section covers how AI is being used in practice in a specific function, where the value is real, where the risks concentrate, and what to do this week. Skip to the section relevant to your role.
@@ -2211,26 +2209,180 @@ Organizations have an obligation — ethical, not just strategic — to be hones
 
 ## ‼️ Ethics isn't a section you check off. It's a lens that applies to every decision in this guide. Every use case selection (Section 9) should ask: who benefits and who bears the risk? Every governance decision (Section 14) should ask: are we protecting the people affected by AI, not just the organization? Every measurement system (Section 17) should ask: are we tracking outcomes for everyone, including those who might be disadvantaged? Every change management program (Section 20) should ask: are we treating people with the honesty and investment they deserve? If these questions aren't part of your AI adoption process, your process is incomplete — and the gaps will eventually surface as incidents (Section 29), legal exposure, or the kind of organizational erosion that no technology can fix.
 
-### 31\. AI and Organizational Design 🧰
+### 31. AI and Organizational Design
 
-- How AI changes team structure and workflows long-term  
-- The "AI-native" team vs. retrofitting AI into existing structures  
-- When to centralize AI expertise vs. distribute it  
-  - Center of Excellence model: pros and cons  
-  - Embedded AI specialists: pros and cons  
-  - Hybrid: a central platform team with embedded practitioners  
-- How reporting structures and decision rights shift  
-- Planning for roles that will significantly change — with dignity and investment in people
+The first year of AI adoption changes tools. The second year changes workflows. The third year changes the organization itself.
 
-### 32\. Staying Current Without Losing Your Mind 🧰
+Most of this guide has addressed the first two stages — selecting, deploying, governing, and measuring AI tools, then redesigning workflows around them. This section addresses what comes after: the structural changes to teams, roles, reporting lines, and organizational capabilities that AI eventually demands. These changes are the hardest to plan for, the slowest to implement, and the most consequential to get wrong, because they involve not just technology or process but power, identity, and how people understand their place in the organization.
 
-- The pace of change is genuinely unprecedented — how to filter signal from noise  
-- Recommended sources for staying informed (categorized by audience and depth)  
-- How to build an internal "AI radar" function that tracks developments relevant to your business  
-- When to adopt new capabilities vs. when to wait  
-- The art of "good enough for now": avoiding perpetual pilot mode and analysis paralysis
+If you're in the first year of AI adoption, this section is a preview. Read it to understand where you're headed, and make early decisions (like your organizational model for AI expertise) with the long-term structure in mind. If you're in the second or third year — pilots are working, production deployments are generating value, and you're starting to see the organizational strain of bolting AI onto structures designed for a pre-AI world — this section is immediately relevant.
 
----
+#### 31.1 How AI Changes Team Structure and Workflows Long-Term
+
+The first-order effects of AI are efficiency gains within existing team structures. A support team handles more tickets. A content team produces more drafts. A development team ships more features. The team structure doesn't change — people just work faster within it.
+
+The second-order effects are more disruptive. When AI handles the routine work that previously occupied junior team members, the ratio of senior to junior staff that was optimal for the old workflow is no longer optimal. When AI enables a single person to do what previously required a team of specialists, the team composition changes. When AI makes certain handoffs unnecessary — because information that previously moved between humans now moves through an AI pipeline — the workflow that justified the team's existence simplifies, and the team must either expand its scope or shrink.
+
+Consider a customer support operation where AI deflects 60% of incoming inquiries. The first-order effect is efficiency: the same team handles more volume. The second-order effect is structural: you no longer need as many Tier 1 agents, but you need more skilled Tier 2 and Tier 3 agents who can handle the complex issues AI escalates. The skill profile shifts from breadth (handle anything) to depth (handle what AI can't). The training program changes. The career ladder changes. The hiring profile changes. The management structure — designed around supervising a large team of generalists — may no longer fit a smaller team of specialists.
+
+These structural shifts play out across every function where AI reaches meaningful adoption. Engineering teams shift from writing code to reviewing, integrating, and debugging AI-generated code — changing the junior-to-senior ratio and the skills that define career progression. Marketing teams shift from content production to content strategy, editorial judgment, and brand stewardship — changing who you hire and what you train them to do. Legal teams shift from document review to exception handling and strategic counsel — changing the economics of the traditional associate-to-partner pyramid.
+
+## ⚠️ The structural changes are gradual enough to miss in any given quarter and significant enough to create serious organizational misalignment over two or three years. The team structure that's optimal for your current AI maturity is probably not optimal for where you'll be in eighteen months. Plan for the transition rather than discovering it retroactively.
+
+#### 31.2 The "AI-Native" Team vs. Retrofitting AI
+
+There are two fundamentally different approaches to incorporating AI into how teams work, and most organizations will use both — but understanding the distinction helps you make conscious design choices rather than defaulting to whatever emerges.
+
+**Retrofitting AI into existing structures** means adding AI tools and capabilities to teams that are organized around pre-AI workflows. The support team gets a chatbot. The marketing team gets a content generation tool. The development team gets a code assistant. The team structure, roles, processes, and management hierarchy stay the same — AI is layered on top. This is how nearly all organizations start, and it's the right approach for the first year. It minimizes disruption, leverages existing organizational knowledge, and allows learning before restructuring.
+
+The limitation is that retrofitted teams eventually hit a ceiling. The workflow was designed for humans doing all the work. Adding AI to a human-optimized workflow produces incremental improvement. Redesigning the workflow around human-AI collaboration produces transformational improvement — but requires structural change. McKinsey's data that organizations reporting significant financial returns are nearly three times as likely to have redesigned workflows before selecting technology reflects exactly this dynamic.
+
+**AI-native teams** are organized from the start around human-AI collaboration. The workflow assumes AI handles certain tasks, humans handle others, and the handoffs between them are designed — not bolted on. An AI-native content team doesn't have writers who use AI tools; it has strategists who direct AI production, editors who refine and quality-control AI output, and analysts who measure content performance — with AI handling first-draft generation, variation, and personalization end-to-end. The team is smaller, more senior, and produces more output.
+
+AI-native teams are the long-term destination for most functions. They are not the right starting point for most organizations, because you can't design an effective human-AI workflow until you understand, through retrofitting experience, what AI is good at and what it isn't in your specific context. The path is: retrofit first, learn from what works, then redesign workflows and team structures based on evidence, not assumption.
+
+#### 31.3 When to Centralize AI Expertise vs. Distribute It
+
+This is the organizational design question that every company scaling AI beyond initial pilots must answer: where does AI expertise live?
+
+**The Center of Excellence (CoE) model** centralizes AI expertise in a single team that serves the entire organization. The CoE owns the AI platform, sets governance standards, builds shared infrastructure, and executes (or at minimum approves) AI projects across business units.
+
+The advantages are real. A central team builds deep expertise faster than distributed teams. Governance is consistent because one team enforces it. Infrastructure investment is efficient because it's shared. Knowledge compounds because lessons from one project inform the next. Coca-Cola's approach — a small global team coordinating distributed adoption — demonstrates a lean version of this model. They deliberately avoided a large centralized AI department, running a small coordination team with only 2 of approximately 2,000 marketing employees carrying "AI" in their job title.
+
+The disadvantages are equally real. A central team becomes a bottleneck — every AI initiative queues behind every other initiative. The ModelOp finding that 44% of organizations say governance is "too slow" often reflects a centralized model where requests wait for a review board that meets biweekly. Central teams also struggle with domain expertise; the people who understand AI deeply may not understand the finance team's specific workflows, the legal team's particular requirements, or the support team's operational constraints. The result is technically sound solutions that don't fit the operational reality — the "build it and they won't come" pattern.
+
+**The embedded specialist model** distributes AI expertise directly into business units. Each department has its own AI-capable staff — data scientists, prompt engineers, or AI-literate domain experts — who build and manage AI solutions for their specific function.
+
+The advantages mirror the CoE's disadvantages: embedded specialists understand the domain deeply, respond quickly to business needs, and don't create a queue. Solutions are built by people who will live with them, which dramatically increases the odds that they actually work in practice.
+
+The disadvantages mirror the CoE's advantages: distributed teams duplicate effort, build inconsistent infrastructure, create governance gaps, and don't share knowledge effectively. The tool proliferation problem from Section 11 is the infrastructure version of this organizational pattern — fifteen teams building fifteen AI solutions on fifteen different platforms with fifteen different security postures.
+
+**The hybrid model** — a central platform team with embedded practitioners — is where organizations that have scaled AI successfully converge. Dataiku's research confirms: companies using a hub-and-spoke model are 3x more likely to have scaled AI successfully than those using either pure centralization or pure distribution.
+
+The central team (the "hub") owns: the AI platform and infrastructure (Section 11's tech stack), governance standards and enforcement mechanisms, evaluation frameworks and monitoring tools, vendor relationships and procurement, security and compliance, and organizational AI literacy programs.
+
+The embedded practitioners (the "spokes") own: use case identification and prioritization within their function, workflow design and integration, domain-specific prompt engineering and configuration, user training and adoption within their team, and day-to-day operation and quality monitoring.
+
+The boundary between hub and spoke should be drawn at the point where domain expertise becomes more important than platform expertise. Building the RAG pipeline is a platform task — the infrastructure is shared, the engineering patterns are common, and doing it once well is better than doing it five times poorly. Designing the prompts that make the RAG pipeline useful for the legal team's specific contract review workflow is a domain task — it requires legal expertise that the platform team doesn't have.
+
+## ‼️ The organizational model you choose determines the speed, consistency, and sustainability of your AI adoption. Choose deliberately. A centralized model that becomes a bottleneck will kill innovation. A distributed model that fragments infrastructure will create ungovernable sprawl. The hybrid model requires clear boundaries between what the center owns and what the spokes own — and those boundaries must be defined explicitly, not assumed.
+
+#### 31.4 How Reporting Structures and Decision Rights Shift
+
+AI adoption eventually surfaces questions about organizational authority that no one anticipated.
+
+**Who decides what data the AI can access?** Traditionally, data access was managed by IT based on role-based access controls. When an AI system needs to access data from multiple departments to perform a cross-functional task — say, combining customer data from CRM, financial data from the billing system, and product data from the knowledge base to generate a comprehensive customer response — the existing access control framework may not have a clear owner. The answer matters both operationally and from a governance perspective.
+
+**Who is accountable when AI makes a wrong decision?** In a human-only workflow, the person who made the decision is accountable. In a human-AI workflow, the AI generated the recommendation, the human approved it, the prompt engineer designed the system, the data team provided the training data, and the vendor built the model. When something goes wrong — and it will (Section 29) — the accountability chain must be clear before the incident, not debated during the response.
+
+**Who approves changes to AI systems that affect other teams?** A prompt change in the customer support AI might change how tickets are routed, affecting the workload of a different team. A data pipeline update might change what information the AI surfaces, affecting decisions in a department that wasn't consulted. AI systems create dependencies across organizational boundaries that traditional reporting structures weren't designed to manage.
+
+These questions don't have universal answers — they depend on your organizational structure, culture, and regulatory context. But they do have a universal requirement: they must be answered explicitly. Document who owns which decisions, who must be consulted (vs. merely informed) before changes, and who is accountable when outcomes are bad. Build these decision rights into the governance framework (Section 14), not into informal understanding that dissolves when people change roles.
+
+#### 31.5 Planning for Roles That Will Significantly Change
+
+The ethical dimension of organizational redesign was covered in Section 30.4. Here we address the operational dimension: how to plan for and execute role transitions with both organizational effectiveness and individual dignity.
+
+**Map the transition before it's urgent.** For each function where AI is deployed, document: which tasks AI is absorbing, which tasks are becoming more important for humans, what new skills the evolving role requires, and what the transition timeline looks like. This mapping should happen when AI is first deployed, not when the role change becomes undeniable. Waiting until the role has already changed to plan for the change guarantees that people feel blindsided rather than prepared.
+
+**Invest in reskilling before it's needed.** The CCSLA three-tier training framework (Section 16.5) — foundational literacy, applied department-specific training, and advanced power-user development — applies directly to role transition. The goal is to develop the skills people will need in the evolved role while they're still performing the current one. The VP who delayed rollout by eight weeks to build role-differentiated training and saw 71% of employees report feeling "actually capable" understood this principle: invest before demand, not after.
+
+**Create transition pathways, not dead ends.** When a role is substantially reduced by AI — not eliminated but fundamentally changed — the organization should provide clear pathways to the evolved role (with the training to support the transition), to adjacent roles that leverage transferable skills, or, when reduction is unavoidable, to transitions outside the organization with genuine support (extended timelines, outplacement services, skill development that's useful beyond the current employer).
+
+**Be honest about the timeline.** People can adapt to significant change if they have time, information, and support. They cannot adapt to change that arrives as a surprise announcement. The organizations that handle role transition well communicate early, specifically, and repeatedly: "Over the next twelve months, the compliance reporting process will change in these specific ways. Your role will shift from data gathering and first-draft generation toward analysis, exception handling, and strategic review. Training begins next month. We'll check in quarterly on how the transition is going."
+
+📜 A mid-size financial services firm automated 40% of their compliance reporting workflow with AI. Rather than reducing the compliance team, the firm's head of operations mapped how each team member's role would change and identified the skills gap between current responsibilities and the evolved role. She then structured a six-month transition: months one through two focused on training in the new analytical skills the evolved role required, months three through four had team members working in parallel with the AI system (doing their old work while practicing the new skills on real outputs), and months five through six shifted to the new workflow with the old process as a fallback. One team member decided the new role wasn't for them and transferred to an adjacent department. The rest made the transition successfully. Eighteen months later, the team was smaller by one person, substantially more senior in their skills, and handling a compliance volume that would have required three additional hires under the old model. The team lead credited not the AI but the transition plan: "The technology was ready in month two. The team wasn't ready until month five. If we'd flipped the switch in month two, we would have lost three people instead of one."
+
+#### 31.6 The Long View
+
+AI's impact on organizational design is still in its early stages. The structural changes described in this section — shifting skill profiles, evolving team compositions, centralize-vs-distribute decisions, new accountability frameworks — are the first wave. The second wave, driven by agentic AI systems that can operate with greater autonomy, will create organizational questions we can't fully anticipate: how do you manage a "team" that includes both humans and AI agents? How do you evaluate performance when outputs are jointly produced? How do you allocate credit and accountability in a deeply interdependent human-AI system?
+
+These questions are not yet urgent for most organizations. But they are approaching. The organizations best positioned to navigate them are the ones that build adaptable structures today — clear principles for how they organize AI capability, explicit decision rights, investment in people's development, and the institutional humility to redesign when the evidence shows the current structure isn't working.
+
+The organizational choices you make in the next twelve months will determine whether your company adapts smoothly to what's coming or spends the next three years unwinding structures that were optimized for a moment that has already passed.
+
+
+### 32. Staying Current Without Losing Your Mind
+
+A new foundation model is released every few weeks. A new framework launches monthly. Vendor feature announcements arrive daily. The regulatory landscape shifts quarterly. Research papers that reshape best practices appear faster than any individual can read them. And underneath all of this, the underlying capabilities of AI systems are improving at a pace that makes any specific technical recommendation in this guide potentially outdated within six months.
+
+This is not hyperbole. Enterprise AI spending grew from $1.7 billion to $37 billion in three years. Open-source models went from clearly inferior to frontier-competitive in eighteen months. The EU AI Act moved from proposal to enforceable law in a timeline that caught many organizations off-guard. Agentic AI went from a research concept to a $1.5 billion market in a single year.
+
+The instinct in this environment is to track everything, evaluate every new release, and constantly reconsider your technology choices. That instinct is both understandable and destructive. Organizations that chase every new development never ship anything. They exist in a permanent state of evaluation — exploring the latest model, piloting the newest framework, reconsidering their architecture every quarter — while their competitors deploy imperfect solutions that actually generate value.
+
+The opposite instinct is equally destructive: make a decision, commit to it, and stop paying attention. The organization that selected its AI stack in 2024 and hasn't reevaluated since is probably running on architecture that's been surpassed, paying prices that have since dropped, and missing capabilities that would change their approach.
+
+The goal is neither constant vigilance nor willful ignorance. It is structured awareness — knowing enough to make good decisions at the right moments, without letting the noise of the field consume the attention you need for execution.
+
+#### 32.1 How to Filter Signal from Noise
+
+The AI information landscape has a specific structure that, once you understand it, becomes more navigable.
+
+**The hype layer** is the loudest and least useful. Vendor announcements, influencer takes, "X will change everything" proclamations, and breathless coverage of benchmark improvements that may or may not translate to real-world performance. This layer is designed to capture attention, not to inform decisions. It's useful for one thing only: becoming aware that something new exists. It is not useful for determining whether that thing matters to your organization.
+
+**The analysis layer** interprets and contextualizes new developments. Industry analysts (Gartner, Forrester, IDC), thoughtful practitioner newsletters, research-oriented publications (MIT Technology Review, Stanford HAI's AI Index), and enterprise-focused surveys (Deloitte's State of AI, Menlo Ventures' annual report, Andreessen Horowitz's enterprise surveys) provide the context that the hype layer strips away. This layer tells you what a new development actually means, who it affects, and what the evidence says about its impact.
+
+**The practitioner layer** is the most valuable and hardest to access. This is the information that comes from people actually deploying AI in production at organizations similar to yours — what worked, what didn't, what they'd do differently. It lives in conference hallways, private Slack communities, peer networks, and occasionally in detailed case studies. It is unglamorous and slow compared to the hype layer, but it's where the actionable insight lives.
+
+The filtering strategy: scan the hype layer briefly to know what's new (fifteen minutes per week is sufficient). Read the analysis layer selectively to understand what matters (one to two hours per week, focused on sources relevant to your industry and role). Invest in the practitioner layer through relationships, communities, and peer exchanges (ongoing, and the most valuable time you spend staying current).
+
+#### 32.2 Recommended Sources for Staying Informed
+
+Calibrated by audience and depth. This is not a comprehensive list — it's a curated starting point that you should adapt based on your specific industry, role, and information needs.
+
+**For executives and strategy leaders** who need the big picture without the technical detail: Deloitte's annual State of AI in the Enterprise report provides benchmark data and strategic trends. The Stanford HAI AI Index is the most rigorous annual overview of AI progress, adoption, and policy. The Anthropic Economic Index and OpenAI's State of Enterprise AI report provide usage-pattern data from actual production deployments. McKinsey's periodic AI surveys give strategic framing, though with the consulting-firm optimism you should discount by 20–30%.
+
+**For engineering and product leaders** who need to understand technology evolution and make architectural decisions: Andreessen Horowitz's enterprise AI surveys provide detailed data on how CIOs are buying and deploying. Simon Willison's blog and Lilian Weng's posts provide technically grounded but accessible analysis of model capabilities and limitations. The LMSYS Chatbot Arena leaderboard gives real-time model quality comparisons from blind user evaluations. Latent Space podcast covers the engineering practitioner perspective. And your model providers' changelogs and system cards — dry reading, but they're where you learn what actually changed.
+
+**For security and governance leaders** who need to track threats and regulatory developments: OWASP's Top 10 for LLM Applications and Top 10 for Agentic Applications are the essential vulnerability frameworks. The EU AI Office publications track enforcement guidance and template development. NIST's AI Risk Management Framework is the primary U.S. governance standard. Anthropic, OpenAI, and Google's model system cards document known risks for specific deployments.
+
+**For individual contributors** who want to get better at using AI: Your organization's internal knowledge base (Section 21) should be the first stop. Beyond that, Anthropic's and OpenAI's prompt engineering documentation provide the foundation. Ethan Mollick's work bridges research and practical application. And the weekly team sessions recommended in Section 20 are the single best source of role-specific, organization-specific learning.
+
+## ⚠️ Be wary of sources that consistently tell you what you want to hear. If every article you read confirms that your current approach is right, your information diet is too narrow. Seek out sources that challenge your assumptions — including critical perspectives on AI's limitations, honest failure analyses, and research that complicates the simple narratives.
+
+#### 32.3 Building an Internal "AI Radar" Function
+
+As your organization matures in AI adoption, staying current becomes a team function, not an individual hobby. The organizations that scale AI effectively typically designate someone — or a small group — to track developments relevant to their business and translate those developments into actionable recommendations.
+
+This doesn't require a dedicated role (though at large organizations it may warrant one). It requires three things.
+
+**A named owner.** Someone whose acknowledged responsibility includes monitoring the AI landscape for developments relevant to the organization. This is often the same person who owns the internal knowledge base (Section 21) or leads the central AI platform team (Section 31.3). The job is not to read everything — it's to maintain enough awareness to answer the question: "Is there anything new in the AI landscape that should change what we're doing or planning?"
+
+**A regular cadence.** Monthly is the right frequency for most organizations. A brief written update — one page, not a report — that covers: new model releases or capability improvements that affect your deployed use cases, regulatory developments that affect your compliance posture, security threats or incidents relevant to your deployment pattern, new tools or approaches that your teams should evaluate, and price changes from your vendors or competitors.
+
+**A decision framework for when to act.** Not every development requires a response. The radar owner's most important skill is distinguishing between developments that are interesting (file and monitor), developments that are relevant (evaluate within the next quarter), and developments that are urgent (act now). Most developments are interesting. A minority are relevant. Very few are urgent. The decision framework should bias toward inaction — "this is interesting but doesn't change what we're doing right now" — because the cost of constant course-correction exceeds the cost of missing an incremental improvement.
+
+#### 32.4 When to Adopt New Capabilities vs. When to Wait
+
+The AI landscape presents a constant stream of new capabilities — better models, new features, novel architectures, additional integrations. The temptation to upgrade is perpetual. The decision framework is straightforward.
+
+**Adopt when** the new capability addresses a documented gap in your current deployment. Your RAG pipeline has a retrieval quality problem, and a new embedding model demonstrably improves it on your data. Your coding assistant's performance on your codebase has measurably degraded relative to newer alternatives. Your governance framework doesn't meet a regulatory requirement that's approaching enforcement. The key word is "documented" — the gap should be identified through your evaluation and monitoring systems (Section 11, Layer 5), not through a vendor pitch or a benchmark comparison.
+
+**Adopt when** the new capability enables a use case you've already validated as high-value but couldn't previously implement. You've identified a use case through the Section 9 prioritization process that scored high on business impact but low on feasibility — and a new tool changes the feasibility score.
+
+**Wait when** the new capability is an incremental improvement to something that's already working. If your current model produces outputs that meet your quality standards and your users are satisfied, switching to a model that's 5% better on a benchmark is not worth the integration work, testing, prompt re-optimization, and disruption. "Better" is not a sufficient reason to change. "Better enough to justify the switching cost" is.
+
+**Wait when** you haven't yet extracted the full value from your current deployment. If your existing AI tools have 35% adoption (remember Larridin's finding: 80% survey satisfaction, 35% actual sustained usage), adding new capabilities won't fix the adoption problem — it will give underutilized tools even more features that nobody uses. Fix adoption first. Upgrade technology second.
+
+**Wait when** the new capability is immature. First-mover advantage in enterprise AI rarely exists because the cost of debugging an immature tool in production is higher than the cost of deploying a stable tool six months later. Let other organizations find the bugs. Let the vendor publish their second release. Let the integration guides get written by practitioners who've actually done it.
+
+## ‼️ The most common mistake is not adopting too slowly. It's adopting too broadly — adding new tools without removing or fully utilizing existing ones. Every new tool creates integration overhead, training burden, governance requirements, and vendor management work. Before adding anything new, ask: have we extracted the full value from what we already have? If not, the highest-ROI investment is deeper adoption, not broader tooling.
+
+#### 32.5 The Art of "Good Enough for Now"
+
+The most destructive phrase in enterprise AI is "let's wait for the next model." The second most destructive is "we should evaluate all the options before deciding." Both phrases sound prudent. Both, in practice, prevent action indefinitely — because the next model is always coming, and the options are always multiplying.
+
+Perfectionism is the enemy of AI adoption. The organizations extracting the most value from AI are not the ones using the best tools. They are the ones that selected adequate tools, deployed them into real workflows, measured the results, and improved iteratively. The ENDKOO longitudinal study found a median eight-month breakeven for narrowly scoped projects — but that clock starts when you deploy, not when you begin evaluating. Every month spent evaluating a marginally better alternative is a month of value left on the table.
+
+"Good enough for now" is not a compromise. It is a strategy. It means: this tool meets our current requirements, integrates with our existing systems, and passes our security and governance review. It may not be the absolute best tool on the market. We will deploy it, learn from real usage, and reevaluate in six months based on evidence from production, not speculation from benchmarks.
+
+The reevaluation is the critical second half of the strategy. "Good enough for now" without a scheduled reassessment becomes "good enough forever," which is how organizations end up running obsolete tools because nobody has a mandate to change them. Set a date. When it arrives, evaluate: is the tool still meeting requirements? Have alternatives emerged that would meaningfully change the value proposition? Has the landscape shifted enough to justify switching costs? If the answer to all three is no, extend for another six months and move on. If the answer to any is yes, evaluate the switch with a specific business case — not a general sense that something newer exists.
+
+The organizations that get AI adoption right share a disposition that's rarer than it sounds: the ability to make a decision with incomplete information, execute against it with commitment, and revisit it on a defined schedule without anxiety. This is the opposite of both reckless early adoption and paralyzing analysis. It is disciplined pragmatism — the recognition that in a field moving this fast, the biggest risk is not making the wrong choice. It is making no choice at all.
+
+This guide was written in the first half of 2026. Some of the specific data points, vendor landscapes, and regulatory timelines will have shifted by the time you read it. The principles — start with business problems, invest in data readiness, govern to enable, take the people side seriously, measure honestly, and ship before you're certain — will not.
+
+Good luck. The work you're doing matters.
 
 ## APPENDICES
 

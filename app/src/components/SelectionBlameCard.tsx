@@ -8,6 +8,8 @@ interface BlameChunk {
   a: string;
   c: string;
   t: number;
+  m: string;
+  av: string;
 }
 
 interface BlameHit {
@@ -15,6 +17,8 @@ interface BlameHit {
   commitSha: string;
   commitUrl: string;
   timestamp: number;
+  message: string;
+  avatarUrl: string;
 }
 
 function timeAgo(ts: number): string {
@@ -76,6 +80,8 @@ function findBlameForSelection(node: Node): BlameHit | null {
     commitSha: chunk.c,
     commitUrl: `https://github.com/${repo}/commit/${chunk.c}`,
     timestamp: chunk.t,
+    message: chunk.m || "",
+    avatarUrl: chunk.av || "",
   };
 }
 
@@ -131,20 +137,30 @@ export function SelectionBlameCard() {
       className="selection-blame-card"
       style={{ top: position.top, left: position.left }}
     >
-      <svg
-        width="12"
-        height="12"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="selection-blame-icon"
-      >
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-        <circle cx="12" cy="7" r="4" />
-      </svg>
+      {blame.avatarUrl ? (
+        <img
+          src={blame.avatarUrl}
+          alt=""
+          width={20}
+          height={20}
+          className="selection-blame-avatar"
+        />
+      ) : (
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="selection-blame-icon"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      )}
       <span className="selection-blame-author">{blame.author}</span>
       <span className="selection-blame-sep" aria-hidden="true">
         ·
@@ -161,6 +177,14 @@ export function SelectionBlameCard() {
       >
         {blame.commitSha}
       </a>
+      {blame.message && (
+        <>
+          <span className="selection-blame-sep" aria-hidden="true">
+            ·
+          </span>
+          <span className="selection-blame-message">{blame.message}</span>
+        </>
+      )}
     </div>
   );
 }

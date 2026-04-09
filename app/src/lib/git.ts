@@ -1,4 +1,5 @@
 import { execSync } from "child_process";
+import { createHash } from "crypto";
 import path from "path";
 
 const ROOT_DIR = path.join(process.cwd(), "..");
@@ -8,6 +9,8 @@ export interface LineBlameDatum {
   author: string;
   sha: string;
   timestamp: number;
+  email: string;
+  summary: string;
 }
 
 export interface BlameChunk {
@@ -16,6 +19,15 @@ export interface BlameChunk {
   a: string; // author
   c: string; // commit SHA (short)
   t: number; // unix timestamp
+  m: string; // commit message (first line)
+  av: string; // avatar URL (Gravatar)
+}
+
+function gravatarUrl(email: string): string {
+  const hash = createHash("md5")
+    .update(email.trim().toLowerCase())
+    .digest("hex");
+  return `https://www.gravatar.com/avatar/${hash}?d=identicon&s=48`;
 }
 
 export interface SectionBlame {
@@ -47,10 +59,18 @@ export function getBlameData(): Map<number, LineBlameDatum> {
     });
 
     const lines = output.split("\n");
-    let currentLine = 0;
+
+    interface CommitInfo {
+      author: string;
+      email: string;
+      timestamp: number;
+      summary: string;
+    }
+
+    const commitCache = new Map<string, CommitInfo>();
     let currentSha = "";
-    let currentAuthor = "";
-    let currentTimestamp = 0;
+    let currentLine = 0;
+    let pending: Partial<CommitInfo> = {};
 
     for (const line of lines) {
       const headerMatch = line.match(
@@ -59,25 +79,52 @@ export function getBlameData(): Map<number, LineBlameDatum> {
       if (headerMatch) {
         currentSha = headerMatch[1];
         currentLine = parseInt(headerMatch[3], 10);
+        if (!commitCache.has(currentSha)) {
+          pending = {};
+        }
         continue;
       }
 
       if (line.startsWith("author ")) {
-        currentAuthor = line.slice(7);
+        pending.author = line.slice(7);
+        continue;
+      }
+
+      if (line.startsWith("author-mail ")) {
+        pending.email = line.slice(12).replace(/[<>]/g, "");
         continue;
       }
 
       if (line.startsWith("author-time ")) {
-        currentTimestamp = parseInt(line.slice(12), 10);
+        pending.timestamp = parseInt(line.slice(12), 10);
+        continue;
+      }
+
+      if (line.startsWith("summary ")) {
+        pending.summary = line.slice(8);
         continue;
       }
 
       if (line.startsWith("\t")) {
-        blameMap.set(currentLine, {
-          author: currentAuthor,
-          sha: currentSha,
-          timestamp: currentTimestamp,
-        });
+        if (!commitCache.has(currentSha) && pending.author) {
+          commitCache.set(currentSha, {
+            author: pending.author,
+            email: pending.email || "",
+            timestamp: pending.timestamp || 0,
+            summary: pending.summary || "",
+          });
+        }
+
+        const info = commitCache.get(currentSha);
+        if (info) {
+          blameMap.set(currentLine, {
+            author: info.author,
+            sha: currentSha,
+            timestamp: info.timestamp,
+            email: info.email,
+            summary: info.summary,
+          });
+        }
       }
     }
   } catch {
@@ -108,6 +155,8 @@ export function getBlameChunks(
         a: datum.author,
         c: datum.sha.slice(0, 7),
         t: datum.timestamp,
+        m: datum.summary,
+        av: datum.email ? gravatarUrl(datum.email) : "",
       };
       chunks.push(current);
     }

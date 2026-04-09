@@ -400,6 +400,14 @@ body {
   animation: blame-card-in 0.15s ease-out;
 }
 
+.selection-blame-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
 .selection-blame-icon {
   color: var(--color-outline-variant);
   flex-shrink: 0;
@@ -432,6 +440,14 @@ body {
 
 .selection-blame-commit:hover {
   background: var(--color-surface-container-high);
+}
+
+.selection-blame-message {
+  color: var(--color-outline);
+  max-width: 20ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @keyframes blame-card-in {
