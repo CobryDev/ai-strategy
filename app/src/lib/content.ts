@@ -8,6 +8,9 @@ import {
   getRevisionCount,
   getSectionBlame,
 } from "./git";
+import { SECTION_QUESTIONS } from "./questions";
+
+const WORDS_PER_MINUTE = 238;
 
 export interface Section {
   id: string;
@@ -19,9 +22,18 @@ export interface Section {
   endLine: number;
   level: "part" | "section" | "appendix";
   wip: boolean;
+  readingTime: number;
+  commonQuestions: string[];
   subsections: { id: string; title: string }[];
   blame: SectionBlame;
   blameChunks: BlameChunk[];
+}
+
+function wordCount(text: string): number {
+  return text
+    .replace(/[#*_`~\[\]()>|\\-]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w.length > 0).length;
 }
 
 export interface TableOfContentsEntry {
@@ -206,6 +218,10 @@ export function parseContentIntoSections(): Section[] {
     const start1 = startLine + 1;
     const end1 = endLine + 1;
 
+    const words = wordCount(content);
+    const readingTime = Math.max(1, Math.round(words / WORDS_PER_MINUTE));
+    const commonQuestions = SECTION_QUESTIONS[marker.number] ?? [];
+
     sections.push({
       id,
       number: marker.number,
@@ -216,6 +232,8 @@ export function parseContentIntoSections(): Section[] {
       endLine: end1,
       level: marker.type,
       wip: marker.wip,
+      readingTime,
+      commonQuestions,
       subsections: extractSubsections(content),
       blame: getSectionBlame(blameMap, start1, end1),
       blameChunks: getBlameChunks(blameMap, start1, end1),
