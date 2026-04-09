@@ -6,7 +6,16 @@ const CONTENT_FILE = "content.md";
 
 export interface LineBlameDatum {
   author: string;
+  sha: string;
   timestamp: number;
+}
+
+export interface BlameChunk {
+  s: number; // startLine (1-indexed)
+  e: number; // endLine (1-indexed)
+  a: string; // author
+  c: string; // commit SHA (short)
+  t: number; // unix timestamp
 }
 
 export interface SectionBlame {
@@ -39,15 +48,17 @@ export function getBlameData(): Map<number, LineBlameDatum> {
 
     const lines = output.split("\n");
     let currentLine = 0;
+    let currentSha = "";
     let currentAuthor = "";
     let currentTimestamp = 0;
 
     for (const line of lines) {
       const headerMatch = line.match(
-        /^[0-9a-f]{40}\s+(\d+)\s+(\d+)(?:\s+(\d+))?$/,
+        /^([0-9a-f]{40})\s+(\d+)\s+(\d+)(?:\s+(\d+))?$/,
       );
       if (headerMatch) {
-        currentLine = parseInt(headerMatch[2], 10);
+        currentSha = headerMatch[1];
+        currentLine = parseInt(headerMatch[3], 10);
         continue;
       }
 
@@ -64,6 +75,7 @@ export function getBlameData(): Map<number, LineBlameDatum> {
       if (line.startsWith("\t")) {
         blameMap.set(currentLine, {
           author: currentAuthor,
+          sha: currentSha,
           timestamp: currentTimestamp,
         });
       }
@@ -73,6 +85,35 @@ export function getBlameData(): Map<number, LineBlameDatum> {
   }
 
   return blameMap;
+}
+
+export function getBlameChunks(
+  blameMap: Map<number, LineBlameDatum>,
+  startLine: number,
+  endLine: number,
+): BlameChunk[] {
+  const chunks: BlameChunk[] = [];
+  let current: BlameChunk | null = null;
+
+  for (let line = startLine; line <= endLine; line++) {
+    const datum = blameMap.get(line);
+    if (!datum) continue;
+
+    if (current && current.c === datum.sha.slice(0, 7)) {
+      current.e = line;
+    } else {
+      current = {
+        s: line,
+        e: line,
+        a: datum.author,
+        c: datum.sha.slice(0, 7),
+        t: datum.timestamp,
+      };
+      chunks.push(current);
+    }
+  }
+
+  return chunks;
 }
 
 export function getSectionBlame(

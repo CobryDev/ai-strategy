@@ -47,6 +47,7 @@ export function SectionRenderer({ section, html }: Props) {
       data-blame-author={blame.primaryAuthor}
       data-blame-date={blame.lastModified.toISOString()}
       data-blame-contributors={blame.contributors.length}
+      data-blame-chunks={JSON.stringify(section.blameChunks)}
       className={`section-container${section.wip ? " section-wip" : ""}`}
     >
       {section.wip && (

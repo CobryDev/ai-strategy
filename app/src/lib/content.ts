@@ -2,7 +2,9 @@ import fs from "fs";
 import path from "path";
 import {
   type SectionBlame,
+  type BlameChunk,
   getBlameData,
+  getBlameChunks,
   getRevisionCount,
   getSectionBlame,
 } from "./git";
@@ -19,6 +21,7 @@ export interface Section {
   wip: boolean;
   subsections: { id: string; title: string }[];
   blame: SectionBlame;
+  blameChunks: BlameChunk[];
 }
 
 export interface TableOfContentsEntry {
@@ -215,6 +218,7 @@ export function parseContentIntoSections(): Section[] {
       wip: marker.wip,
       subsections: extractSubsections(content),
       blame: getSectionBlame(blameMap, start1, end1),
+      blameChunks: getBlameChunks(blameMap, start1, end1),
     });
   }
 

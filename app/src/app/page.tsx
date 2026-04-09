@@ -18,7 +18,10 @@ export default async function Home() {
   const sectionsWithHtml = await Promise.all(
     sections.map(async (section) => ({
       section,
-      html: section.level === "part" ? "" : await markdownToHtml(section.content),
+      html:
+        section.level === "part"
+          ? ""
+          : await markdownToHtml(section.content, section.startLine - 1),
     })),
   );
 

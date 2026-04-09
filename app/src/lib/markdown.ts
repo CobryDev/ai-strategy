@@ -164,13 +164,52 @@ function rehypeDemoteHeadings() {
   };
 }
 
-export async function markdownToHtml(markdown: string): Promise<string> {
+const BLOCK_TAGS = new Set([
+  "p", "h1", "h2", "h3", "h4", "h5", "h6",
+  "li", "blockquote", "pre", "table", "tr",
+]);
+
+function rehypeSourceLines(lineOffset: number) {
+  return (tree: Root) => {
+    for (const node of tree.children) {
+      if (node.type !== "element") continue;
+      const el = node as Element;
+      if (el.position?.start?.line) {
+        el.properties = el.properties || {};
+        el.properties["dataSourceLine"] = el.position.start.line + lineOffset;
+      }
+      if ("children" in el) {
+        stampChildren(el.children as RootContent[], lineOffset);
+      }
+    }
+  };
+}
+
+function stampChildren(children: RootContent[], lineOffset: number) {
+  for (const node of children) {
+    if (node.type !== "element") continue;
+    const el = node as Element;
+    if (BLOCK_TAGS.has(el.tagName) && el.position?.start?.line) {
+      el.properties = el.properties || {};
+      el.properties["dataSourceLine"] = el.position.start.line + lineOffset;
+    }
+    if ("children" in el) {
+      stampChildren(el.children as RootContent[], lineOffset);
+    }
+  }
+}
+
+export async function markdownToHtml(
+  markdown: string,
+  sourceLineOffset = 0,
+): Promise<string> {
   const result = await unified()
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeCallouts)
     .use(rehypeDemoteHeadings)
+    .use(rehypeSourceLines, sourceLineOffset)
     .use(rehypeSlug)
     .use(rehypeAutolinkHeadings, {
       behavior: "wrap",

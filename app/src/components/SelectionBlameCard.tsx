@@ -2,14 +2,23 @@
 
 import { useEffect, useState, useCallback } from "react";
 
-interface BlameInfo {
-  author: string;
-  date: Date;
-  contributors: number;
+interface BlameChunk {
+  s: number;
+  e: number;
+  a: string;
+  c: string;
+  t: number;
 }
 
-function timeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+interface BlameHit {
+  author: string;
+  commitSha: string;
+  commitUrl: string;
+  timestamp: number;
+}
+
+function timeAgo(ts: number): string {
+  const seconds = Math.floor(Date.now() / 1000 - ts);
   if (seconds < 60) return "just now";
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) return `${minutes}m ago`;
@@ -23,28 +32,56 @@ function timeAgo(date: Date): string {
   return `${years}y ago`;
 }
 
-function getBlameFromSelection(node: Node): BlameInfo | null {
+function findBlameForSelection(node: Node): BlameHit | null {
+  const repo =
+    process.env.NEXT_PUBLIC_GITHUB_REPO || "CobryDev/ai-strategy";
+
   let el: HTMLElement | null =
     node.nodeType === Node.ELEMENT_NODE
       ? (node as HTMLElement)
       : node.parentElement;
 
+  let sourceLine: number | null = null;
+  let sectionEl: HTMLElement | null = null;
+
   while (el) {
-    if (el.dataset.blameAuthor) {
-      return {
-        author: el.dataset.blameAuthor,
-        date: new Date(el.dataset.blameDate || ""),
-        contributors: parseInt(el.dataset.blameContributors || "1", 10),
-      };
+    if (sourceLine === null && el.dataset.sourceLine) {
+      sourceLine = parseInt(el.dataset.sourceLine, 10);
+    }
+    if (el.dataset.blameChunks) {
+      sectionEl = el;
+      break;
     }
     el = el.parentElement;
   }
-  return null;
+
+  if (!sectionEl) return null;
+
+  const chunks: BlameChunk[] = JSON.parse(
+    sectionEl.dataset.blameChunks || "[]",
+  );
+  if (chunks.length === 0) return null;
+
+  let chunk: BlameChunk;
+
+  if (sourceLine !== null) {
+    const match = chunks.find((c) => sourceLine! >= c.s && sourceLine! <= c.e);
+    chunk = match || chunks[chunks.length - 1];
+  } else {
+    chunk = chunks[chunks.length - 1];
+  }
+
+  return {
+    author: chunk.a,
+    commitSha: chunk.c,
+    commitUrl: `https://github.com/${repo}/commit/${chunk.c}`,
+    timestamp: chunk.t,
+  };
 }
 
 export function SelectionBlameCard() {
   const [visible, setVisible] = useState(false);
-  const [blame, setBlame] = useState<BlameInfo | null>(null);
+  const [blame, setBlame] = useState<BlameHit | null>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
 
   const handleSelection = useCallback(() => {
@@ -60,8 +97,8 @@ export function SelectionBlameCard() {
       return;
     }
 
-    const info = getBlameFromSelection(selection.anchorNode!);
-    if (!info || isNaN(info.date.getTime())) {
+    const hit = findBlameForSelection(selection.anchorNode!);
+    if (!hit) {
       setVisible(false);
       return;
     }
@@ -69,7 +106,7 @@ export function SelectionBlameCard() {
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
-    setBlame(info);
+    setBlame(hit);
     setPosition({
       top: rect.bottom + window.scrollY + 6,
       left: rect.left + window.scrollX + rect.width / 2,
@@ -79,17 +116,15 @@ export function SelectionBlameCard() {
 
   useEffect(() => {
     document.addEventListener("selectionchange", handleSelection);
-    document.addEventListener("scroll", () => setVisible(false), {
-      passive: true,
-    });
+    const dismiss = () => setVisible(false);
+    document.addEventListener("scroll", dismiss, { passive: true });
     return () => {
       document.removeEventListener("selectionchange", handleSelection);
+      document.removeEventListener("scroll", dismiss);
     };
   }, [handleSelection]);
 
   if (!visible || !blame) return null;
-
-  const otherCount = blame.contributors - 1;
 
   return (
     <div
@@ -111,13 +146,21 @@ export function SelectionBlameCard() {
         <circle cx="12" cy="7" r="4" />
       </svg>
       <span className="selection-blame-author">{blame.author}</span>
-      {otherCount > 0 && (
-        <span className="selection-blame-extra">+{otherCount}</span>
-      )}
       <span className="selection-blame-sep" aria-hidden="true">
         ·
       </span>
-      <time dateTime={blame.date.toISOString()}>{timeAgo(blame.date)}</time>
+      <time>{timeAgo(blame.timestamp)}</time>
+      <span className="selection-blame-sep" aria-hidden="true">
+        ·
+      </span>
+      <a
+        href={blame.commitUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="selection-blame-commit"
+      >
+        {blame.commitSha}
+      </a>
     </div>
   );
 }

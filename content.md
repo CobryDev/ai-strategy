@@ -2210,6 +2210,7 @@ Organizations have an obligation — ethical, not just strategic — to be hones
 **Don't pretend displacement doesn't happen.** Some roles will be substantially reduced. Some people will be affected. Addressing this honestly — with generous transition support, reskilling investment, and genuine effort to find alternative roles — is both the ethical choice and the choice that preserves the organizational trust your AI adoption depends on. The 41% sabotage rate from the Writer survey is the predictable consequence of organizations that adopt AI without addressing the human impact honestly.
 
 ## ‼️ Ethics isn't a section you check off. It's a lens that applies to every decision in this guide. Every use case selection (Section 9) should ask: who benefits and who bears the risk? Every governance decision (Section 14) should ask: are we protecting the people affected by AI, not just the organization? Every measurement system (Section 17) should ask: are we tracking outcomes for everyone, including those who might be disadvantaged? Every change management program (Section 20) should ask: are we treating people with the honesty and investment they deserve? If these questions aren't part of your AI adoption process, your process is incomplete — and the gaps will eventually surface as incidents (Section 29), legal exposure, or the kind of organizational erosion that no technology can fix.
+
 ### 31\. AI and Organizational Design 🧰
 
 - How AI changes team structure and workflows long-term  
