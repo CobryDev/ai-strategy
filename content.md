@@ -1992,24 +1992,142 @@ Use AI for: research synthesis, first-draft PRDs and user stories, competitive m
 
 ## PART VI: THE HARD STUFF — WHAT MOST GUIDES SKIP 🧰
 
-### 29\. When AI Goes Wrong — Incident Response 🧰
+### 29. When AI Goes Wrong — Incident Response
 
-- Types of AI incidents:  
-  - Hallucinated information sent to a customer  
-  - Sensitive data leaked to an AI provider  
-  - Biased or discriminatory AI output  
-  - AI system takes unintended action  
-  - Compliance violation via AI use  
-- Building an AI incident response plan:  
-  - Detection: How do you know something went wrong?  
-  - Containment: How do you stop the damage?  
-  - Assessment: How bad is it?  
-  - Communication: Who needs to know, and what do you tell them?  
-  - Remediation: How do you fix it?  
-  - Learning: How do you prevent it from happening again?  
-- ACTIONABLE: AI incident response plan template  
-- ACTIONABLE: AI incident severity classification matrix
+Your AI system will produce a wrong answer that reaches a customer. An employee will paste confidential data into an unauthorized AI tool. Your chatbot will say something embarrassing on a public channel. Your AI-assisted hiring process will produce results that look discriminatory. An agentic workflow will take an action nobody authorized.
 
+These are not worst-case scenarios to plan for. They are incidents to prepare for, because every one of them has happened — repeatedly, across industries, at organizations that believed their safeguards were adequate. The question is not whether an AI incident will occur at your organization. It is whether, when it does, you'll have a structured response that contains the damage in hours, or an improvised scramble that extends it for weeks.
+
+Most organizations have incident response plans for cybersecurity breaches, system outages, and data loss. Almost none have incident response plans for AI-specific failures. This gap exists because AI incidents don't look like traditional IT incidents. They don't set off alarms. The system doesn't crash. The logs don't show errors. Instead, the system confidently produces output that is wrong, harmful, or unauthorized — and the output looks exactly like correct, helpful, authorized output. The failure is invisible until a human notices, and the human may not notice for hours, days, or months.
+
+This section provides the framework, templates, and classification system to close that gap.
+
+#### 29.1 Types of AI Incidents
+
+AI incidents fall into five categories. Each has different detection methods, different blast radiuses, different stakeholders who need to be notified, and different remediation paths.
+
+**Hallucinated information sent to a customer or used in a decision.** The AI generates false information — fabricated citations, invented product specifications, incorrect financial figures, nonexistent policies — and that information reaches a customer, appears in a deliverable, or informs a business decision. This is the most common AI incident category and the hardest to detect because the hallucinated output is indistinguishable in format and confidence from correct output.
+
+The severity depends entirely on what was hallucinated and who acted on it. A chatbot that tells a customer the wrong return window is embarrassing and may cost a refund. A legal brief that cites fabricated case law leads to sanctions. A financial analysis with invented figures drives a bad investment. The incident category is the same; the severity ranges from minor to catastrophic.
+
+**Sensitive data leaked to an AI provider or exposed through AI output.** An employee enters customer PII, financial data, trade secrets, or proprietary code into an AI tool — either an unauthorized tool (shadow AI) or an authorized tool used beyond its approved data tier. Alternatively, the AI system's output includes information it should not have access to or should not expose — a response that contains another customer's data, internal-only information surfaced in a customer-facing channel, or confidential details embedded in a generated document.
+
+Cisco's 2025 data: 46% of organizations experienced internal data leaks through generative AI. IBM's data: shadow AI-related breaches carry an average cost premium of $670,000. These are not rare events.
+
+**Biased or discriminatory AI output.** The AI produces output that disadvantages individuals or groups based on protected characteristics — a hiring tool that systematically underscores candidates from certain demographics, a customer service AI that provides different quality responses based on inferred characteristics, a content generator that produces stereotypical or offensive material. The harm may be direct (a qualified candidate is rejected) or reputational (a discriminatory output goes viral).
+
+**AI system takes an unintended action.** An agentic AI workflow executes an action that nobody authorized — sends an email, modifies a database record, triggers a purchase, changes a system configuration. This category is emerging as organizations deploy AI agents with tool access. The blast radius scales with the agent's permissions, which is why Section 12 emphasizes least-privilege access so aggressively. Insurance claim processing systems suffered $180 million in fraudulent payouts when prompt injection attacks caused AI systems to automatically approve illegitimate claims.
+
+**Compliance violation via AI use.** The organization's use of AI violates a regulatory requirement — processing personal data without adequate consent, using AI for a prohibited purpose under the EU AI Act, failing to conduct required impact assessments for high-risk AI systems, or making automated decisions in domains that require human oversight. The violation may be inadvertent (nobody realized the AI system fell under a high-risk classification) or structural (the governance framework didn't keep pace with AI deployment).
+
+#### 29.2 Building an AI Incident Response Plan
+
+An AI incident response plan follows the same structure as any incident response plan — detect, contain, assess, communicate, remediate, learn — but each phase requires AI-specific adaptations because the failure modes are different.
+
+**Detection: How do you know something went wrong?**
+
+Traditional IT incidents are detected by monitoring systems — alerts fire when servers crash, latency spikes, or error rates increase. AI incidents are frequently detected by humans, often the affected party: a customer who received wrong information, an employee who noticed something odd in an AI output, a compliance officer who discovered data was sent to an unauthorized tool, or a reporter who obtained an embarrassing AI-generated response.
+
+Build detection into your system architecture, don't rely solely on human observation. Automated quality sampling that evaluates a percentage of AI outputs against known-correct answers on a continuous basis. Output monitoring that flags responses containing patterns matching sensitive data formats (credit card numbers, Social Security numbers, account identifiers). Anomaly detection on AI behavior — sudden changes in response patterns, unusual data access, outputs that differ significantly from historical norms. User feedback mechanisms that make it trivially easy for employees and customers to report AI problems — a single-click "flag this response" button, not a multi-step reporting process.
+
+And establish clear escalation triggers: if an automated check fails, who is notified? If a customer reports a hallucination, what happens within the first fifteen minutes? If an employee reports a data leak to an unauthorized tool, who decides what to do? These triggers should be documented, tested, and known to the people who need to act on them.
+
+**Containment: How do you stop the damage?**
+
+For hallucinated information: identify the scope — how many customers or decisions were affected? Was this a one-off error or a systematic issue affecting all queries of a certain type? If systematic, disable the affected AI capability while the root cause is investigated. If isolated, flag the specific output for correction and continue monitoring for recurrence.
+
+For data leaks: determine what data was exposed, to which system, and whether retention or training-data policies apply. If data was sent to a third-party AI provider, contact the vendor immediately regarding deletion. If the leaked data triggers regulatory notification requirements (GDPR, HIPAA, state breach notification laws), engage legal counsel within the first hour.
+
+For biased output: remove or suspend the affected AI system from decision-making immediately. Do not wait for investigation to determine scope — the reputational and legal risk of continued operation during investigation outweighs the operational cost of suspension.
+
+For unintended actions: reverse the action if possible. If not reversible (email sent, data deleted, transaction executed), document what happened and notify affected parties. Revoke or restrict the agent's permissions immediately.
+
+For compliance violations: document the violation, cease the non-compliant activity, and engage legal counsel to assess notification obligations and liability exposure.
+
+**Assessment: How bad is it?**
+
+Use the severity classification matrix in Section 29.4 to categorize the incident. The assessment should answer: what happened (the specific failure), how it happened (the root cause), who was affected (scope — individuals, customers, data subjects), what the impact is (financial, reputational, legal, operational), whether it's contained or still active, and what the regulatory notification obligations are.
+
+**Communication: Who needs to know, and what do you tell them?**
+
+Internal stakeholders: the AI system owner, the executive sponsor, the security team, legal counsel, and — depending on severity — the CISO, the CEO, and the board. Don't under-notify. An AI incident that becomes a public story is always worse when leadership learns about it from the press rather than from their own team.
+
+External stakeholders (when applicable): affected customers, regulatory bodies (if notification is required), and the public (if the incident is likely to become public regardless). The communication should be factual, acknowledge the issue without minimizing it, explain what you're doing about it, and provide a way for affected parties to get more information. Do not blame the AI. The organization deployed the system and is responsible for its outputs.
+
+**Remediation: How do you fix it?**
+
+The fix depends on the root cause. Hallucination caused by insufficient context in the RAG pipeline requires improving retrieval quality. Data leak caused by inadequate classification requires updating the data classification policy and enforcement mechanisms. Bias caused by training data requires data auditing and model evaluation. Unintended action caused by excessive permissions requires tightening access controls. Compliance violation caused by governance gaps requires governance framework updates.
+
+Every remediation should have a specific owner, a specific timeline, and a verification mechanism — how will you confirm the fix actually works?
+
+**Learning: How do you prevent it from happening again?**
+
+Conduct a blameless post-incident review within two weeks. Document: the timeline of the incident, the root cause, what the response plan got right, what it got wrong, and what specific changes will prevent recurrence. Update the incident response plan, the AI governance framework, and the internal knowledge base (Section 21) with the lessons learned. If the incident revealed a category of risk that isn't covered by your current monitoring, add monitoring for it.
+
+## ‼️ The most important learning from any AI incident is whether your detection systems caught it or whether a human stumbled upon it. If detection was accidental, your monitoring has a gap that will produce the same surprise again. Close it.
+
+#### 29.3 AI Incident Response Plan Template
+
+Adapt this to your organization's existing incident response framework. It should supplement, not replace, your current plan.
+
+**Activation criteria:** This plan activates when any of the following are reported or detected: AI system produces output containing fabricated information that reaches a customer or is used in a business decision. Sensitive data (Tier 1 or Tier 2 per data classification policy) is confirmed or suspected to have been sent to an AI provider without authorization. AI system produces output that is biased, discriminatory, or offensive. AI agent takes an action that was not authorized or intended. AI use results in a confirmed or suspected regulatory compliance violation.
+
+**Roles:**
+- Incident Commander: [Name/role] — Coordinates the response, makes containment decisions, owns the timeline.
+- Technical Lead: [Name/role] — Investigates the root cause, implements technical containment and remediation.
+- Legal Counsel: [Name/role] — Assesses liability, determines notification obligations, advises on communication.
+- Communications Lead: [Name/role] — Drafts internal and external communications, manages stakeholder notification.
+- AI System Owner: [Name/role of the person responsible for the affected system] — Provides system context, assists with root-cause analysis, owns remediation.
+
+**Response timeline:**
+- 0–15 minutes: Initial report received and acknowledged. Incident Commander notified. Preliminary severity assessment.
+- 15–60 minutes: Containment action taken (system disabled, permissions revoked, affected output flagged). Scope assessment begun. Legal counsel engaged if data leak or compliance violation suspected.
+- 1–4 hours: Root cause identified or investigation underway. Scope determined (how many affected, what data involved). Severity classification finalized. Internal stakeholders notified per severity level.
+- 4–24 hours: Remediation plan developed with specific owner and timeline. External notification initiated if required. Affected parties contacted if applicable.
+- 1–5 days: Remediation implemented and verified. Communications completed. Monitoring enhanced for recurrence.
+- 5–14 days: Post-incident review conducted. Lessons documented. Response plan, governance framework, and knowledge base updated.
+
+**Documentation requirements:** Every AI incident, regardless of severity, must be documented in the incident log with: date and time of detection, how it was detected (automated monitoring vs. human report), description of the incident, severity classification, containment actions taken, root cause (once determined), remediation actions and owner, stakeholders notified, and lessons learned.
+
+#### 29.4 AI Incident Severity Classification Matrix
+
+**Severity 1 — Critical**
+
+Characteristics: Sensitive personal data (PII, PHI, financial) confirmed exposed to unauthorized parties. AI output used in a decision that caused material financial loss. Regulatory notification obligation triggered. Biased AI output in hiring, lending, or other legally protected decision processes. AI agent executed unauthorized high-value transaction.
+
+Response: Incident Commander and legal counsel engaged immediately. Affected AI system suspended. Executive leadership notified within one hour. External notification within regulatory timelines. Full post-incident review required.
+
+**Severity 2 — High**
+
+Characteristics: Proprietary or confidential business data confirmed sent to unauthorized AI system. Hallucinated information sent to customer that could cause financial or reputational harm. AI output that is offensive or discriminatory in customer-facing context. AI agent took unintended action affecting multiple records or external parties. Compliance gap identified that affects a production AI system.
+
+Response: Incident Commander notified within one hour. Affected capability suspended or restricted pending investigation. Executive sponsor notified within four hours. Remediation plan within 24 hours. Post-incident review required.
+
+**Severity 3 — Medium**
+
+Characteristics: Internal-only data sent to AI system beyond its approved data tier. Hallucinated information caught internally before reaching customer or decision. AI output inconsistent with governance policy but no external impact. Shadow AI usage discovered involving non-sensitive but unauthorized data. AI system quality degradation detected through monitoring.
+
+Response: AI system owner notified. Investigation within 24 hours. Containment if needed but system may continue operating. Remediation within one week. Documented in incident log; post-incident review at owner's discretion.
+
+**Severity 4 — Low**
+
+Characteristics: AI output of poor quality caught during routine human review. Minor policy deviation with no data exposure or external impact. User reports AI behaving unexpectedly but no harm identified. Monitoring detects anomaly that investigation determines to be benign.
+
+Response: Logged in incident tracker. Reviewed during next scheduled quality review. Pattern analysis to determine if multiple Severity 4 incidents indicate a systemic issue warranting escalation.
+
+## ⚠️ Multiple Severity 4 incidents of the same type within a short window should be treated as a Severity 3 or higher. A single hallucination caught in review is a minor event. Ten hallucinations of the same type in a week is a systematic failure. Track patterns, not just individual incidents.
+
+#### 29.5 After the Incident: Making It Count
+
+The post-incident review is the most valuable output of any incident, and the most frequently skipped. Organizations rush to remediate, declare the incident closed, and move on — losing the institutional learning that prevents the next incident.
+
+The review should be blameless. AI incidents are usually system failures, not individual failures — the employee who pasted data into the wrong tool was following a workflow that didn't prevent it; the AI that hallucinated was operating within parameters that allowed it; the agent that took an unauthorized action had permissions that nobody restricted. Punishing individuals for system failures ensures that the next incident is hidden rather than reported.
+
+The review should produce specific, actionable changes — not "be more careful" but "add automated PII detection to the input pipeline by [date]" or "reduce agent permissions on financial systems to read-only by [date]" or "add weekly hallucination rate monitoring for customer-facing RAG system by [date]." Each action should have an owner, a deadline, and a verification step.
+
+And the review should update the broader system: the incident response plan itself (what did we learn about our response process?), the AI governance framework (what gap did this incident reveal?), the internal knowledge base (what should every AI user in the organization know about this failure mode?), and the training program (do people need to understand something they currently don't?).
+
+An organization that has no AI incidents has no AI in production. An organization that has AI incidents and learns from them is building the institutional resilience that makes AI adoption sustainable. An organization that has AI incidents and doesn't learn from them is accumulating risk that will eventually produce an incident from which learning is no longer optional.
 ### 30\. The Ethics You Can't Outsource 🧰
 
 - Bias and fairness: not just a technical problem  
