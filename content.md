@@ -1792,70 +1792,203 @@ Use this as a starting structure. Adapt the sections, naming, and organization t
 - Content verification standard: all entries verified within the last 90 days; flagged entries archived after two review cycles
 ## PART V: DOMAIN-SPECIFIC GUIDANCE 🧰
 
-### 22\. AI for Software Engineering Teams 🧰
+## PART V: DOMAIN-SPECIFIC GUIDANCE
 
-- Code generation: what it's good at, what it's not, and how to use it well  
-- AI-assisted code review and debugging  
-- AI for documentation and test generation  
-- Risks: code quality, security vulnerabilities in generated code, over-reliance  
-- How engineering managers should think about AI and developer productivity  
-- ACTIONABLE: Engineering team AI adoption checklist
-
-### 23\. AI for Customer Support and Success 🧰
-
-- Chatbots and auto-responders: when they work, when they backfire  
-- AI-assisted agent workflows (drafting responses, summarizing tickets, routing)  
-- Knowledge base automation and self-service  
-- Quality and brand voice consistency  
-- Measuring impact without destroying CSAT  
-- ACTIONABLE: Support team AI deployment playbook
-
-### 24\. AI for Marketing and Content 🧰
-
-- Content generation: first drafts, variations, personalization  
-- SEO and content strategy with AI assistance  
-- AI in design workflows  
-- Brand voice, originality, and the "sounds like AI" problem  
-- Legal and IP considerations for AI-generated marketing content  
-- ACTIONABLE: Marketing team AI workflow guide
-
-### 25\. AI for Sales 🧰
-
-- Prospecting and lead enrichment  
-- Email and outreach drafting  
-- Call summarization and CRM automation  
-- Pipeline analysis and forecasting  
-- CAUTION: AI-generated outreach that *sounds* AI-generated is actively harmful to your brand  
-- ACTIONABLE: Sales team AI integration checklist
-
-### 26\. AI for HR and People Operations 🧰
-
-- Recruiting: resume screening, job description writing, interview prep  
-- Onboarding automation and personalization  
-- Policy Q\&A and employee self-service  
-- Performance review drafting assistance  
-- DANGER: AI in hiring decisions carries significant legal and ethical risk. Never use AI as the sole decision-maker in hiring, promotion, or termination decisions.  
-- ACTIONABLE: HR AI use case risk assessment
-
-### 27\. AI for Legal, Compliance, and Finance 🧰
-
-- Contract review and analysis  
-- Regulatory monitoring and compliance checking  
-- Financial analysis and reporting  
-- Audit preparation  
-- CAUTION: These are high-stakes domains. Human review is non-negotiable for any AI-assisted output that has legal or financial consequences.  
-- ACTIONABLE: Legal/finance AI governance requirements
-
-### 28\. AI for Product Management and Design 🧰
-
-- User research synthesis and analysis  
-- Requirements drafting and refinement  
-- Competitive analysis  
-- Design iteration and prototyping  
-- Feature prioritization with AI-assisted data analysis  
-- ACTIONABLE: Product team AI workflow guide
+The previous sections apply to everyone. This part applies to your team specifically. Each section covers how AI is being used in practice in a specific function, where the value is real, where the risks concentrate, and what to do this week. Skip to the section relevant to your role.
 
 ---
+
+### 22. AI for Software Engineering Teams
+
+Software engineering is AI's breakout enterprise use case — $4 billion in spending, 55% of all departmental AI investment, 85–90% of developers now using AI tools regularly. It's also the domain with the most rigorous data on both benefits and costs, and that data tells a more nuanced story than the productivity headlines suggest.
+
+#### Code Generation: What It's Good At, What It's Not
+
+AI code assistants excel at boilerplate and pattern-based code — standard CRUD operations, well-documented API integrations, common data transformations, test scaffolding, and code that follows established patterns in popular languages. For these tasks, the speed gains are real and well-documented. Developers complete more tasks and touch more pull requests per day.
+
+AI struggles with novel architecture decisions, complex system design, uncommon library interactions, and edge cases — precisely the work where bugs are most expensive. A study of over 100 LLMs found that 45% of AI-generated code contains security vulnerabilities aligned with the OWASP Top 10. Sixty-two percent of AI-generated solutions contain design flaws or known security vulnerabilities even with the latest models. The best-performing model produces secure and correct code only 56% of the time without specific security prompting. Java code is especially risky, with a 72% security failure rate.
+
+The pattern is consistent: AI generates more code faster, but that code requires more review, produces more technical debt, and introduces more security surface area. Microsoft's own research found coding speed increased 29% but code review time increased 47%, with 30% more static analysis warnings, 41% more complexity, and up to 4.94x more technical debt. Google's DORA report found developers estimate a 17% individual effectiveness improvement, but software delivery instability climbed nearly 10% — and 60% of developers work in teams suffering from either lower delivery speeds, greater instability, or both.
+
+## ⚠️ CAUTION: The average developer checked in 75% more code in 2025 than in 2022. That is not a 75% productivity improvement — it is a 75% increase in code that must be reviewed, tested, maintained, and eventually deprecated. If your measurement system counts lines produced as productivity, AI will look like a miracle. If it counts working, secure, maintainable software delivered to users, the picture is considerably more complicated.
+
+#### AI-Assisted Code Review and Debugging
+
+This is where AI provides some of its most unambiguous value for engineering teams. Using AI to review code — identifying potential bugs, suggesting improvements, flagging patterns that differ from team conventions — augments human reviewers rather than replacing them. AI is fast at spotting surface-level issues and consistent at applying known patterns. The human reviewer focuses on architecture, business logic, and the contextual judgment that AI lacks.
+
+For debugging, AI excels at suggesting fixes for common error patterns and explaining unfamiliar code. It struggles with complex, multi-system bugs where the problem spans multiple services or involves subtle timing issues. Use it for the first pass; rely on human expertise for the hard problems.
+
+#### AI for Documentation and Test Generation
+
+Documentation and test generation are among the highest-value, lowest-risk uses of AI in engineering. Most teams underinvest in both because the work is tedious and unglamorous. AI makes it fast enough to actually happen. Generating docstrings, README files, API documentation, inline comments for complex logic, and test cases from function signatures — these are tasks where AI's pattern-matching capability aligns well with the work, the accuracy requirements are moderate, and a human can quickly verify the output.
+
+#### Risks Engineering Leaders Must Manage
+
+**Security vulnerabilities in generated code.** Treat AI-generated code with the same security scrutiny as third-party library code — because that's effectively what it is. Integrate static analysis security testing (SAST) into the CI/CD pipeline. Require security scanning before any AI-generated code is merged. Include security-oriented instructions in your AI coding prompts; research shows this improves secure code generation rates from 56% to 66–69%.
+
+**Over-reliance and skill atrophy.** When developers shift from writing code to reviewing AI-generated code, they risk losing the deep understanding of implementation that makes them effective reviewers. Researchers have documented cognitive deskilling fears among developers. The countermeasure is deliberate: ensure developers still write complex code from scratch regularly, particularly for security-critical and architecturally significant components.
+
+**Technical debt accumulation.** AI generates verbose, sometimes redundant code because it optimizes for solving the stated problem, not for long-term maintainability. Without processes to refactor and trim AI output before committing, codebases bloat. Establish post-generation checklists: Does this code need all of this? Can it be simplified? Does it follow our conventions?
+
+#### Engineering Team AI Adoption Checklist
+
+For getting started: Have you selected and provisioned approved AI coding tools for the team? Have you established guidelines for when AI assistance is appropriate vs. when manual coding is expected (security-critical components, core architecture)? Is security scanning integrated into the CI/CD pipeline for all code, including AI-generated code? Have you updated code review standards to account for AI-generated code (reviewers should verify logic and security, not just syntax)?
+
+For production use: Are you measuring the full development cycle (including review, testing, and maintenance) rather than just code generation speed? Do your prompts include security-oriented instructions? Are developers still writing complex code manually for architecturally significant components? Is there a process for flagging and refactoring AI-generated code that introduces unnecessary complexity?
+
+---
+
+### 23. AI for Customer Support and Success
+
+Customer support is the second-most-proven AI use case in the enterprise, with production deployments at scale and documented ROI that justifies the investment. Klarna's AI handles 2.3 million conversations per month — two-thirds of incoming chats — with resolution time dropping from 11 minutes to under 2 minutes. ServiceNow deflects 54% of common forms, saving 12–17 minutes per case. Esusu automated 64% of email interactions with a 10-point CSAT lift.
+
+These numbers are achievable. They are also achievable only with the right architecture, the right expectations, and the right safety nets.
+
+#### Chatbots and Auto-Responders: When They Work and When They Backfire
+
+AI chatbots work well for high-volume, routine inquiries where the answer is drawn from documented knowledge: order status, return policies, account information, standard troubleshooting steps. They work because the information exists in structured form, the queries are repetitive, and the cost of a minor error is low.
+
+They backfire when deployed on complex, emotionally charged, or ambiguous inquiries without adequate escalation paths. The Air Canada incident — an AI chatbot invented a refund policy the airline had to honor — is the canonical cautionary tale. DPD's AI chatbot was manipulated into swearing at a customer and criticizing the company. These incidents share a root cause: AI was given customer-facing authority without guardrails, escalation triggers, or human oversight for situations it wasn't designed to handle.
+
+The pattern that works: AI handles the routine tier autonomously; AI assists human agents on the complex tier (drafting responses, summarizing history, suggesting resolutions); and humans handle the escalated tier with full context from the AI's initial triage.
+
+#### AI-Assisted Agent Workflows
+
+The highest and most sustainable value in support AI comes not from replacing agents but from augmenting them. AI that drafts responses for agent review, summarizes ticket history so agents don't waste time re-reading, suggests resolutions based on similar past tickets, auto-categorizes and routes incoming requests, and pre-fills forms with extracted information — these applications reduce handle time while keeping a human in the loop for quality and judgment.
+
+MindStudio reports that well-designed human-in-the-loop workflows achieve accuracy up to 99.9% in document extraction, compared to 92% for AI-only. That 7.9-point gap is the difference between a system customers trust and one they don't.
+
+#### Measuring Impact Without Destroying CSAT
+
+The most dangerous metric in support AI is "deflection rate" measured in isolation. A high deflection rate with declining CSAT means you're turning away customers, not serving them. Always measure deflection alongside satisfaction, resolution rate, and escalation volume. If deflection goes up and satisfaction holds steady or improves, you're winning. If deflection goes up and satisfaction drops, you're losing — the AI is blocking customers from the help they need.
+
+#### Support Team AI Deployment Playbook
+
+Phase 1 (weeks 1–4): Deploy AI on the single highest-volume, lowest-complexity ticket category. Measure deflection rate, CSAT, and escalation rate against baseline. Run in shadow mode first — AI suggests responses, agents decide whether to use them.
+
+Phase 2 (weeks 5–8): Based on Phase 1 results, expand to two or three additional ticket categories. Implement auto-response for categories where Phase 1 accuracy exceeded 95%. Maintain human review for all other categories.
+
+Phase 3 (weeks 9–12): Build feedback loops — agent corrections feed back into system improvements. Establish ongoing monitoring dashboards for quality, satisfaction, and escalation patterns.
+
+---
+
+### 24. AI for Marketing and Content
+
+Marketing was among the earliest adopters of generative AI, and for good reason — content creation is the archetypal "first draft" use case where AI's speed-to-output advantage is enormous and the cost of imperfection is manageable. Enterprise marketing AI spending hit $660 million in 2025.
+
+#### Content Generation: First Drafts, Variations, Personalization
+
+AI's value in content generation is as a first-draft engine, not a finished-content engine. Generate ten headline variations in two minutes instead of brainstorming for an hour. Produce a first draft of a blog post that's 70% there instead of staring at a blank page. Create personalized email variations for different audience segments without writing each one from scratch. Adapt existing content for different channels and formats.
+
+ContentMonk's production model — automating 70–80% of content operations with human review at brief generation, draft review, and pre-publish — represents the mature pattern. The AI handles volume; humans handle strategy, quality, and the editorial decisions that separate good content from generic output.
+
+#### Brand Voice and the "Sounds Like AI" Problem
+
+The single biggest risk in marketing AI is homogenization. AI-generated content converges on a style that is fluent, competent, and recognizably generic — the same rhythms, the same structures, the same predictable transitions that every other company using the same models also produces. When your marketing sounds like everyone else's marketing, you've traded production speed for brand distinctiveness.
+
+The fix is not to avoid AI — it's to invest in the prompt engineering and editorial layer that bends AI output toward your specific voice. System prompts that encode your brand guidelines, tone preferences, and linguistic quirks. Style guides that give the AI concrete examples of what your voice sounds like and doesn't sound like. And a human editorial step that catches the "AI tells" — the overused phrases, the artificial enthusiasm, the formulaic structures that mark content as machine-generated.
+
+## ⚠️ CAUTION: Audiences are developing sensitivity to AI-generated content. A growing percentage of readers can identify (and are alienated by) content that "sounds like AI." The competitive advantage is shifting from "can produce content faster" to "can produce content that doesn't sound like everyone else's AI-generated content." That distinction is an editorial skill, not a technology capability.
+
+#### Legal and IP Considerations
+
+AI-generated marketing content exists in a legally unsettled landscape. Key considerations: AI models may have trained on copyrighted content, creating potential infringement claims for outputs that closely resemble existing works. AI-generated content may not be copyrightable in all jurisdictions, meaning your AI-produced marketing materials may not receive the same IP protection as human-created work. Claims and statistics generated by AI must be verified — AI will confidently produce impressive-sounding data points that are fabricated. And disclosure requirements are evolving; some jurisdictions and industry standards require disclosure when content is AI-generated.
+
+#### Marketing Team AI Workflow Guide
+
+Use AI for: first drafts, variations, ideation, personalization, SEO meta-content, social media scheduling copy, internal briefs, and competitive research summaries. Apply human review for: final brand voice polish, factual verification of all claims and data, strategic messaging decisions, visual-text alignment, and anything customer-facing at scale. Don't use AI for: final copy without human review, fabricated testimonials or endorsements, content that claims to represent original research you haven't conducted, or content that impersonates specific individuals.
+
+---
+
+### 25. AI for Sales
+
+Sales AI spending is embedded within broader CRM and productivity categories, but the use cases are well-established and the ROI data is strong. Larridin's task-level measurements show prospect research reduced from 2.5 hours to 35 minutes (76%), competitive analysis from 4 hours to 1.5 hours (62%), and first-draft emails from 45 minutes to 12 minutes (73%).
+
+#### Where AI Helps Sales Teams
+
+**Prospecting and lead enrichment.** AI can synthesize publicly available information about prospects — company news, financial filings, org chart changes, social media activity — into pre-meeting briefings that would take an SDR hours to compile manually. This is AI as research assistant, and it's one of the clearest time-savers in the enterprise.
+
+**Call summarization and CRM automation.** AI that transcribes calls, extracts key points and action items, and updates CRM records automatically eliminates hours of administrative work that salespeople resent and neglect. When the CRM is consistently updated, pipeline visibility improves for the entire organization.
+
+**Pipeline analysis and forecasting.** AI that analyzes patterns in your sales data — deal velocity, stage conversion rates, engagement signals — can surface risks and opportunities that human analysis would miss or find too late. This is analytical AI at its most useful: pattern recognition across a large dataset.
+
+#### The Outreach Quality Problem
+
+## ⚠️ CAUTION: AI-generated outreach that *sounds* AI-generated is actively harmful to your brand. Every prospect's inbox is flooded with AI-written emails that open with "I hope this email finds you well" and pivot to "I noticed your company is [generic observation]." These emails are easy to generate and easy to ignore. Worse, they signal to sophisticated buyers that your sales team relies on automation rather than genuine engagement — a brand impression that's hard to reverse.
+
+The fix is not to avoid AI for outreach — it's to use AI for research and personalization that's genuine, not cosmetic. AI that pulls a specific data point from a prospect's recent earnings call and connects it to a relevant case study is doing useful work. AI that generates a generic-sounding paragraph with the prospect's company name inserted is generating spam. The difference is in the prompt design, the data the AI has access to, and the human judgment applied before sending.
+
+#### Sales Team AI Integration Checklist
+
+For immediate value: Deploy call summarization and CRM auto-update — highest ROI, lowest risk, fastest adoption. Provide prospect research tools that synthesize public data into pre-meeting briefs. For communication: Establish clear guidelines — AI drafts, humans personalize and send. No fully automated outreach to any lead that matters. For measurement: Track downstream metrics (response rates, meeting conversion, deal velocity), not just activity metrics (emails sent, calls made).
+
+---
+
+### 26. AI for HR and People Operations
+
+HR sits at the intersection of AI's efficiency benefits and its highest ethical risks. The efficiency opportunities are genuine — automating administrative tasks, scaling self-service, streamlining communication. The risks are concentrated in decisions that affect people's livelihoods.
+
+#### Where AI Helps HR
+
+**Job description writing and optimization.** AI generates first-draft job descriptions, identifies potentially biased language, suggests inclusive alternatives, and adapts descriptions for different posting platforms. This is low-risk, high-frequency, and immediately valuable.
+
+**Policy Q&A and employee self-service.** An AI assistant trained on your employee handbook, benefits documentation, and HR policies can handle the routine inquiries that consume HR team time — leave balances, benefits enrollment procedures, expense policy questions. This is a classic RAG use case with well-defined data and moderate accuracy requirements.
+
+**Onboarding automation and personalization.** AI can generate personalized onboarding schedules, assemble role-specific documentation packages, and provide new-hire Q&A support during the critical first weeks. The value is both in speed (onboarding setup that took days happens in hours) and in consistency (every new hire gets the same quality of information).
+
+**Performance review drafting assistance.** AI that helps managers write performance reviews by generating structured first drafts from notes, goals, and feedback data reduces one of the most universally dreaded management tasks. The human manager reviews, edits, and owns the final content — the AI handles the blank-page problem.
+
+## 🚨 DANGER: AI in hiring decisions carries significant legal and ethical risk. Never use AI as the sole decision-maker in hiring, promotion, or termination decisions. The EU AI Act classifies AI systems used in employment decisions as high-risk, requiring conformity assessments, risk management systems, and documented human oversight. In the U.S., the EEOC has issued guidance that employers can be liable for discrimination resulting from AI hiring tools, even if the employer didn't design the tool. New York City's Local Law 144 requires bias audits for automated employment decision tools. AI-assisted resume screening that filters candidates based on patterns correlated with protected characteristics — even indirectly — exposes your organization to discrimination claims. If you use AI in any part of the hiring pipeline, ensure: documented human review of all AI-assisted decisions, regular bias audits by qualified third parties, transparency with candidates about AI use in the process, and legal review of your specific implementation.
+
+#### HR AI Use Case Risk Assessment
+
+Low risk (proceed with standard governance): job description drafting, policy Q&A, onboarding document assembly, scheduling automation, performance review first drafts with human editing. Medium risk (additional review required): employee sentiment analysis, internal mobility recommendations, training program personalization, workforce planning analytics. High risk (legal review and bias audit required): resume screening, candidate ranking, interview scoring, promotion recommendations, compensation analysis, performance rating calibration, termination risk modeling.
+
+---
+
+### 27. AI for Legal, Compliance, and Finance
+
+These are the domains where AI's value is highest and its margin for error is lowest. The tension is permanent and irreducible: every AI-assisted output in legal, compliance, or finance carries consequences that range from embarrassment to regulatory sanction to material financial loss. This does not mean you shouldn't use AI. It means you must use it with an unwavering commitment to human review.
+
+#### Where AI Helps
+
+**Contract review and analysis.** AI that identifies key clauses, flags unusual terms, extracts obligations and deadlines, and compares contract language against your standard templates can reduce review time from hours to minutes for routine agreements. Wolters Kluwer's 2025 benchmark found AI legal research tools averaged 89% accuracy on complex regulatory questions — impressive for volume screening, insufficient for standalone use, and exactly right when paired with professional review.
+
+**Regulatory monitoring and compliance checking.** AI that monitors regulatory sources, flags changes relevant to your business, and cross-references new requirements against your current policies addresses a problem that's impossible to handle manually at scale. The volume of regulatory change exceeds any compliance team's reading capacity.
+
+**Financial analysis and reporting.** AI that queries financial databases, generates visualizations, produces first-draft narratives for earnings reports or board materials, and identifies anomalies in financial data accelerates work that's essential but time-consuming.
+
+**Audit preparation.** AI that assembles documentation, identifies gaps in evidence, cross-references requirements against available records, and generates first-draft audit responses reduces the panic and scramble that typically precedes an audit.
+
+## ⚠️ CAUTION: Human review is non-negotiable for any AI-assisted output that has legal or financial consequences. The hallucination problem is not theoretical in these domains — lawyers have been sanctioned for filing briefs with AI-fabricated case citations (and these incidents continued through 2025 and into 2026, with over 50 U.S. lawsuits documented). Financial analysis with invented data points can drive bad investment decisions. Compliance determinations based on AI-generated regulatory interpretations can miss critical requirements. AI does the heavy lifting of search, synthesis, and first-draft generation. A qualified professional verifies every output that will be relied upon.
+
+#### Legal/Finance AI Governance Requirements
+
+All AI-generated legal or financial output must be reviewed by a qualified professional before external use or reliance. AI-generated citations, case references, regulatory references, and financial figures must be verified against primary sources. AI tools used in these domains must maintain audit trails showing what was generated, what was reviewed, and who approved the final output. Regular accuracy audits (monthly sampling at minimum) must verify that AI output quality meets professional standards. Staff must be trained on AI limitations specific to legal and financial work, including hallucination patterns, citation fabrication, and the tendency to produce plausible but incorrect analysis.
+
+---
+
+### 28. AI for Product Management and Design
+
+Product management and design sit at the intersection of analytical and creative AI use cases. The work involves synthesizing large volumes of qualitative data (user feedback, research transcripts, competitor analysis) and generating artifacts (requirements, specifications, prototypes) — both areas where AI provides genuine leverage.
+
+#### Where AI Helps
+
+**User research synthesis and analysis.** Product managers drown in qualitative data — interview transcripts, survey responses, support tickets, app reviews, NPS comments. AI that synthesizes these sources, identifies themes, extracts quotes that illustrate key points, and generates structured summaries transforms weeks of analysis into days. The human PM then validates the themes, adds context the AI can't know, and makes strategic judgments about priority.
+
+**Requirements drafting and refinement.** AI generates first-draft PRDs, user stories, and acceptance criteria from meeting notes, research summaries, and strategic directives. The value is in the blank-page problem: starting from a structured draft is faster than starting from nothing. The human PM revises for accuracy, completeness, and strategic alignment.
+
+**Competitive analysis.** AI that monitors competitor products, pricing changes, feature announcements, job postings, and public communications — and synthesizes this into structured intelligence briefs — provides continuous competitive visibility that's impractical to maintain manually.
+
+**Design iteration and prototyping.** AI-assisted design tools generate layout variations, suggest component compositions, create placeholder content, and produce rapid visual prototypes from text descriptions. This accelerates the exploration phase where teams need to evaluate many options quickly. AI-generated visuals serve as conversation starters, not final deliverables.
+
+**Feature prioritization with AI-assisted data analysis.** AI that analyzes usage data, support ticket patterns, revenue attribution, and customer feedback to surface insights about what features drive retention, satisfaction, and revenue helps PMs make evidence-based prioritization decisions. The AI identifies patterns; the PM applies strategic judgment about what to build.
+
+## ⚠️ CAUTION: AI-generated requirements that aren't validated against actual user needs risk encoding plausible-sounding specifications that solve the wrong problem. AI is excellent at producing well-structured, professional-looking PRDs — and that polished surface can mask fundamental misunderstandings about what users actually need. Always validate AI-generated requirements against primary research data and user feedback.
+
+#### Product Team AI Workflow Guide
+
+Use AI for: research synthesis, first-draft PRDs and user stories, competitive monitoring, data analysis and pattern identification, design exploration, meeting summarization, and stakeholder communication drafts. Apply human judgment for: strategic prioritization, trade-off decisions, user empathy and contextual understanding, design system coherence, and any customer-facing specification. Integrate AI into existing tools: the best product AI workflows connect directly to your research repository, project management tool, and design system — not a separate AI interface that requires context switching.
 
 ## PART VI: THE HARD STUFF — WHAT MOST GUIDES SKIP 🧰
 
