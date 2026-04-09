@@ -1,9 +1,22 @@
 import type { Metadata } from "next";
-import { Newsreader, Lexend, Plus_Jakarta_Sans } from "next/font/google";
+import {
+  Newsreader,
+  Source_Serif_4,
+  Lexend,
+  Plus_Jakarta_Sans,
+} from "next/font/google";
 import "./globals.css";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",
+  subsets: ["latin"],
+  display: "swap",
+  style: ["normal", "italic"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const sourceSerif = Source_Serif_4({
+  variable: "--font-source-serif",
   subsets: ["latin"],
   display: "swap",
   style: ["normal", "italic"],
@@ -44,7 +57,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${lexend.variable} ${jakarta.variable} h-full`}
+      className={`${newsreader.variable} ${sourceSerif.variable} ${lexend.variable} ${jakarta.variable} h-full`}
     >
       <body className="min-h-full bg-surface antialiased">{children}</body>
     </html>

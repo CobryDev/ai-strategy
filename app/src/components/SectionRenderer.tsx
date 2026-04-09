@@ -40,6 +40,9 @@ export function SectionRenderer({ section, html }: Props) {
   const { blame } = section;
   const otherContributors = blame.contributors.length - 1;
 
+  const { readingTime, commonQuestions } = section;
+  const showPreamble = readingTime > 0 || commonQuestions.length > 0;
+
   return (
     <article
       id={section.id}
@@ -54,6 +57,26 @@ export function SectionRenderer({ section, html }: Props) {
         <div className="wip-badge">
           <span className="wip-badge-icon">🧰</span>
           Work in progress
+        </div>
+      )}
+      {showPreamble && (
+        <div className="chapter-preamble">
+          <span className="reading-time-badge">
+            <span className="reading-time-icon" aria-hidden="true">◷</span>
+            {readingTime} min read
+          </span>
+          {commonQuestions.length > 0 && (
+            <div className="common-questions">
+              <div className="common-questions-label">
+                Questions this section answers
+              </div>
+              <ul>
+                {commonQuestions.map((q) => (
+                  <li key={q}>{q}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
       <div
