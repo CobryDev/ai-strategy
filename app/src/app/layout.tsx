@@ -57,6 +57,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${newsreader.variable} ${sourceSerif.variable} ${lexend.variable} ${jakarta.variable} h-full`}
     >
       <body className="min-h-full bg-surface antialiased">{children}</body>
