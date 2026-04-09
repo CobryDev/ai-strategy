@@ -8,6 +8,7 @@ import { ReadingProgress } from "@/components/ReadingProgress";
 import { TableOfContents } from "@/components/TableOfContents";
 import { SectionRenderer } from "@/components/SectionRenderer";
 import { Header } from "@/components/Header";
+import { SelectionBlameCard } from "@/components/SelectionBlameCard";
 
 export default async function Home() {
   const sections = parseContentIntoSections();
@@ -30,6 +31,7 @@ export default async function Home() {
     <>
       <ReadingProgress />
       <Header revisionCount={revisionCount} />
+      <SelectionBlameCard />
 
       <div className="flex min-h-screen">
         <TableOfContents entries={toc} />

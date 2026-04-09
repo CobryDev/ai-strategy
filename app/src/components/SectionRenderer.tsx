@@ -44,6 +44,9 @@ export function SectionRenderer({ section, html }: Props) {
     <article
       id={section.id}
       data-section-id={section.id}
+      data-blame-author={blame.primaryAuthor}
+      data-blame-date={blame.lastModified.toISOString()}
+      data-blame-contributors={blame.contributors.length}
       className={`section-container${section.wip ? " section-wip" : ""}`}
     >
       {section.wip && (
