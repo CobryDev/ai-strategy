@@ -1,0 +1,110 @@
+---
+order: 14
+number: "14"
+title: "Pillar 3: Governance and Compliance"
+partId: "part-iii-the-pillars-what-you-need-to-get-right"
+partTitle: "PART III: THE PILLARS - WHAT YOU NEED TO GET RIGHT"
+level: "section"
+---
+# 14. Pillar 3: Governance and Compliance
+
+The conventional wisdom about AI governance goes something like this: governance is important, but if you make it too heavy, you'll slow everything down, so find a balance. This framing is correct but unhelpful, like saying the key to cooking is using the right amount of heat. What matters is the specific mechanisms.
+
+KPMG's guidance is the most direct articulation of the principle: responsible AI governance is a "first order of business" because it enables going "safe" and going "fast" by giving business leaders clear guardrails to operate within. The word "enables" is doing the heavy lifting in that sentence. Governance that slows you down is governance designed wrong. Governance that tells people what they can do - not just what they can't - is the kind that accelerates.
+
+## 14.1 The Risk-Tiered Model
+
+Microsoft's April 2026 adaptive governance framework is the most practical lightweight model we've found, and it has the virtue of being simple enough that people will actually use it. It uses a three-tier risk classification:
+
+Low risk covers constrained, self-serve scenarios with limited data access. An employee using a general-purpose AI assistant to brainstorm ideas, draft internal emails, or summarize publicly available information. The governance model here is: provide clear guidelines about what data cannot be entered, and let people go. As Microsoft puts it, "makers don't need to open a ticket for every idea."
+
+Medium risk covers scenarios with broader sharing and more sensitive data. An AI system that accesses internal documents to answer employee questions, or that drafts customer-facing content for human review. This requires review but shouldn't be a bottleneck - a defined approval process with clear criteria, not a committee that meets monthly.
+
+High risk covers core business system connections - AI that can take actions, access sensitive data at scale, or make decisions that affect customers or employees. Full governance review required, with named human oversight, documented decision criteria, and ongoing monitoring.
+
+The key insight Microsoft articulates, which many governance frameworks miss: "Agents don't create access problems; they expose the ones you already have, faster." This matters because it reframes AI governance not as a new burden but as a forcing function for fixing problems you already had. If your data permissions are a mess, AI will find out before your audit does.
+
+> ⚠️ CAUTION
+>
+> The most common governance failure is governance designed as a gate rather than a guide. ModelOp's research found 44% of organizations say governance is "too slow." When governance means submitting a request to a review board that meets every two weeks and takes another two weeks to respond, teams will either stop innovating or route around governance entirely.
+
+## 14.2 Coca-Cola's Approach: Governance as Coordination
+
+Coca-Cola's real-world implementation demonstrates what lightweight-but-effective governance looks like. They deliberately avoided creating a large centralized AI department. Instead, they run a small global team that coordinates a distributed network of early adopters - only 2 of approximately 2,000 marketing employees have "AI" in their job title. They created a cross-functional "digital council" of senior leaders whose job is to inventory all digital capabilities, reduce duplication, and eliminate silos. The function of this council is coordination, not gatekeeping. It exists to make sure people aren't building the same thing in three different departments, that lessons from one team reach others, and that risk is managed consistently - not to approve or deny individual AI projects.
+
+This model works because it matches how AI adoption actually happens in large organizations: distributed, organic, driven by individual teams solving their own problems. Centralizing all AI activity into a single team creates a bottleneck. Leaving it entirely ungoverned creates chaos. The coordination model sits between the two.
+
+## 14.3 Acceptable Use Policies That People Actually Read
+
+Every organization deploying AI needs an acceptable use policy. Very few organizations have one that's worth the PDF it's printed on.
+
+ISACA's research found only 28% of organizations have a formal, comprehensive AI use policy. The other 72% are operating on implicit norms, verbal guidance, or nothing at all, which means every employee is making their own judgment calls about what's appropriate.
+
+The published policies worth studying as starting points include Fisher Phillips' full-text "Acceptable Use of Generative AI Tools" policy, which covers scope, prohibited uses (entering confidential information, representing AI work as original), required practices (human review of all AI outputs before external use), and integration notes for regulated industries. ISACA offers a customizable template. Adelia Risk's template stands out for going beyond the policy itself into practical deployment guidance - walking employees through specific examples of what is and isn't allowed. Their framing is instructive: "'A client's name' isn't allowed; 'A generic question about retirement planning' is fine." That level of specificity is what makes a policy usable rather than theoretical.
+
+> ‼️ IMPORTANT
+>
+> A policy that employees don't read, don't understand, or can't apply to their daily work creates a false sense of security. The best policies are short, specific, full of concrete examples, and integrated into the tools people actually use. A policy document buried on the intranet is governance theater.
+
+## 14.4 Human-in-the-Loop That Doesn't Kill Usability
+
+One of the most important governance decisions you'll make is defining when AI outputs require human review before they're acted on or shared externally. Get this wrong in one direction and you create risk: AI-generated content goes to customers without anyone checking it. Get it wrong in the other direction and you eliminate every efficiency gain AI provides, because people are reviewing everything, every time.
+
+Three production patterns have been documented that balance these concerns effectively.
+
+Approval flows pause the workflow at pre-determined checkpoints for human sign-off. SkillStruct, which generates AI-powered career recommendations, reviews all recommendations before they reach users. The AI does the heavy lifting of analysis and drafting; humans verify that the output is appropriate and accurate. This works well for high-stakes, lower-volume outputs where the cost of an error is significant.
+
+Feedback loops let human reviewers evaluate and correct AI outputs, with corrections feeding back into future iterations. ContentMonk automates 70–80% of content operations with human review at three specific points: brief generation, draft review, and pre-publish review. Over time, the AI learns from corrections and the review burden decreases. This works well for content generation and similar creative tasks where quality matters but volume is high.
+
+Escalation paths route to humans only when the AI's confidence is low or the stakes are high. The system handles routine cases autonomously and flags exceptions. This is the most efficient pattern for high-volume operational workflows like customer support triage.
+
+The key principle, articulated by Zapier: "Human-in-the-loop doesn't mean slowing down automation or reviewing every action. The goal is to let the workflow run on its own until it reaches a point where human input is required." MindStudio reports that well-designed human-in-the-loop workflows achieve accuracy up to 99.9% in document extraction, compared to 92% for AI-only.
+
+> 🚨 DANGER
+>
+> The worst implementation of human-in-the-loop is "human rubber stamp." If reviewers are expected to approve dozens of AI outputs per hour, they will stop actually reviewing them. If you're going to require human review, give reviewers the time, context, and incentive to actually do it. Otherwise, remove the review step and invest in better automated evaluation instead.
+
+## 14.5 EU AI Act: What to Do Before August 2026
+
+For organizations with EU customers or operations, the EU AI Act creates compliance obligations that are already partially in force and will expand significantly. This is the most consequential AI regulation globally, and even organizations outside the EU need to pay attention if they serve EU customers.
+
+The timeline is staged. Prohibited AI practices and AI literacy requirements have been in force since February 2, 2025\. General-purpose AI model provider obligations took effect August 2, 2025\. The high-risk AI system obligations - the most operationally significant - take effect August 2, 2026 under the current law.
+
+> ‼️ IMPORTANT
+>
+> The Digital Omnibus proposal, currently in trilogue negotiations, would push the high-risk deadline to December 2, 2027 for stand-alone Annex III high-risk systems. Prepare as if August 2026 is real, plan as if December 2027 is the likely enforcement date. If the trilogue runs late, August 2026 applies by default.
+
+The practical compliance sequence, drawing on Cognisys's deliverables-driven approach: Build a complete AI system inventory (every AI system in use, its version, provider, deployment context, risk classification, the rationale for that classification, and the date and approver who signed off). Produce classification decision records, signed by a compliance lead. For deployers of high-risk systems, complete a Fundamental Rights Impact Assessment. Document human oversight procedures, including intervention points, named roles, escalation paths, and evidence of training. Prepare technical documentation per Annex IV. Collect vendor evidence: your providers will need to demonstrate their own compliance, and you need documented proof.
+
+> 🚨 DANGER
+>
+> The official FRIA template mandated by Article 27(5) has not yet been published by the AI Office as of early 2026\. The ECNL/DIHR Guide is currently the most operational interpretation available and includes a downloadable FRIA template questionnaire. Do not wait for the official template to begin readiness work.
+
+For organizations that fine-tune foundation models, the provider-versus-deployer distinction matters enormously. The July 2025 GPAI Guidelines set an indicative threshold: fine-tuning that exceeds one-third of the original model's training compute triggers provider obligations. Currently, no publicly available model meets this threshold, meaning most fine-tuning will not trigger provider status. For high-risk AI systems under Article 25, however, the bar is significantly lower: rebranding, altering the intended purpose, or making a "substantial modification" can transform a deployer into a legally responsible provider. Assume fine-tuning triggers provider obligations until vendor data confirms otherwise.
+
+For non-EU companies with EU customers, the priority actions in order are: assess applicability, ensure no prohibited AI uses exist (already in force), meet AI literacy requirements (already in force), classify all systems by risk tier, determine your role for each system, appoint an Authorized Representative established in the EU before making high-risk systems available, complete conformity assessments, register in the EU database, and implement post-market monitoring. Failure to appoint an Authorized Representative carries fines of up to €15 million or 3% of global turnover.
+
+## 14.6 Governance Checklist
+
+**For getting started:**
+
+- [ ] Have you classified your AI use cases into risk tiers (low, medium, high)?
+- [ ] Is there a published acceptable use policy that employees have read and acknowledged?
+- [ ] Have you defined which AI outputs require human review and which don't?
+- [ ] Is there a named person or team responsible for AI governance?
+- [ ] Do you have an inventory of all AI tools and systems in use, including shadow AI?
+
+**For production readiness:**
+
+- [ ] Are governance controls embedded in the technical pipeline (identity, access, logging, evaluation gates), or are they a separate manual process?
+- [ ] Can you produce an audit trail showing what data an AI system accessed, what it generated, and whether a human reviewed it?
+- [ ] Is there a defined escalation path for when AI systems produce unexpected or harmful outputs?
+- [ ] Have you established a feedback mechanism for users to report AI issues?
+
+**For EU AI Act compliance:**
+
+- [ ] Do you have a complete AI system inventory with risk classifications?
+- [ ] Have you documented classification decisions with rationale?
+- [ ] For high-risk systems, have you completed or planned a Fundamental Rights Impact Assessment?
+- [ ] Have you determined provider versus deployer status for each system?
+- [ ] If applicable, have you appointed or planned to appoint an EU Authorized Representative?

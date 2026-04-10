@@ -1,0 +1,143 @@
+---
+order: 19
+number: "19"
+title: "Running AI Pilots That Don't Die"
+partId: "part-iv-adoption-making-it-actually-happen"
+partTitle: "PART IV: ADOPTION - MAKING IT ACTUALLY HAPPEN"
+level: "section"
+---
+# 19. Running AI Pilots That Don't Die
+
+The failure rates are established (Section 7.2): most pilots never reach production, and the reasons are structural, not technological. This section is about the mechanics — how to design a pilot that either reaches production or fails fast, rather than drifting into the slow death of declining attention and shifting priorities.
+
+Most pilots that die don't die dramatically. They die through the gradual realization that nobody planned for what comes after the demo. The demo works. The selected users are enthusiastic. The leadership presentation goes well. And then nothing happens — because the pilot was designed to prove the technology functions, not to answer the question that actually matters: should we invest production resources in this?
+
+## 19.1 Why Most AI Pilots Fail
+
+The failure patterns are consistent and almost never technical. Five structural mistakes account for the vast majority.
+
+**No clear success criteria.** The pilot launches with the implicit goal of "seeing if AI works for this use case." It works, in the sense that the AI produces outputs. But nobody defined what "works" means in business terms before the pilot started, so there's no objective basis for deciding whether to scale, modify, or abandon the initiative. The team presents qualitative testimonials: "Users liked it." "The outputs were impressive." "We see potential." This is not evidence. This is enthusiasm. And enthusiasm doesn't survive a budget review.
+
+**Wrong use case.** Two failure modes here. Too ambitious: the pilot takes on a complex, multi-system, high-stakes workflow that requires six months of data preparation, integration engineering, and change management - turning what was supposed to be a four-week experiment into a twelve-month project that never reaches a clear evaluation point. Too trivial: the pilot selects something so minor that even a resounding success doesn't justify the investment or generate organizational momentum. "We used AI to summarize our team meetings" is a successful pilot that convinces nobody to fund the next initiative.
+
+**No executive sponsor.** Section 18 covered this in the adoption playbook, and it bears repeating: "buy-in" is not sponsorship. Buy-in means someone nodded when the pilot was proposed. Sponsorship means a named executive who will remove obstacles, make decisions when the team is stuck, defend the budget when priorities shift, and answer for the results. Research shows 84% of AI initiatives with C-level sponsorship achieve positive ROI versus 23% without. A pilot without a sponsor is a hobby project with a corporate email address.
+
+**No path to production.** This is the single most common structural failure. The pilot was designed as an experiment, not as the first phase of a production deployment. The data was manually curated. The users were hand-selected. The edge cases were quietly handled offline. The integration was a prototype held together with API keys that expire in thirty days. When leadership asks "Great, how do we roll this out to the whole team?" the answer is "We'd need to basically start over" - and the momentum dies.
+
+**Piloted by enthusiasts, not by actual users.** The pilot team consists of people who volunteered - the early adopters, the AI enthusiasts, the people who were already using AI on their own. They're motivated, technically comfortable, and forgiving of rough edges. They are not representative of the people who will actually need to use this system in production. A pilot that succeeds with enthusiasts and fails with the general user base hasn't validated the solution - it's validated the enthusiasm.
+
+> ‼️ The pilot is not the goal. Production is the goal. The pilot is a controlled method of >reducing risk on the path to production. Every design decision in the pilot should be made with 
+> production in mind. If a pilot decision wouldn't survive production (manually curated data, > hand-selected users, offline edge-case handling), it should either be replaced with a 
+> production-viable alternative or explicitly documented as a gap that must be closed before scaling.
+
+## 19.2 The Anatomy of a Successful Pilot
+
+A successful AI pilot has eight components. Missing any one of them dramatically increases the probability of failure or, worse, the probability of inconclusive results that waste time without producing a clear decision.
+
+**Sponsor.** A named executive who cares about the business outcome the pilot addresses - not someone who thinks AI is interesting, but someone whose performance metrics improve if this works. The sponsor's job is threefold: protect the pilot's resources from competing priorities, make decisions when the team encounters obstacles, and own the go/no-go decision at the end. If the sponsor doesn't attend the kickoff meeting, the weekly check-in, and the final evaluation meeting, they are not a sponsor.
+
+**Owner.** A person - not a team, not a committee, a specific person - responsible for running the pilot day-to-day. The owner manages the timeline, coordinates between participants, tracks metrics, resolves issues, and produces the final evaluation. This person should have enough authority to make operational decisions without escalating every question to the sponsor, and enough proximity to the actual workflow to understand what's happening on the ground.
+
+**Participants.** Five to fifteen people who represent the actual user base. Not AI enthusiasts - representative users. Include at least two or three people who are skeptical of AI. Include people with different skill levels. Include people who work in the edge cases, not just the happy path. If the pilot succeeds only with the most technically capable, most motivated subset of users, you haven't validated the solution for production.
+
+> 📜 At one organization, the first AI pilot was staffed entirely with volunteers from the engineering team - people who were already using AI tools daily. The pilot reported a 40% productivity improvement. When the tool was deployed to the broader team, actual usage was under 20% and measurable productivity gains were negligible. The second pilot was deliberately staffed with a cross-section of the target department, including three people who had expressed skepticism about AI tools. The pilot reported a more modest 18% improvement - but that number held when the tool was deployed broadly, because it reflected the reality of the full user base, not just the early adopters.
+
+**Use case.** The Goldilocks problem: the use case must be specific enough to measure, valuable enough to justify the investment, and low-risk enough to experiment with. The criteria from Section 9 apply directly:
+
+Connected to a measurable business outcome - not "explore AI potential" but "reduce the time to generate quarterly compliance reports from 40 hours to under 15 hours."
+
+Data-ready - the specific data this use case needs has been identified, assessed, and confirmed accessible. If the data isn't ready, the pilot isn't ready.
+
+High task frequency - the task happens often enough that the pilot can generate statistically meaningful data within the timeline. A task that occurs once a quarter cannot be evaluated in a four-week pilot.
+
+Moderate stakes - important enough that success matters, but not so critical that a failure during the pilot would cause real damage. Don't pilot AI on your most sensitive customer-facing process or your regulatory filing workflow. Pilot on the internal process that's painful, frequent, and forgiving.
+
+**Timeline.** Four to eight weeks. This is not negotiable in either direction. Shorter than four weeks and you don't have enough data to evaluate - you have initial impressions that may not reflect sustained performance. Longer than eight weeks and you lose urgency, attention drifts, participants disengage, and the pilot enters purgatory. Eight weeks is enough to get through the learning curve, generate meaningful usage data, encounter realistic edge cases, and produce a credible evaluation.
+
+Structure the timeline explicitly. Week 1: setup, training, initial deployment. Weeks 2–3: active use with daily check-ins and issue resolution. Weeks 4–6: sustained use with weekly metrics review. Weeks 7–8: evaluation, documentation, go/no-go preparation. If the pilot timeline starts slipping - if "we need another two weeks" becomes "we need another month" - that is itself a signal. Either the scope was wrong, the use case was too complex, or the data wasn't ready. Extend once, briefly, for a specific documented reason. Don't extend indefinitely.
+
+**Success criteria.** Defined before day one. Written down. Agreed upon by the sponsor, the owner, and the participants. Measurable. Tied to the business outcome, not to AI activity metrics.
+
+Bad success criteria: "Users find the tool helpful." "The AI produces quality outputs." "We achieve high adoption." These are subjective, unmeasurable, and unfalsifiable - you can always find someone who thought it was helpful.
+
+Good success criteria: "Average time to produce a compliance report decreases from 40 hours to under 20 hours, as measured by time tracking." "AI-suggested responses are accepted with minor or no edits by agents at least 60% of the time, as measured by the editing log." "Support ticket first-response time decreases by at least 30% for participating agents compared to the control group, with no decrease in customer satisfaction score."
+
+Include a quality gate, not just a speed gate. As Section 17 details extensively, measuring speed without measuring quality is measuring the wrong thing. If the AI produces reports in half the time but the reports need twice the editing, you haven't saved time - you've shifted it.
+
+**Documentation.** Throughout the pilot, not just at the end. Capture: what's working and why, what's not working and why, workarounds participants develop (these are design requirements for production), edge cases the AI handles poorly (these define the boundary of the system's capability), and training or support gaps (these define the change management work needed for scaling).
+
+The retrospective is not an afterthought - it's one of the most valuable outputs of the pilot. A pilot that fails with good documentation produces more organizational value than a pilot that succeeds with no documentation, because the documentation tells you what to do differently next time.
+
+**Decision point.** A scheduled go/no-go meeting with the sponsor, owner, and key stakeholders. Not "let's see how things are going and decide later" - a specific date, on the calendar from day one, where a decision will be made.
+
+The decision has three outcomes, not two. **Go:** the pilot met success criteria, the path to production is clear, and resources are allocated for scaling. **No-go:** the pilot did not meet success criteria, and the initiative is stopped - resources are freed, lessons are documented, and the team moves to the next use case. **Iterate:** the pilot produced promising but inconclusive results, and a specific, time-boxed extension with modified parameters is justified. Iterate is legitimate but dangerous - it must have its own revised success criteria, its own deadline, and its own go/no-go meeting. "Iterate" that repeats indefinitely is purgatory by another name.
+
+## ⚠️ The hardest discipline in AI pilots is killing the ones that don't work. Organizations that can't kill unsuccessful pilots can't learn from failure, can't reallocate resources, and can't build the institutional knowledge that makes subsequent pilots succeed. A clean kill - documented lessons, freed resources, no blame - is more valuable than a zombie pilot consuming budget and attention for six months before everyone quietly pretends it never happened.
+
+## 19.3 Pilot Planning Template
+
+Produce this document before the pilot begins. It should fit on a single page. If it requires more than a page, the scope is too broad or the thinking isn't clear enough.
+
+**Pilot Name:** [A descriptive name, not a project code. "AI-Assisted Compliance Report Generation" not "Project Athena."]
+
+**Business Objective:** [The strategic goal this connects to, from the Section 8 framework. One sentence.]
+
+**Specific Problem:** [The challenge this addresses, in measurable terms. "Quarterly compliance reports take an average of 40 hours each across the team, with 60% of that time spent on data gathering and first-draft generation."]
+
+**Proposed AI Solution:** [What the AI will do, specifically. "AI-powered RAG system retrieves relevant data from our compliance database and regulatory document library, generates first-draft report sections, and flags areas requiring human analysis."]
+
+**Success Criteria:** [Two to four measurable criteria, with thresholds. Each should specify the metric, the measurement method, and the minimum acceptable result.]
+
+**Quality Gate:** [At least one quality criterion alongside speed/volume metrics. "Report accuracy, measured by subject-matter expert review of a random 20% sample, must meet or exceed the current baseline error rate of 3%."]
+
+**Kill Criteria:** [Conditions under which the pilot will be stopped early. "If AI-generated sections require full rewrites more than 40% of the time after two weeks, the pilot will be paused for reassessment."]
+
+**Sponsor:** [Name, title. This person has agreed to attend the kickoff, weekly check-ins, and go/no-go meeting.]
+
+**Owner:** [Name, title. This person runs the pilot day-to-day.]
+
+**Participants:** [Names, roles. Five to fifteen people. Note any skeptics deliberately included.]
+
+**Timeline:** [Start date, end date, key milestones. Four to eight weeks.]
+
+**Go/No-Go Date:** [Specific date. On the calendar. Non-negotiable.]
+
+**Data Requirements:** [Specific data sources, confirmed accessible. Any data preparation needed before the pilot begins.]
+
+**Resources Required:** [Tool licenses, integration work, training time, participant time commitment.]
+
+**Risks and Mitigations:** [Top three risks and what you'll do about them.]
+
+## 19.4 Pilot Retrospective Template
+
+Conduct this within one week of the pilot's end. Include the sponsor, owner, all participants, and any stakeholders who will be involved in the scaling decision.
+
+**Results vs. Success Criteria:** [For each criterion defined in the planning template, document the actual result. Met / Not Met / Partially Met, with the specific numbers.]
+
+**What Worked:** [Three to five things that went well, with specific examples. Focus on *why* they worked - what conditions or design decisions enabled success. These are the elements to preserve and amplify in production.]
+
+**What Didn't Work:** [Three to five things that didn't work, with specific examples. Focus on root cause, not blame. Was it a technology limitation? A data quality issue? A workflow design problem? A training gap? A change management failure? Each root cause implies a different fix.]
+
+**Workarounds Participants Developed:** [These are gold. When participants find unofficial ways to work around the AI's limitations, those workarounds reveal design requirements for the production system. A participant who copies AI output into a different template before using it is telling you the output format needs to change. A participant who always edits the AI's opening paragraph is telling you the prompt needs work.]
+
+**Edge Cases and Failure Modes:** [Specific situations where the AI produced poor results. Document the input, the output, and why it was wrong. These define the boundary of what the system can handle and inform the design of escalation paths and human-review triggers in production.]
+
+**Adoption Patterns:** [Who used it most? Who used it least? Why? Were there patterns by role, experience level, or workflow type? What training or support would have changed adoption for the low users?]
+
+**Production Readiness Assessment:** [What would need to change to scale this from the pilot group to the full target audience? Specific gaps in data, integration, training, monitoring, or governance that the pilot revealed.]
+
+**Recommendation:** [Go / No-Go / Iterate, with specific rationale tied to the success criteria and the evidence from the pilot.]
+
+**If Go:** [Proposed production timeline, resource requirements, and the top three risks to manage during scaling.]
+
+**If No-Go:** [Key lessons learned, and whether a different use case, different data, or different approach might succeed where this one didn't.]
+
+**If Iterate:** [What specifically changes in the next iteration, what the revised success criteria are, and the deadline for the next go/no-go decision.]
+
+## 19.5 The Meta-Lesson: Pilots Are a Decision-Making Tool
+
+A pilot is not a research project. It is not an experiment for the sake of learning. It is not a sandbox for AI enthusiasts. A pilot is a structured method for making a specific decision: should we invest production resources in this AI use case?
+
+Everything in the pilot design should serve that decision. The success criteria exist so the decision has an objective basis. The timeline exists so the decision happens on schedule. The sponsor exists so the decision has authority behind it. The documentation exists so the decision - and the reasoning behind it - can be communicated to the rest of the organization.
+
+Organizations that treat pilots as decision-making tools run fewer of them, run them faster, and get to production more often. The high failure rate is not inevitable — it is the result of the specific, avoidable structural decisions catalogued in Section 19.1. Fix those decisions, and you fix the failure rate.

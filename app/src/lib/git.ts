@@ -3,7 +3,7 @@ import { createHash } from "crypto";
 import path from "path";
 
 const ROOT_DIR = path.join(process.cwd(), "..");
-const CONTENT_FILE = "content.md";
+const CONTENT_ROOT = "app/content";
 
 export interface LineBlameDatum {
   author: string;
@@ -36,27 +36,38 @@ export interface SectionBlame {
   contributors: { name: string; lines: number }[];
 }
 
-export function getRevisionCount(): number {
+function normalizePath(targetPath: string): string {
+  const trimmed = targetPath.trim();
+  return trimmed.length > 0 ? trimmed : CONTENT_ROOT;
+}
+
+export function getRevisionCount(targetPath = CONTENT_ROOT): number {
   try {
-    const output = execSync(`git log --oneline -- ${CONTENT_FILE}`, {
-      cwd: ROOT_DIR,
-      encoding: "utf-8",
-    });
+    const output = execSync(
+      `git log --oneline -- "${normalizePath(targetPath)}" 2>/dev/null`,
+      {
+        cwd: ROOT_DIR,
+        encoding: "utf-8",
+      },
+    );
     return output.trim().split("\n").filter(Boolean).length;
   } catch {
     return 1;
   }
 }
 
-export function getBlameData(): Map<number, LineBlameDatum> {
+export function getBlameData(targetPath: string): Map<number, LineBlameDatum> {
   const blameMap = new Map<number, LineBlameDatum>();
 
   try {
-    const output = execSync(`git blame --porcelain -- ${CONTENT_FILE}`, {
+    const output = execSync(
+      `git blame --porcelain -- "${normalizePath(targetPath)}" 2>/dev/null`,
+      {
       cwd: ROOT_DIR,
       encoding: "utf-8",
       maxBuffer: 10 * 1024 * 1024,
-    });
+      },
+    );
 
     const lines = output.split("\n");
 
@@ -193,7 +204,8 @@ export function getSectionBlame(
 
   return {
     primaryAuthor: contributors[0]?.name || "Unknown",
-    lastModified: new Date(latestTimestamp * 1000),
+    lastModified:
+      latestTimestamp > 0 ? new Date(latestTimestamp * 1000) : new Date(0),
     contributors,
   };
 }

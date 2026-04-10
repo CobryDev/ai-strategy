@@ -1,0 +1,116 @@
+---
+order: 18
+number: "18"
+title: "The Adoption Playbook - Phase by Phase"
+partId: "part-iv-adoption-making-it-actually-happen"
+partTitle: "PART IV: ADOPTION - MAKING IT ACTUALLY HAPPEN"
+level: "section"
+---
+# 18. The Adoption Playbook - Phase by Phase
+
+S&P Global's data shows the average prototype-to-production gap is 8 months when pilots are treated as isolated experiments. The 90-day timeline that leading organizations achieve requires a production-first mindset from day one.
+
+This section provides a phase-by-phase playbook based on the most detailed practitioner timelines available, particularly Fracto's production-focused framework and the operational sequences documented across KPMG, Intel, and McKinsey case studies.
+
+## 18.1 Phase 0: Constrain the Chaos (Week 0\) 
+
+Before any technical work begins, you need three things in place: a decision, a sponsor, and a boundary.
+
+The decision is which use case you're pursuing. Identify 3-5 candidates, estimate business impact and data readiness for each, and select one primary use case plus one backup. The criteria that predict success: connection to a measurable business outcome, validated data readiness, a named business sponsor, and high task frequency. The criteria that sound good but don't predict success: generic "strategic alignment" scores and anything selected because the technology is exciting rather than because the business need is clear.
+
+The sponsor is a named executive who cares about the outcome, a business leader who will be personally affected by whether this succeeds or fails. Research from Nexos.ai shows 84% of AI initiatives with C-level sponsorship achieve positive ROI versus just 23% without. Buy-in is not sponsorship. Sponsorship means a named person who will remove obstacles, make decisions when the team is stuck, and answer for the results.
+
+The boundary is a one-page business case that defines what you're doing, why, how you'll know it worked, and what you explicitly are not doing. The last part matters as much as the first. AI projects fail through scope creep as often as through technical failure. One use case, one workflow, one team. Expand later.
+
+> ‼️ IMPORTANT
+>
+> CiGen recommends structuring your portfolio as one quick win returning value within weeks, one capability builder that upgrades data or evaluation infrastructure, and one strategic bet. For Phase 0, you're selecting the quick win. The capability builder and strategic bet come later, after you've demonstrated that you can ship. 
+
+## 18.2 Phase 1: Define and Assess (Weeks 1–3) 
+
+Week 1 runs problem and workflow definition workshops. You are mapping the current workflow in detail: who does what, in what order, using what tools and data, with what handoffs and decision points. Most organizations skip this because it feels like it's delaying the AI part. McKinsey tested 25 attributes that predict AI impact on EBIT, and workflow redesign has the "biggest effect." You cannot redesign a workflow you haven't mapped.
+
+Week 2 conducts data and compliance assessment: inventory the data sources your use case needs, assess quality using the checklist from the Data Readiness pillar, map PII and PHI, and involve security and legal immediately. Organizations that involve security and legal late pay for it in delays, rework, and occasionally public embarrassment.
+
+Week 3 produces a production-oriented design: the human-AI interaction pattern (where does the human review? where does the AI act autonomously?), the integration points with existing systems, and the monitoring and evaluation approach.
+
+> ⚠️ CAUTION
+>
+> Fracto's gate criteria for proceeding past Phase 1: if problem statement, KPIs, workflow maps, data assessment, or architecture diagram are missing, do not proceed. Every one of these has been the root cause of a failed deployment.
+
+## 18.3 Phase 2: Build the Foundation (Weeks 4–6) 
+
+Stand up your environments (development, staging, production) with identity and access management and security controls from day one. This is building the foundation that every subsequent workload will use.
+
+Build your data pipelines and context layer. For RAG use cases, this means your vector database, your ingestion pipeline, your chunking and embedding configuration. For predictive use cases, this means your feature store. Refer to the Data Readiness pillar for the details, but the critical point is: this infrastructure is what makes the difference between a demo and a product. A demo can use copy-pasted data and manual processes. A product needs automated, monitored, reliable data flow.
+
+Implement observability and guardrails from the start: logging, dashboards, content filters, rate limits, escalation paths. Eighty-nine percent of organizations with production AI agents have implemented observability, because the ones that didn't learned the hard way that you can't fix what you can't see.
+
+## 18.4 Phase 3: Build and Integrate (Weeks 7–10) 
+
+Model and workflow implementation, starting with managed LLM APIs for speed. Unless you have a compelling reason to self-host (data sovereignty, extreme latency requirements, cost at massive scale), use the cloud provider's managed model endpoints.
+
+Integration with production systems, staging tests, security review. The integration is usually harder than the AI part. Getting an LLM to generate a good response is straightforward. Getting that response into the right place in the right system with the right permissions and the right audit trail is where the engineering effort concentrates.
+
+> ‼️ IMPORTANT
+>
+> The Anthropic engineering team's advice: start with direct LLM API calls and simple workflows. Do not begin with an agent framework, a complex orchestration layer, or a multi-model architecture. Earn complexity with evidence. If a simple prompt and a well-designed RAG pipeline solve 80% of the problem, ship that.
+
+## 18.5 Phase 4: Shadow Mode and Measurement (Weeks 11–13) 
+
+Deploy in "shadow mode": the AI runs alongside humans, generates recommendations without executing them, and both outputs are compared. This lets you measure AI quality against the human baseline, catch failure modes before they affect customers or operations, build user trust through transparency, and collect the training data you'll need to improve the system.
+
+Measure against baseline KPIs established in Phase 1\. This is where the Measurement pillar becomes critical - measure the full workflow, not just the AI-assisted portion. Track downstream quality indicators, not just speed. Compare AI recommendations to human decisions and note where they diverge.
+
+Document lessons and prepare for scale. The output of Phase 4 is a documented assessment of what worked, what didn't, what the system is good at, where it struggles, and what needs to change before expanding.
+
+## 18.6 What Happens After 90 Days
+
+The 90-day timeline gets you to a first production deployment with one team on one workflow. Most organizations never get there. But it's the beginning.
+
+The scaling pattern that works is expanding via reusable components rather than building bespoke solutions for each new use case. The infrastructure you built in Phase 2 (your data pipelines, your evaluation framework, your logging and monitoring, your governance controls) becomes the platform that subsequent workloads deploy on. Each new use case should be faster than the first because the foundation is already in place.
+
+> ⚠️ CAUTION
+>
+> A successful 90-day pilot with one team is proof that AI can work for one use case with one team that was selected because conditions were favorable. Scaling requires sustained investment in the platform, in training, in governance, and in the organizational changes that make AI a default part of how work gets done.
+
+Dataiku's research shows companies using a hub-and-spoke model (a central team that owns infrastructure, governance, and capability building, with business-unit teams that own their own use cases and adoption) are 3x more likely to have scaled AI successfully. Scaling requires both centralized enablement and distributed ownership.
+
+## 18.7 Adoption Playbook Checklist
+
+**For Phase 0:**
+
+- [ ] Do you have a single primary use case selected based on data readiness and measurable business impact?
+- [ ] Is there a named executive sponsor (not just "leadership buy-in")?
+- [ ] Do you have a one-page business case with explicit scope boundaries?
+
+**For Phase 1:**
+
+- [ ] Have you mapped the current workflow in detail before designing the AI-augmented version?
+- [ ] Has data quality been assessed for the specific data your use case requires?
+- [ ] Are security and legal engaged now, not later?
+- [ ] Do you meet Fracto's gate criteria: problem statement, KPIs, workflow maps, data assessment, and architecture diagram?
+
+**For Phase 2:**
+
+- [ ] Are environments provisioned with identity, access, and logging from day one?
+- [ ] Is your data pipeline automated and monitored, or manual and fragile?
+- [ ] Are observability and guardrails in place before the first model call?
+
+**For Phase 3:**
+
+- [ ] Are you using managed APIs unless you have a documented reason not to?
+- [ ] Is the integration with existing systems tested in staging?
+- [ ] Have you resisted the temptation to add complexity before proving the simple version works?
+
+**For Phase 4:**
+
+- [ ] Are you running in shadow mode before autonomous deployment?
+- [ ] Are you measuring the full workflow, including downstream quality effects?
+- [ ] Have you documented what works, what doesn't, and what needs to change before scaling?
+
+**For scaling:**
+
+- [ ] Is there a central team owning the platform and shared infrastructure?
+- [ ] Do business units own their own use cases and adoption?
+- [ ] Is each new use case faster to deploy than the last because it builds on reusable components?

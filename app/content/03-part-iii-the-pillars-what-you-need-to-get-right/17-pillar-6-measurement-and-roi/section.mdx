@@ -1,0 +1,95 @@
+---
+order: 17
+number: "17"
+title: "Pillar 6: Measurement and ROI"
+partId: "part-iii-the-pillars-what-you-need-to-get-right"
+partTitle: "PART III: THE PILLARS - WHAT YOU NEED TO GET RIGHT"
+level: "section"
+---
+# 17. Pillar 6: Measurement and ROI
+
+Almost everyone is measuring AI ROI wrong, and most of them don't know it.
+
+Larridin's March 2026 analysis documented the measurement failure precisely: one company reported 80% survey satisfaction with their AI tools while actual sustained usage, measured through telemetry, was closer to 35%. This is not an outlier. It is the default pattern when organizations measure AI success through surveys, login counts, and executive impressions rather than through instrumented behavioral data.
+
+The problem runs deeper than inaccurate self-reporting. Even organizations that measure actual usage often measure the wrong thing. They count how many people logged in, how many queries were processed, how many documents were generated: activity metrics that tell you nothing about whether AI is making the organization better.
+
+## 17.1 The Quality Degradation Blind Spot
+
+Microsoft's own internal research, published in January 2025, found that Copilot users completed coding tasks 29% faster. But code review time increased 47%. The net result was a productivity loss, not a gain. If you measured only "time to complete coding task," you'd conclude Copilot was a resounding success. If you measured the full workflow, you'd reach the opposite conclusion.
+
+This isn't unique to coding. Stanford's February 2025 study found fewer than 8% of organizations have measurement systems that capture the downstream effects of AI-generated work. Longitudinal tracking shows AI-generated code increases static analysis warnings by 30%, code complexity by 41%, and technical debt by up to 4.94x. The code gets written faster. It also gets worse. The cost of "worse" shows up weeks or months later, in bugs, in maintenance burden, in the accumulating drag of technical debt, long after the "time saved" metric has been reported to the board.
+
+> ⚠️ CAUTION
+>
+> If your primary AI metric is "time saved" or "tasks completed," you are almost certainly overstating the value of AI and missing genuine quality degradation. Time saved without quality held constant is not a productivity gain - it's a speed increase with hidden costs. Measure the full workflow, including downstream effects, or don't claim you're measuring ROI.
+
+## 17.2 What to Measure Instead
+
+Larridin's five-link measurement chain (spend, adoption depth, proficiency, productivity signal, business outcome) addresses the measurement problem by focusing on tasks, not tools. Decompose a workflow into its component tasks and measure each one independently, with both speed and quality indicators.
+
+Their example: for a sales workflow, they broke the process into prospect research (reduced from 2.5 hours to 35 minutes, a 76% reduction), competitive analysis (4 hours to 1.5 hours, 62% reduction), and first-draft emails (45 minutes to 12 minutes, 73% reduction). Each of these is a specific, measurable task with a clear before-and-after comparison. As they note, "these granular task-level metrics hold up in a board meeting."
+
+The critical addition is measuring what happens downstream. Did the faster prospect research lead to better-qualified leads, or just more leads? Did the AI-drafted emails get better response rates, or worse? Did the competitive analysis that took 62% less time capture the same insights, or miss things a human would have caught? Without these downstream quality checks, your speed measurements are meaningless.
+
+> ‼️ IMPORTANT
+>
+>  Power users generate 10–50x more value than beginners, according to multiple enterprise studies. This means your overall ROI number is being dragged down by a large population of light users and inflated by a small population of heavy users. If you're measuring an average, you're seeing neither reality. Segment your measurement by proficiency level to understand where value actually concentrates and where training investment would have the highest return.
+
+## 17.3 Case Studies With Real Numbers
+
+The ENDKOO longitudinal study of 200 B2B deployments in France between 2022 and 2025 is the most rigorous empirical dataset on enterprise AI ROI available. The median ROI was +159.8% over 24 months, with a 73% success rate reaching production and a median 8 months to breakeven. These numbers come from actual deployments with tracked financials, not surveys or estimates.
+
+Named cases: Klarna's AI assistant handles 66% of incoming customer chats (2.3 million conversations) with resolution time dropping from 11 minutes to under 2 minutes, equating to approximately 700 full-time employee capacity and roughly $40 million in profit improvement. ServiceNow achieved 54% deflection on common forms with 12-17 minutes saved per case, annualizing to approximately $5.5 million in savings. Esusu automated 64% of email interactions with a 10-point CSAT lift. Qualcomm vetted 25+ use cases and defined 70 workflows, saving approximately 2,400 hours per month.
+
+> ⚠️ CAUTION
+>
+> These case studies represent the success stories, the organizations willing to publish their numbers because the numbers are good. The denominator is much larger. S&P Global reports that 42% of companies abandoned most AI initiatives in 2025. For every Klarna, many organizations spent similar amounts and have nothing to show for it. Honest ROI measurement requires acknowledging this base rate.
+
+## 17.4 The Honest Timeline
+
+How long does it actually take to see returns? The answer depends on scope, and the range is wider than most vendors will tell you.
+
+For narrowly scoped projects - a single workflow, a single team, a clear metric - the ENDKOO data shows a median 8-month breakeven. This is achievable and realistic for organizations that scope tightly, measure carefully, and commit resources to data readiness and change management.
+
+For enterprise-wide transformation (AI embedded across multiple functions, workflows redesigned, organizational structures adapted), Deloitte's 2025 survey of 1,854 executives found most organizations achieve satisfactory ROI within 2 to 4 years. Only 6% see payback in under a year.
+
+The gap between these two timelines is a scope difference. A sequenced approach (start with narrow projects that demonstrate value and then expand) yields 40% higher cumulative returns than immediately pursuing transformational use cases.
+
+> ‼️ IMPORTANT
+>
+> To keep executive sponsorship alive during the wait, you need leading indicators that demonstrate progress before ROI materializes: actual usage patterns (sessions per day, feature diversity, not logins), task-level time savings with quality controls, error rate changes, and proficiency growth among users.
+
+## 17.5 What Not to Measure
+
+Certain metrics are actively misleading and should be avoided as primary indicators:
+
+"Number of AI tools deployed" tells you about purchasing decisions, not value. An organization with one well-integrated AI tool generating measurable results is in a better position than one with fifteen tools scattered across the organization.
+
+"Percentage of employees using AI" conflates activity with value. If 90% of employees logged in once and never returned, your adoption rate is 90% and your actual usage is close to zero. Larridin's 80%/35% discrepancy illustrates exactly this failure mode.
+
+Raw time savings without quality adjustment, as we've covered, overstates value and masks degradation. Time saved is a component of productivity, not a synonym for it.
+
+Self-reported productivity gains are systematically biased upward. People overestimate their own improvement, especially when they know the organization has invested in the tool and wants it to succeed. Use instrumented data wherever possible.
+
+## 17.6 Measurement Checklist
+
+**For baseline:**
+
+- [ ] Have you measured the current state of the workflows AI will affect — time per task, error rate, quality scores, cost per unit of output?
+- [ ] Is your measurement instrumented (system logs, telemetry) or self-reported (surveys)?
+- [ ] Have you defined success criteria and a timeline before deploying AI?
+
+**For ongoing measurement:**
+
+- [ ] Are you tracking task-level metrics (specific workflow steps) rather than tool-level metrics (logins, queries)?
+- [ ] Are you measuring downstream quality effects (error rates, rework, customer satisfaction) in addition to speed?
+- [ ] Are you segmenting usage by proficiency level to understand where value concentrates?
+- [ ] Do you have a mechanism to detect quality degradation — not just absence of improvement, but active worsening?
+
+**For executive reporting:**
+
+- [ ] Can you tie AI metrics to business outcomes (revenue, cost, customer metrics) rather than activity metrics?
+- [ ] Do your reports include both efficiency gains and quality indicators?
+- [ ] Have you established leading indicators to sustain sponsorship before full ROI materializes?
+- [ ] Are you honest about the timeline — months for narrow use cases, years for transformation?

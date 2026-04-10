@@ -1,0 +1,39 @@
+---
+order: 23
+number: "23"
+title: "AI for Customer Support and Success"
+partId: "part-v-domain-specific-guidance"
+partTitle: "PART V: DOMAIN-SPECIFIC GUIDANCE"
+level: "section"
+---
+# 23. AI for Customer Support and Success
+
+Customer support is the second-most-proven AI use case in the enterprise, with production deployments at scale and documented ROI that justifies the investment. Klarna's AI handles 2.3 million conversations per month - two-thirds of incoming chats - with resolution time dropping from 11 minutes to under 2 minutes. ServiceNow deflects 54% of common forms, saving 12–17 minutes per case. Esusu automated 64% of email interactions with a 10-point CSAT lift.
+
+These numbers are achievable. They are also achievable only with the right architecture, the right expectations, and the right safety nets.
+
+## Chatbots and Auto-Responders: When They Work and When They Backfire
+
+AI chatbots work well for high-volume, routine inquiries where the answer is drawn from documented knowledge: order status, return policies, account information, standard troubleshooting steps. They work because the information exists in structured form, the queries are repetitive, and the cost of a minor error is low.
+
+They backfire when deployed on complex, emotionally charged, or ambiguous inquiries without adequate escalation paths. The Air Canada incident - an AI chatbot invented a refund policy the airline had to honor - is the canonical cautionary tale. DPD's AI chatbot was manipulated into swearing at a customer and criticizing the company. These incidents share a root cause: AI was given customer-facing authority without guardrails, escalation triggers, or human oversight for situations it wasn't designed to handle.
+
+The pattern that works: AI handles the routine tier autonomously; AI assists human agents on the complex tier (drafting responses, summarizing history, suggesting resolutions); and humans handle the escalated tier with full context from the AI's initial triage.
+
+## AI-Assisted Agent Workflows
+
+The highest and most sustainable value in support AI comes not from replacing agents but from augmenting them. AI that drafts responses for agent review, summarizes ticket history so agents don't waste time re-reading, suggests resolutions based on similar past tickets, auto-categorizes and routes incoming requests, and pre-fills forms with extracted information - these applications reduce handle time while keeping a human in the loop for quality and judgment.
+
+MindStudio reports that well-designed human-in-the-loop workflows achieve accuracy up to 99.9% in document extraction, compared to 92% for AI-only. That 7.9-point gap is the difference between a system customers trust and one they don't.
+
+## Measuring Impact Without Destroying CSAT
+
+The most dangerous metric in support AI is "deflection rate" measured in isolation. A high deflection rate with declining CSAT means you're turning away customers, not serving them. Always measure deflection alongside satisfaction, resolution rate, and escalation volume. If deflection goes up and satisfaction holds steady or improves, you're winning. If deflection goes up and satisfaction drops, you're losing - the AI is blocking customers from the help they need.
+
+## Support Team AI Deployment Playbook
+
+Phase 1 (weeks 1–4): Deploy AI on the single highest-volume, lowest-complexity ticket category. Measure deflection rate, CSAT, and escalation rate against baseline. Run in shadow mode first - AI suggests responses, agents decide whether to use them.
+
+Phase 2 (weeks 5–8): Based on Phase 1 results, expand to two or three additional ticket categories. Implement auto-response for categories where Phase 1 accuracy exceeded 95%. Maintain human review for all other categories.
+
+Phase 3 (weeks 9–12): Build feedback loops - agent corrections feed back into system improvements. Establish ongoing monitoring dashboards for quality, satisfaction, and escalation patterns.

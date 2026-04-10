@@ -1,0 +1,118 @@
+---
+order: 11
+number: "11"
+title: "The AI Tech Stack - What You Actually Need"
+partId: "part-ii-strategy-deciding-where-and-how-to-use-ai"
+partTitle: "PART II: STRATEGY - DECIDING WHERE AND HOW TO USE AI"
+level: "section"
+---
+# 11. The AI Tech Stack - What You Actually Need
+
+The AI tech stack is the set of tools and infrastructure that sits between your business problem and your AI-powered solution. For organizations buying SaaS AI tools, much of this stack is handled by the vendor. For organizations configuring AI platforms or building custom solutions, understanding the stack is essential - because bad architectural decisions here create technical debt that compounds with every new use case.
+
+The stack has six layers. Not every organization needs every layer at full maturity from day one, and the minimum viable version is much simpler than the full enterprise architecture. But understanding what each layer does - and what happens when you skip it - helps you make informed decisions about where to invest and where to simplify.
+
+## 11.1 Layer 1: Foundation Models
+
+This is the AI engine - the large language model (or models) that power your applications. Your choice here is between commercial APIs, self-hosted open-source models, or a hybrid of both.
+
+| | **Commercial APIs** | **Self-hosted Open Source** | **Hybrid** (Emerging Pattern) |
+|---|---|---|---|
+| **Providers** | OpenAI, Anthropic, Google | Llama 4, Mistral, DeepSeek, Qwen | Mix of both, with a routing layer |
+| **Best for** | Most organizations; high-stakes, complex tasks | Data sovereignty requirements; high-volume routine processing; sensitive data workflows | Mature enterprises (year 2-3+) optimizing across cost, performance, and privacy |
+| **Advantages** | Frontier capabilities; managed infrastructure; enterprise security; continuous improvements; minutes to start | Complete data control; 60-80% lower per-query costs at scale; deep customization (fine-tuning, architectural changes) | Right model for each task; optimized cost; maximum data control where needed |
+| **Limitations** | Per-token pricing scales with usage; vendor dependency; data leaves your infrastructure | Requires GPU clusters, ML ops expertise, monitoring, scaling, and security; higher upfront investment | Requires evaluation infrastructure and routing layer; more architectural complexity |
+| **Cost threshold** | Cost-effective below ~10K queries/day | Economics improve above ~10K queries/day with predictable workloads | Varies by task routing |
+| **When to start** | Day one — start here | Add when data sovereignty or volume economics justify it | Second or third year of AI deployment |
+
+**Commercial APIs** (OpenAI, Anthropic, Google) are the starting point for most organizations and remain the right choice for most. You get frontier model capabilities, managed infrastructure, enterprise security features, and continuous improvements without managing anything yourself. The cost is per-token pricing that scales with usage, plus the vendor dependency discussed in Section 10.4. Andreessen Horowitz's survey of 100 enterprise CIOs found that OpenAI, Google, and Anthropic dominate commercial model usage, with most enterprises using multiple providers - model differentiation by use case has become pronounced, with different providers excelling at different tasks.
+
+**Self-hosted open-source** (Llama 4, Mistral, DeepSeek, Qwen) gives you complete data control and, at scale, lower per-query costs. The tradeoff is infrastructure management, ML operations expertise, and the responsibility for security, monitoring, and updates that commercial providers handle for you. The practical threshold: if you're processing fewer than tens of thousands of queries per day on a consistent basis, commercial APIs are almost certainly more cost-effective. Self-hosting economics improve with volume and predictability.
+
+**The emerging pattern** for mature enterprises is a routing layer that directs queries to the appropriate model based on task complexity, data sensitivity, and cost - commercial APIs for high-stakes, complex tasks; self-hosted models for high-volume, routine processing or sensitive data. This is not over-engineering; it's the pattern Gartner, a16z, and production practitioners are converging on. But it is a pattern for your second or third year of AI deployment, not your first.
+
+For organizations just starting: use a single commercial API provider. Pick one. Build on it. Learn from it. Add model diversity later, when you have the evaluation infrastructure to know whether a different model would actually perform better for your use cases - not before.
+
+## 11.2 Layer 2: Orchestration
+
+Orchestration is the logic that sits between user requests and model responses - the layer that manages prompts, chains multiple model calls together, routes queries, manages conversation state, and coordinates tool use for agentic workflows.
+
+**Prompt management** means treating prompts as code: versioned, tested, reviewed, and deployed through a controlled process rather than ad-hoc edits by whoever happens to be working on the system that day. This sounds like overhead for a single use case, but the moment you have two or more AI applications running in production, unmanaged prompts become a reliability problem. A prompt change that improves one output can degrade another, and without versioning, you can't track what changed or roll it back.
+
+**Chains and workflows** connect multiple model calls into sequences - summarize a document, extract key entities, generate a structured output, validate against business rules. Frameworks like LangChain, LlamaIndex, and vendor-specific tools (Microsoft's Semantic Kernel, Amazon Bedrock's agent framework) provide the plumbing. The choice of framework matters less than the principle: keep it simple. Anthropic's engineering advice is worth repeating: start with direct LLM API calls and simple workflows. Do not begin with a complex orchestration layer or multi-model architecture. Earn complexity with evidence.
+
+**Agent frameworks** handle the most complex orchestration pattern: AI systems that plan multi-step tasks, use tools (APIs, databases, code execution), and make decisions about what to do next. CrewAI, AutoGen, LangGraph, and the agent capabilities built into commercial platforms (Microsoft Copilot Studio, Salesforce Agentforce) are the current landscape. But as Section 15 covers in detail, most organizations should not start here. Agent frameworks introduce failure modes and governance challenges that simpler architectures avoid.
+
+## 11.3 Layer 3: Data Infrastructure
+
+This is the layer that connects AI to your organization's data - and, as Section 13 covers extensively, it's where most failures originate.
+
+**Vector databases** (Pinecone, Weaviate, Qdrant, pgvector, and the vector capabilities built into cloud databases like Cosmos DB and AlloyDB) store the embeddings that power semantic search in RAG pipelines. When a user asks a question, the vector database finds the most relevant documents or chunks based on meaning, not just keyword matching. The choice of vector database matters less than you think - most are adequate for enterprise workloads. What matters enormously is how you prepare the data that goes into it.
+
+**Embeddings and chunking** are the process of converting your documents into the numerical representations that vector databases store. The chunking strategy - how you split documents into pieces - has an outsized impact on retrieval quality. As Section 13.5 warns: PremAI's analysis shows 80% of RAG failures trace to the ingestion and chunking layer, not to the language model. And changing your chunking strategy after you've built your index requires re-embedding your entire corpus. Treat initial chunking and embedding decisions as semi-permanent architectural choices.
+
+**Data connectors** link your AI system to the source systems where your data lives - your CRM, document management system, knowledge base, ERP, ticketing system. The integration work here is the same work discussed in Section 13.4: building a clean interface that presents organized data to AI while hiding the mess of your actual data landscape underneath.
+
+## 11.4 Layer 4: Integration
+
+Integration connects your AI system to the tools and workflows where people actually do their work. This is distinct from data infrastructure (which feeds information *into* the AI) - integration puts AI outputs *into* the places they need to go.
+
+**APIs and middleware** connect AI outputs to your existing systems. The AI generates a customer response - the integration layer posts it to your ticketing system. The AI classifies a document - the integration layer routes it to the appropriate workflow. The AI detects an anomaly - the integration layer triggers an alert in your monitoring platform.
+
+**Existing tool connections** embed AI into the applications people already use. The Writer survey finding is critical here: 35% of employees pay out of pocket for AI tools because employer-provided ones don't integrate well. If your AI strategy requires people to leave their normal tools, copy content to a different application, interact with the AI, then paste results back - you've already lost. The organizations with the highest adoption rates are the ones that make AI invisible within existing workflows: embedded in Teams, Outlook, Slack, the CRM, the code editor. AI should be where work happens, not a destination people travel to.
+
+## 11.5 Layer 5: Evaluation and Monitoring
+
+This layer is the most frequently skipped and the most consequential to skip. Without it, you are deploying AI blind - you don't know if outputs are good, bad, improving, or degrading, and you won't find out until a customer complains or a costly error surfaces.
+
+**Output quality evaluation** means systematically measuring whether AI outputs meet your standards. This involves automated evaluation (using LLMs to judge other LLMs' outputs, comparing against golden datasets, measuring factual accuracy against source documents), human evaluation (sampling AI outputs for expert review on a regular cadence), and domain-specific metrics (for coding: does it compile and pass tests? for customer support: did it resolve the issue? for content: did the human editor accept it with minimal changes?).
+
+**Cost tracking** matters because AI costs scale with usage in ways traditional software doesn't. Token-based pricing means a verbose prompt costs more than a concise one. A poorly configured RAG pipeline that retrieves too much context inflates costs with every query. Without instrumented cost tracking, you'll be surprised by the invoice - and you won't know which use cases are cost-effective and which are bleeding money.
+
+**Latency monitoring** ensures the AI responds fast enough for the workflow it's embedded in. A code completion tool that takes five seconds to respond is useless. A customer support AI with fifteen-second response times will frustrate users. Latency varies with model, prompt complexity, and infrastructure load, and it needs continuous monitoring, not a one-time benchmark.
+
+**Drift detection** catches the subtle degradation that happens when the world changes but the AI doesn't - when products are updated but the knowledge base isn't, when policies change but the prompts still reference old rules, when the distribution of user queries shifts in ways the system wasn't designed for. Without drift monitoring, quality degrades silently. As Google Cloud's RAG evaluation guidance puts it: systems return confident-sounding answers that are wrong, and no one will know until someone makes a bad decision based on a bad answer.
+
+> 🚨 DANGER
+>
+> Deploying AI in production without evaluation and monitoring is like driving without a dashboard - you don't know how fast you're going, how much fuel you have, or whether the engine is overheating. Eighty-nine percent of organizations with production AI agents have implemented observability. The ones that didn't learned the hard way. Build monitoring from day one, not after the first incident.
+
+## 11.6 Layer 6: Governance
+
+The governance layer enforces your organization's policies at the technical level - not through documents people may or may not read, but through system controls that cannot be bypassed.
+
+**Access control** determines who can use which AI capabilities with which data. Role-based access ensures that a marketing team member can query the public knowledge base but not the financial database. The principle articulated by Microsoft applies: treat AI agents as digital workers and tie their identities to appropriate access control lists with monitoring.
+
+**Audit logging** captures what happened - what data the AI accessed, what it generated, who received the output, and whether a human reviewed it. This is essential for compliance (the EU AI Act requires documentation for high-risk systems), for incident response (when something goes wrong, you need to trace what happened), and for improvement (you can't optimize what you don't measure).
+
+**Policy enforcement** encodes your acceptable use policy into technical controls - content filters that prevent certain types of outputs, input filters that block sensitive data from being sent to external AI systems, rate limits that prevent abuse, and workflow gates that require human approval before high-stakes AI actions execute.
+
+## 11.7 The Minimum Viable AI Stack
+
+For organizations just starting out, the full six-layer architecture is overkill. Here's the minimum viable stack that lets you deploy your first production AI use case responsibly:
+
+**Foundation model:** One commercial API provider. Not three. Not a self-hosted model. One provider, one API key, one billing relationship. Pick the one whose model performs best on your specific use case (evaluate with your data, not benchmarks) and whose pricing and data handling policies you're comfortable with.
+
+**Orchestration:** Direct API calls with well-engineered system prompts. No agent framework. No complex chains. If your use case requires more than a single model call with good prompting, add RAG. If RAG plus good prompting doesn't solve it, add a simple chain. Do not start with LangChain or an agent framework - you'll be debugging framework issues instead of solving business problems.
+
+**Data infrastructure:** If your use case requires internal data, build a minimal RAG pipeline - a vector database (start with a managed service, not self-hosted), an ingestion pipeline for your core document set, and a retrieval component integrated into your prompts. If your use case doesn't require internal data (code completion, general writing assistance), you can skip this layer entirely on day one.
+
+**Integration:** Embed AI output into one existing workflow. Not five. Not "everywhere." Put the AI where the specific use case lives - in the support tool, in the code editor, in the document system - and measure whether people actually use it.
+
+**Evaluation:** Define three to five quality metrics for your use case. Instrument them. Review them weekly. This can be as simple as a spreadsheet tracking a sample of outputs, reviewed by a domain expert. It doesn't need to be an automated evaluation pipeline on day one. It needs to exist.
+
+**Governance:** An acceptable use policy, data classification rules (what can and cannot be sent to the AI), access controls on the API key, and basic logging of what queries are being sent and what responses are coming back. This is the foundation you'll build on; don't skip it because you only have one use case.
+
+> ⚠️ CAUTION
+>
+> Tool proliferation is real and it's the natural enemy of a coherent AI strategy. Every team wants their own AI tool, optimized for their workflow. The result is fifteen platforms, fifteen vendor relationships, fifteen security reviews, fifteen integration projects, and no shared infrastructure, evaluation framework, or governance model. The minimum viable stack is deliberately minimal - not because more tools wouldn't add value, but because starting with fewer, well-integrated tools creates a foundation that subsequent use cases can build on. Add tools when you have evidence that what you have is insufficient, not when a vendor demo is impressive.
+
+## 11.8 How the Layers Interact
+
+In a typical enterprise AI workflow - say, an internal knowledge retrieval system - the layers interact in sequence:
+
+A user asks a question in their existing tool (Layer 4: Integration). The governance layer checks that the user has permission to query this knowledge base and logs the request (Layer 6: Governance). The orchestration layer formats the query into an embedding request and a retrieval call (Layer 2: Orchestration). The data infrastructure layer searches the vector database for relevant documents and returns the top matches (Layer 3: Data Infrastructure). The orchestration layer assembles a prompt combining the user's question, the retrieved documents, and system instructions, then sends it to the foundation model (Layer 1: Foundation Model, Layer 2: Orchestration). The model generates a response. The evaluation layer scores the response for quality indicators (Layer 5: Evaluation). The response is returned to the user through their existing tool (Layer 4: Integration), with the full interaction logged for audit and improvement purposes (Layer 6: Governance).
+
+Each layer has a defined responsibility. When something goes wrong - and it will - you can isolate which layer failed: did the retrieval return irrelevant documents? Did the model hallucinate despite good context? Did the integration fail to deliver the response? Did governance not enforce a policy? This separation of concerns is what makes the system debuggable, improvable, and trustworthy.
+
+The organizations that rush to production without this layered architecture spend their first six months building impressive demos and their next twelve months discovering that they can't figure out why the system sometimes gives wrong answers, can't measure whether it's getting better or worse, and can't prove to compliance what data the AI accessed. The layers aren't overhead. They're the infrastructure that turns a demo into a product.

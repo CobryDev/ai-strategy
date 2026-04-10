@@ -4,5 +4,4 @@ app/.env.local
 .cursor
 cobry-skills-main
 *.md
-!content.md
 !app/README.md

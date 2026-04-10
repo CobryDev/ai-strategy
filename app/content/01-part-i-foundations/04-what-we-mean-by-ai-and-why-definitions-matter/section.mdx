@@ -1,0 +1,75 @@
+---
+order: 4
+number: "4"
+title: "What We Mean by \"AI\" (and Why Definitions Matter)"
+partId: "part-i-foundations"
+partTitle: "PART I: FOUNDATIONS"
+level: "section"
+---
+# 4. What We Mean by "AI" (and Why Definitions Matter)
+
+Every enterprise AI conversation starts with a terminology problem. The CEO reads about "agentic AI" in the Wall Street Journal and wants to know why the company doesn't have any agents yet. The engineering team says they've been "using AI" for years and points to a recommendation algorithm from 2019. Marketing just wants to know if they're allowed to use ChatGPT. Legal hears "artificial intelligence" and starts drafting disclaimers. Everyone is using the same words to mean different things.
+
+This matters. If your executive team thinks "AI adoption" means deploying autonomous agents that run your supply chain, and your IT team thinks it means giving employees access to a chatbot, you will waste months discovering that misalignment, usually after you've committed budget and headcount to a project that one side didn't realize they'd agreed to. Getting definitions right early is the difference between a coherent strategy and an expensive miscommunication.
+
+## 4.1 Cutting Through the Buzzwords
+
+A practical glossary, focused on the definitions that matter for making enterprise decisions.
+
+Artificial Intelligence (AI) is the broadest term and, at this point, the least useful. It covers everything from a spam filter to a self-driving car. When someone in your organization says "AI," your first job is to figure out what they actually mean, because it could be any of the following.
+
+Machine Learning (ML) is the subset of AI that learns patterns from data rather than following explicit rules. Your fraud detection system, your demand forecasting model, your recommendation engine: these are ML. They've been in production at enterprises for years, often under unglamorous names like "predictive analytics." ML is not new. What's new is the next category.
+
+Large Language Models (LLMs) are the technology behind the current wave of AI excitement. These are massive neural networks trained on internet-scale text data that can generate, summarize, translate, and reason about language. GPT-4, Claude, Gemini, Llama are LLMs. When your employees say "AI," this is usually what they mean in 2026.
+
+Generative AI is the broader category that includes LLMs but also covers image generation (DALL-E, Midjourney), video generation, audio generation, and code generation. These systems create new content rather than classifying or predicting from existing data. Most of the enterprise excitement, and most of the governance headaches, center here.
+
+Copilots are AI assistants embedded into existing tools that help humans do their work faster. Microsoft Copilot in Office 365, GitHub Copilot in your code editor, Salesforce Einstein in your CRM. A human initiates every interaction: you ask, it responds, you decide what to do with the output. The human remains the decision-maker and the executor.
+
+Agents (or agentic AI) are the next step beyond copilots: AI systems that can plan multi-step tasks, use tools, take actions across systems, and operate with greater autonomy. Instead of responding to a prompt and returning text, an agent can receive a goal ("resolve this customer's billing issue"), decompose it into steps, query your CRM, check the billing system, draft a response, and execute the resolution, potentially without human intervention at each step. Gartner predicts that 40% of enterprise applications will feature task-specific AI agents by the end of 2026, up from less than 5% in 2025. The hype is enormous. The production deployments are still early.
+
+> ⚠️ CAUTION
+>
+> The vendor landscape has made these terms worse, not better. "Copilot" is now a brand name as much as a category. "Agent" is attached to every product that can do more than answer a question, whether or not it has genuine planning and execution capabilities. "AI-powered" gets appended to products that use a single API call to an LLM for one minor feature. When evaluating tools, ignore the marketing labels and ask: what does this system actually do, what data does it access, what actions can it take, and what level of human oversight does it require?
+
+## 4.2 Three Ways Enterprises Engage with AI
+
+A second definitional confusion causes even more strategic damage: conflating the different ways an organization can engage with AI. These are different activities with different costs, timelines, skill requirements, and risk profiles.
+
+Using AI tools means deploying commercially available AI products: giving your team access to ChatGPT Enterprise, Microsoft Copilot, a customer support AI platform, an AI-powered code assistant. You're a consumer of someone else's AI capability. The investment is primarily in licensing, training, governance, and change management. This is where the vast majority of enterprises should start and where most will stay for most use cases. Menlo Ventures' 2025 data confirms the shift: {{cite:menlo-ventures|76% of enterprise AI solutions are now purchased rather than built internally, up from 53% in 2024}}.
+
+Building AI products means your engineering team is constructing AI-powered features or products: fine-tuning models on your proprietary data, building custom RAG pipelines, developing AI-native applications. You need ML engineers, data engineers, evaluation infrastructure, and a different development process than traditional software. This is appropriate when AI is core to your product offering or when your use case is genuinely unique enough that off-the-shelf solutions don't work.
+
+Embedding AI into operations is the middle ground that most enterprises will eventually occupy: configuring AI platforms on top of your own data and workflows, building integrations between AI tools and your existing systems, designing human-AI workflows for specific business processes. You're not building models from scratch, but you're doing more than buying a SaaS login. This is where the build-vs-buy-vs-configure decision from Section 10 becomes critical.
+
+> ‼️ IMPORTANT
+>
+> The most expensive confusion is when an organization that should be *using* AI tools decides instead to *build* AI products. Organizations building everything in-house succeed only 33% of the time, per MIT's data. If you don't have an ML team, if AI isn't core to your product, if the use case is common across industries, buy or configure. Save the building for the rare cases where you have genuinely differentiated data and a use case that nothing on the market addresses.
+
+## 4.3 A Practical Taxonomy of Enterprise AI
+
+The buzzwords describe what the technology is. What matters for strategy, governance, and adoption planning is what the technology *does* in your organization. We use a four-category taxonomy based on the level of autonomy and the type of value created.
+
+Assistive AI is AI with a human in the loop for every meaningful action. Copilots, writing assistants, code completion tools, search and summarization over internal documents, meeting transcription and note-taking. The human initiates, the AI assists, the human decides and acts. This is the category where most enterprise value concentrates today, and it has the most favorable risk profile: if the AI gets something wrong, a human catches it before it matters. Governance is relatively straightforward. You need acceptable use policies, data classification rules, and training, but you don't need the complex oversight structures that higher-autonomy systems demand.
+
+Analytical AI covers data analysis, pattern recognition, forecasting, anomaly detection, and classification. Your demand planning model, your fraud detection system, your customer churn predictor, your document classifier. Some of these systems predate the current LLM wave by years. They tend to be narrower in scope, more measurable in performance, and better understood from a risk perspective. Analytical AI finds patterns in existing data and surfaces them for human decision-making. This category is often undervalued because it's less flashy than generative AI, but it produces some of the most reliable and measurable enterprise ROI.
+
+Automated AI describes workflows that are triggered and completed without human intervention for routine cases. An AI that automatically categorizes and routes incoming support tickets. An invoice processing system that extracts data, matches against purchase orders, and flags only exceptions for human review. An email system that generates and sends routine responses to common inquiries. The workflow runs end-to-end for the cases it's designed to handle, with humans engaged only for exceptions. This is where efficiency gains become substantial, but also where governance requirements step up, because errors can reach customers or affect operations without a human checking first.
+
+Agentic AI is the newest and highest-autonomy category: systems that can plan multi-step tasks, reason about intermediate results, use tools, and take actions across multiple systems to achieve a goal. A procurement agent that monitors inventory levels, identifies when reorder thresholds are crossed, evaluates suppliers, negotiates pricing against pre-approved parameters, and generates purchase orders. A customer service agent that diagnoses issues, queries multiple backend systems, takes corrective action, and follows up with the customer. Only 15% of IT application leaders are even considering, piloting, or deploying fully autonomous AI agents, according to a 2025 Gartner survey.
+
+## 4.4 Why the Taxonomy Matters
+
+These categories map directly to the decisions you'll make throughout this guide.
+
+Governance requirements scale with autonomy. Assistive AI needs acceptable use policies and data classification. Automated AI needs evaluation frameworks, monitoring, and defined escalation paths. Agentic AI needs all of that plus robust human oversight mechanisms, action-level audit trails, and often real-time intervention capabilities. If you apply the same governance model to all four categories, you'll either over-govern the simple cases (killing adoption) or under-govern the complex ones (creating risk).
+
+Risk profiles differ by category. When assistive AI hallucinates, a human catches it. When automated AI hallucinates, a customer might see it. When agentic AI hallucinates, it might take a series of actions based on a wrong premise before anyone notices. The blast radius of failure increases with autonomy.
+
+The skills required differ too. Deploying assistive AI requires training, change management, and integration work. Building automated workflows requires process design, evaluation engineering, and monitoring infrastructure. Deploying agentic systems requires all of that plus safety engineering, guardrail design, and often a different approach to system architecture.
+
+ROI timelines vary accordingly. Assistive AI can show value in days. Analytical AI typically takes weeks to months as models are trained and validated. Automated workflows take months to design, build, test, and deploy safely. Agentic systems are still in early production at most organizations and the ROI data is thin.
+
+> ‼️ IMPORTANT
+>
+> Most enterprise value today comes from assistive and analytical AI. These categories address real, measurable business problems with manageable risk profiles. The companies seeing the best returns are the ones executing well in the categories appropriate to their maturity. Don't skip the boring stuff chasing agents.

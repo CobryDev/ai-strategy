@@ -1,0 +1,84 @@
+---
+order: 10
+number: "10"
+title: "Build vs. Buy vs. Configure"
+partId: "part-ii-strategy-deciding-where-and-how-to-use-ai"
+partTitle: "PART II: STRATEGY - DECIDING WHERE AND HOW TO USE AI"
+level: "section"
+---
+# 10. Build vs. Buy vs. Configure
+
+Once you've identified your use cases (Section 9) and traced them through the Objective, Challenge, Solution, Tool framework (Section 8), you arrive at the implementation question: how do you get the capability you need? The answer is almost never "build it from scratch" - but the nuances of when to buy, when to configure, and when the rare case for building applies are worth understanding in detail, because getting this wrong is among the most expensive mistakes in enterprise AI.
+
+## 10.1 The Three Options
+
+| | **Buy** (SaaS AI tools) | **Configure** (Platforms + Prompts + RAG) | **Build** (Custom Models / Fine-tuning) |
+|---|---|---|---|
+| **What it means** | Purchase a commercial AI product that works out of the box | Customize a foundation model with your data and workflows, without changing the model itself | Train or substantially modify a model using your own data |
+| **When to use** | Use case is common across industries; speed matters more than customization; AI isn't your differentiator | You need company-specific data, custom workflows, or integration with internal systems | AI is core to your product; unique data at scale creates competitive advantage; behavioral changes beyond what RAG can achieve |
+| **Advantages** | Deploy in days, not months; no ML team needed; vendor handles infrastructure and updates | Frontier model capability with your data specificity; control over behavior without training a model | Maximum control and customization; potential competitive moat from proprietary model capabilities |
+| **Limitations** | Locked into vendor's design decisions, model choices, and feature scope | Requires integration engineering and prompt management; more complex to operate than Buy | Requires ML engineers, GPU infrastructure, and ongoing model operations; ~33% success rate vs. 67% for purchased tools (MIT) |
+| **Examples** | Copilot, GitHub Copilot, Zendesk AI, Intercom AI | RAG pipelines, custom prompt systems, workflow automation with LLM APIs | Fine-tuned domain models, custom classification systems |
+| **Market share** | 76% of enterprise AI solutions are purchased (Menlo Ventures, up from 53% in 2024) | 51% of enterprise AI deployments use RAG in production | <10% of organizations should be here |
+
+**Buy (SaaS AI tools)** means purchasing a commercially available AI product that works more or less out of the box. Microsoft Copilot for productivity. A customer support AI platform like Intercom or Zendesk's AI features. A code assistant like GitHub Copilot or Cursor. A content platform with built-in AI generation. You're a consumer of someone else's AI capability. Your team configures settings, writes guidelines, and manages adoption - but you don't touch models, build data pipelines, or write orchestration logic.
+
+Buy when the use case is common across industries (email drafting, meeting summarization, code completion), speed to value matters more than customization, the AI isn't your competitive differentiator, and you don't have - or don't want to build - an ML engineering team. The advantage is speed: you can have a team using a bought tool within days. The limitation is that you get the vendor's design decisions, the vendor's model choices, and the vendor's definition of what the tool does. If your needs align with their product, that's fine. If they don't, you're working around constraints rather than solving your actual problem.
+
+**Configure (platforms + prompts + RAG)** means taking a foundation model or AI platform and customizing it for your specific needs without changing the model itself. You write system prompts that encode your company's tone, policies, and domain knowledge. You build a RAG pipeline that connects the model to your internal documents, knowledge bases, and data systems. You design workflows that route AI outputs through human review, connect to your existing tools via APIs, and enforce your governance rules. The model is someone else's; the intelligence layer on top of it is yours.
+
+Configure when you need the AI to know your company's specific information (products, policies, procedures, customer data), when you need custom workflows that off-the-shelf tools don't support, when the use case requires integration with multiple internal systems, and when you want to control how the AI behaves without training a model from scratch. This is the sweet spot for most enterprise AI work. Menlo Ventures' data shows 51% of enterprise AI deployments use RAG in production - the defining pattern of the "configure" approach. You get the capability of a frontier model with the specificity of your own data, without the cost and risk of building from scratch.
+
+**Build (custom models / fine-tuning)** means training or substantially modifying a model using your own data. Fine-tuning a foundation model on proprietary datasets to change its behavior, building custom ML models for specific prediction or classification tasks, or - in the extreme and almost certainly wrong case - training a foundation model from scratch. You need ML engineers, GPU infrastructure, evaluation pipelines, and ongoing model operations.
+
+Build when the use case is core to your product (AI *is* what you sell, not a tool your team uses), when you have genuinely unique data at scale that creates competitive advantage, when fine-tuning is the only way to achieve the behavioral changes you need (not just domain knowledge - RAG handles that - but behavioral patterns like specific classification logic or specialized output formats), and when you have the team to do it and maintain it indefinitely.
+
+> ‼️ IMPORTANT
+>
+> 90% of companies should be buying or configuring, not building. This is not a conservative estimate - it's what the data shows. MIT's research found that purchasing AI tools from specialized vendors succeeds roughly 67% of the time, while fully internal builds succeed at approximately half that rate. Menlo Ventures confirms: 76% of enterprise AI solutions are now purchased rather than built internally, up from 53% in 2024. The market is moving decisively away from building. If you don't have an ML team, building is almost certainly wrong. If you do have an ML team, building is probably still wrong for most use cases - your ML team's time is better spent on evaluation, integration, and the hard work of making purchased or configured tools actually work in production.
+
+## 10.2 The Decision Framework
+
+For each use case identified in Section 9, run it through this decision tree:
+
+**Is this use case common across industries?** If yes - code completion, email drafting, meeting summarization, document search, standard customer support triage - buy. Someone has already built and optimized a product for this. Your competitive advantage lies not in having the capability but in how well you deploy and adopt it. Reinventing the wheel is not innovation; it's waste.
+
+**Does the use case require your company's specific data, workflows, or domain logic?** If yes, and those requirements can be met by connecting a model to your data (RAG), writing custom prompts, and building workflow integrations - configure. This covers the vast majority of enterprise use cases: internal knowledge retrieval, company-specific customer support, policy-aware document analysis, domain-specific content generation.
+
+**Does the use case require the model to behave differently at a fundamental level - not just know different things, but reason, classify, or generate in patterns that can't be achieved through prompts and retrieval?** If yes, consider fine-tuning. But verify first: have you exhausted prompt engineering and RAG approaches? The practical advice from production experience is unambiguous - start with well-engineered prompts and RAG, and fine-tune only when you've confirmed the gap can't be closed any other way. As one enterprise AI guide puts it: many teams skip prompt engineering and invest directly in fine-tuning or RAG infrastructure, even though a carefully constructed prompt would have been sufficient.
+
+**Is AI the core of your product - the thing customers pay for?** If yes, and your competitive moat depends on proprietary model capabilities, building may be justified. But even here, most successful AI products are built on top of foundation models rather than from scratch. The team that "builds" is typically fine-tuning and configuring, not training from zero.
+
+## 10.3 Evaluating AI Vendors
+
+When you're buying or configuring (which you should be, for most use cases), vendor evaluation becomes critical. The enterprise AI vendor landscape is noisy, fast-moving, and full of marketing claims that exceed production reality. Here's a practical scoring rubric.
+
+**Capability fit (weight: 30%).** Does the tool actually solve your specific use case, or does it solve an adjacent use case that the salesperson is positioning as close enough? Run your actual data through the tool during evaluation. Not their demo data - yours. Performance on vendor-selected examples tells you nothing about performance on your problems.
+
+**Integration (weight: 25%).** Can the tool connect to your existing systems - your CRM, knowledge base, ticketing system, data warehouse - without heroic engineering effort? What APIs does it expose? What authentication methods does it support? Integration difficulty is the most consistently underestimated cost in enterprise AI procurement. A tool that's 90% as capable but integrates cleanly is worth more than a tool that's 100% capable but requires six months of custom development to connect.
+
+**Security and compliance (weight: 20%).** Where does data go? How is it stored? Who has access? Does the vendor have SOC 2 Type II certification? HIPAA BAA if you handle health data? GDPR-compliant data processing? Can you audit what data was sent to the AI and what it returned? Go beyond the SOC 2 checkbox - ask specifically how they handle your data in their model pipeline, whether your data is used for training, and what happens to your data if you terminate the contract.
+
+**Total cost of ownership (weight: 15%).** Not just the license fee - the full three-year cost including integration, training, ongoing maintenance, and the cost of switching if the tool doesn't work out. Token-based pricing creates budget unpredictability unless governed by rate limits. Ask about volume pricing, committed-use discounts, and what happens to pricing when your usage scales beyond the initial estimate.
+
+**Vendor viability and roadmap (weight: 10%).** Is this vendor going to exist in two years? The AI vendor landscape is consolidating rapidly. A startup with impressive technology and no revenue path is a risk to your production workflow. Equally, a large vendor that treats AI as a feature add-on rather than a core competency may deliver a mediocre product that never improves. Ask about their customer base, funding, revenue trajectory, and product roadmap - and discount the roadmap by at least 50%, because every vendor's roadmap is aspirational.
+
+## 10.4 The Platform Lock-In Question
+
+Enterprise buyers worry about vendor lock-in with AI, and the worry is partially justified - but often misplaced in its specifics.
+
+**Where lock-in is real.** If your RAG pipeline, prompts, and workflows are tightly coupled to a specific model's behavior and you've optimized extensively for that model's strengths, switching models will require rework. If your data is stored in a vendor's proprietary format with no export mechanism, you're locked in. If your team has built institutional knowledge around a specific tool's workflow, switching carries a retraining cost.
+
+**Where lock-in is overstated.** At the model layer, switching between foundation model providers (OpenAI, Anthropic, Google, open-source alternatives) has become increasingly practical. The Andreessen Horowitz enterprise survey found 37% of organizations now use five or more models, up from 29% the prior year. Model-agnostic architectures with routing layers are becoming the standard pattern in mature deployments. The models themselves are converging in capability; the differences are real but increasingly about specific strengths rather than wholesale quality gaps.
+
+**The practical advice:** design for portability where the cost is low (use abstraction layers for model calls, avoid proprietary prompt formats where possible, ensure data export is contractually guaranteed) and don't over-invest in portability where the cost is high (rewriting your entire orchestration layer for a hypothetical model switch that may never happen). Include exit clauses around data portability in every vendor contract. Model the three-year total cost of ownership, including cloud egress costs if you need to move your data. And most importantly: don't let lock-in fears paralyze you into building everything yourself, which has a much higher failure rate than buying or configuring from a vendor you might need to switch someday.
+
+## 10.5 When Open-Source Models Make Sense
+
+The open-source AI landscape has changed dramatically. In 2023, open-source models were clearly inferior to commercial alternatives. In 2026, the gap has narrowed to the point where properly optimized open-source models achieve 85–90% of closed-model performance on most enterprise tasks, and in some specialized domains they match or exceed them.
+
+Open-source models (Meta's Llama 4, Mistral, DeepSeek, Qwen, and others) make sense when **data sovereignty is non-negotiable** - your data absolutely cannot leave your infrastructure due to regulatory requirements, competitive sensitivity, or policy constraints. Self-hosting is the only path to complete data control. They also make sense when **volume economics favor self-hosting** - at high query volumes with predictable workloads, the cost of running your own infrastructure can be 60–80% lower than API pricing. And they make sense when you need **deep customization** - fine-tuning, architectural modifications, or model behavior changes that commercial APIs don't support.
+
+Open-source models don't make sense when **you lack infrastructure and ML operations expertise** - self-hosting an LLM requires GPU clusters, monitoring, scaling, security, and ongoing maintenance. If you don't have this capability in-house, API-based commercial models or managed open-source hosting services are more practical. They don't make sense when **you need cutting-edge performance on the most demanding tasks** - on complex multi-step reasoning, novel coding challenges, and nuanced research synthesis, frontier commercial models still hold an edge. And they don't make sense when **speed to deployment matters more than cost optimization** - commercial APIs are accessible in minutes; self-hosting requires infrastructure provisioning, model deployment, and operational setup.
+
+The dominant pattern in 2026 is hybrid: commercial APIs for complex, customer-facing tasks where maximum capability matters, paired with self-hosted open-source models for high-volume routine tasks or any workflow touching sensitive data. This portfolio approach optimizes cost, performance, and privacy simultaneously rather than forcing a single choice that compromises one dimension.

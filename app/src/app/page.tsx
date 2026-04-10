@@ -3,28 +3,20 @@ import {
   getTableOfContents,
   getContentRevisionCount,
 } from "@/lib/content";
-import { markdownToHtml } from "@/lib/markdown";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { TableOfContents } from "@/components/TableOfContents";
 import { SectionRenderer } from "@/components/SectionRenderer";
+import { SectionMdx } from "@/components/SectionMdx";
 import { Header } from "@/components/Header";
 import { SelectionBlameCard } from "@/components/SelectionBlameCard";
+import { CitationTooltip } from "@/components/CitationTooltip";
 import { CalloutLegend } from "@/components/CalloutLegend";
+import { CLAIMS } from "@/lib/claims";
 
 export default async function Home() {
   const sections = parseContentIntoSections();
   const toc = getTableOfContents();
   const revisionCount = getContentRevisionCount();
-
-  const sectionsWithHtml = await Promise.all(
-    sections.map(async (section) => ({
-      section,
-      html:
-        section.level === "part"
-          ? ""
-          : await markdownToHtml(section.content, section.startLine - 1),
-    })),
-  );
 
   // Extract title and subtitle from first lines
   const title = "The Enterprise Guide to AI Adoption";
@@ -36,6 +28,8 @@ export default async function Home() {
       <ReadingProgress />
       <Header revisionCount={revisionCount} />
       <SelectionBlameCard />
+      <CitationTooltip claims={CLAIMS} />
+      <CalloutLegend />
 
       <div className="flex min-h-screen">
         <TableOfContents entries={toc} />
@@ -75,13 +69,13 @@ export default async function Home() {
 
           {/* Content */}
           <div className="max-w-3xl mx-auto px-6 sm:px-10 pb-24">
-            <CalloutLegend />
-            {sectionsWithHtml.map(({ section, html }) => (
+            {sections.map((section) => (
               <SectionRenderer
                 key={section.id}
                 section={section}
-                html={html}
-              />
+              >
+                {section.level === "part" ? null : <SectionMdx section={section} />}
+              </SectionRenderer>
             ))}
           </div>
         </main>

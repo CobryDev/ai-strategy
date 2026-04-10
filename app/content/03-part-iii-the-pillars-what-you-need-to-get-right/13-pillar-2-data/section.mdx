@@ -1,0 +1,116 @@
+---
+order: 13
+number: "13"
+title: "Pillar 2: Data"
+partId: "part-iii-the-pillars-what-you-need-to-get-right"
+partTitle: "PART III: THE PILLARS - WHAT YOU NEED TO GET RIGHT"
+level: "section"
+---
+# 13. Pillar 2: Data
+
+The most expensive pattern in enterprise AI is discovering your data doesn't exist after you've already committed resources to using it. 
+
+A mid-market retailer documented by Braincuber spent $187,000 building an AI-powered recommendation engine before discovering their product data was unusable. Inconsistent categories, missing attributes, no reliable purchase history linkage. They eventually succeeded, but only after abandoning the recommendation engine entirely and focusing on a single, data-ready use case: deflecting customer support tickets about returns. The lesson cost them six months and nearly $200K.
+
+Data readiness is where the gap between what companies think they need and what they actually need is widest. Most organizations hear "you need good data" and interpret it as "we need a company-wide data transformation initiative," a multi-year, multi-million-dollar program to clean, unify, and govern everything. This interpretation is wrong and paralyzing. What you actually need is much smaller, much more specific, and achievable in weeks rather than years.
+
+## 13.1 The Question That Actually Matters
+
+Braincuber's Minimum Viable Dataset concept is the most practical reframe of the data readiness problem we've encountered. Instead of asking "Are we AI-ready as a company?" (a question so broad it invites analysis paralysis), ask: "What is the minimum viable dataset to reduce one specific cost line by a measurable amount in the next quarter?"
+
+That question does several things at once. It forces specificity about the business outcome. It constrains the data scope to what's actually needed. And it makes the assessment tractable - you're auditing a handful of tables from a few systems, not your entire data estate.
+
+The process is four steps. First, pick one boring but measurable use case - ticket deflection, invoice coding, churn prediction. Not a moonshot. Not "AI-powered everything." One process, one cost line, one metric. Second, list the systems that touch that process and ignore everything else. If you're automating invoice processing, you need your ERP, your AP system, and maybe your vendor database. You don't need your CRM, your marketing analytics, or your HR system. Third, define the exact tables, fields, date range, and outcome labels you need. Be specific: "We need the `invoices` table from SAP with fields X, Y, Z from the last 24 months, with approval status as the label." Fourth, audit readiness on that tiny slice with a simple checklist: What percentage of values are null? Are there obvious outliers? Can you trace provenance? Do you have legal clearance to use this data for AI?
+
+In practice, most AI use cases need a few clean tables from existing systems, clear labels or categories, and basic governance around that specific slice of data. That's it. You don't need a data lake. You don't need a unified customer 360\. You need enough clean, relevant, accessible data to power one specific workflow.
+
+> ‼️ IMPORTANT
+>
+> Winning programs earmark 50-70% of their timeline and budget for data readiness. If your plan allocates 80% of the budget to model development and 20% to data, invert it.
+
+## 13.2 A Week-One Assessment You Can Actually Run
+
+Andrea Gigli's Data Readiness Checklist, published in January 2026, is the most actionable assessment we've found. It comprises 24 yes/no questions across six dimensions: inventory and visibility, quality and consistency, business logic, traceability, governance, and organizational readiness.
+
+The scoring is straightforward. Twenty to twenty-four "yes" answers means you have a solid foundation: proceed with confidence. Fifteen to nineteen means a usable base with gaps you can work around if you scope tightly. Ten to fourteen means substantial risk; address specific blockers before committing real resources. Below ten means your data foundations are fragile and AI investment is premature.
+
+> ‼️ IMPORTANT
+>
+> This is not an IT checklist. Many questions cannot be answered by a technical team alone. "Do business stakeholders understand what data exists and where?" is about organizational awareness, not database schemas. "Is there a process for resolving data quality disputes?" is about governance culture. Run the assessment with a cross-functional group or the results will be misleadingly optimistic.
+
+For a lighter-weight alternative, Promethium's 15-question Enterprise AI Readiness Checklist covers data access, context and accuracy, governance and trust, and integration and delivery, with a three-tier scoring system: AI-Ready, Growth Stage, or Early Stage.
+
+Neither checklist is perfect, but either one is infinitely better than the most common approach, which is to assume data readiness based on vibes and discover the problems at the worst possible moment.
+
+## 13.3 The Blockers That Actually Kill Projects
+
+Transcend's 2025 analysis identifies four recurring data blockers that derail enterprise AI projects, all more structural than technical.
+
+Fragmented consent and permission data. In any organization that has grown through acquisitions, product additions, or even years of operation, the data about what you're allowed to do with customer data is scattered across dozens of systems. You cannot confidently feed customer data into AI systems if you can't verify consent.
+
+Lack of data lineage extending into AI pipelines. Most organizations have some sense of where their data comes from and how it flows through traditional systems. Very few have extended that lineage tracking to cover how data flows into AI training sets, RAG indexes, or fine-tuning datasets. Without this, you can't answer basic questions like "which customer records did this AI system learn from?"
+
+Manual enforcement of data policies through custom scripts and brittle connectors. This works at small scale and breaks catastrophically at large scale. If your data governance depends on a Python script that someone wrote eighteen months ago and no one has touched since, it will fail silently the moment conditions change.
+
+Compliance teams blocking deployment because they lack real-time visibility into what data AI systems are accessing. This blocker is entirely rational: if compliance can't see what's happening, they shouldn't approve it. The solution is to give them the visibility they need.
+
+## 13.4 When Your Data Infrastructure Is a Mess (It Probably Is)
+
+Most enterprises don't have clean, unified data platforms. They have a patchwork of systems accumulated over years or decades, many of which don't talk to each other, some of which run on technology from the previous century. This is normal, and not a reason to delay AI adoption. It's a reason to be pragmatic about how you connect AI to your data.
+
+Datagrid documented a workaround pattern that's both humble and effective: rather than connecting AI directly to multiple incompatible databases, build a unified API layer. For a logistics client, they built a single "shipment API" that aggregated data from their transportation management system, warehouse management system, and carrier systems. The AI interacted with one clean interface; the messy integration happened behind it. For a manufacturing client running a 1990s-era ERP system, they used read-only database views and middleware that translated AI agent actions into the ERP's native API format. Their own assessment: "Not elegant, but it worked."
+
+This pattern (a thin integration layer that presents a clean interface to AI while hiding the mess underneath) is far more common in successful deployments than the "unified data platform" approach that architecture diagrams love to show. It's faster to build, easier to maintain, and doesn't require you to replace your existing systems.
+
+> ⚠️ CAUTION
+>
+> The unified API approach solves the integration problem but doesn't solve the data quality problem. If the underlying data is full of duplicates, missing values, or inconsistencies, your API will faithfully serve that garbage to your AI system. You still need to audit and clean the specific data your use case depends on - you just don't need to clean everything.
+
+## 13.5 RAG and Data: The Ingestion Layer Is Where Most Failures Live
+
+If your first AI use case involves any form of knowledge retrieval (and most enterprise use cases do), you'll be building some form of Retrieval Augmented Generation pipeline. The details of RAG architecture are covered in the Development and Engineering pillar, but the data implications deserve attention here because this is where the failures concentrate.
+
+According to PremAI's analysis, 80% of RAG failures trace to the ingestion and chunking layer, not to the language model. The model is usually fine. The problem is that the right information never reaches it, or reaches it in a form that makes it useless.
+
+Google Cloud's RAG evaluation guidance puts it starkly: without evaluation at the data layer, RAG can fail silently and undermine trust. Your system will return confident-sounding answers that are wrong because it retrieved the wrong document, or the right document chunked in a way that lost critical context, or an outdated version of a policy instead of the current one. No one will know until someone makes a bad decision based on a bad answer.
+
+The minimum viable approach to data readiness for RAG: define your corpus, build a representative test set of documents and queries, and instrument retrieval quality before you commit to chunking and embedding decisions. Azure's RAG design guide explicitly starts here. Most teams skip this because it feels like it's slowing them down. It's preventing them from building something that looks like it works but doesn't.
+
+> ‼️ IMPORTANT
+>
+> Changing your chunking strategy after you've built your index requires re-embedding your entire corpus. Treat your initial chunking and embedding decisions as semi-permanent architectural choices, not experiments you can easily revisit.
+
+## 13.6 Data Readiness Checklist
+
+Before committing resources to an AI project, ensure you can answer the following:
+
+**For scoping:**
+
+- [ ] Have you identified the specific tables, fields, and systems your use case depends on?
+- [ ] Can you articulate the minimum viable dataset in concrete terms?
+- [ ] Have you explicitly excluded data sources that aren't needed for this use case?
+
+**For quality:**
+
+- [ ] Have you run basic quality checks on the specific data slice you need — null rates, outlier analysis, freshness, consistency?
+- [ ] Is the data labeled or categorizable in the way your use case requires?
+- [ ] Have you identified who is responsible for data quality in the source systems?
+
+**For access and governance:**
+
+- [ ] Do you have legal clearance to use this data for AI purposes?
+- [ ] Can you trace the provenance of the data — where it came from, how it was collected, what consents apply?
+- [ ] Do your compliance and security teams have visibility into how AI will access this data?
+- [ ] Is there an access control mechanism that can enforce who and what can query this data?
+
+**For integration:**
+
+- [ ] Can you access the data programmatically, or does it require manual extraction?
+- [ ] If multiple systems are involved, is there an integration layer (API, middleware, views) or does one need to be built?
+- [ ] Have you estimated the effort to build and maintain the data pipeline?
+
+**For evaluation:**
+
+- [ ] Do you have a representative test set of queries and expected answers?
+- [ ] Have you defined what "good enough" retrieval quality looks like for this use case?
+- [ ] Is there a plan to monitor data quality and retrieval accuracy over time?

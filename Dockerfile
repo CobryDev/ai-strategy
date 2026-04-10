@@ -8,7 +8,6 @@ RUN apk add --no-cache git
 WORKDIR /repo
 
 COPY .git .git
-COPY content.md content.md
 
 WORKDIR /repo/app
 COPY app/ .

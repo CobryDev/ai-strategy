@@ -1,10 +1,11 @@
+import type { ReactNode } from "react";
 import type { Section } from "@/lib/content";
 import { getGitHubEditUrl } from "@/lib/content";
 import { EditOnGitHub } from "./EditOnGitHub";
 
 interface Props {
   section: Section;
-  html: string;
+  children?: ReactNode;
 }
 
 function timeAgo(date: Date): string {
@@ -22,9 +23,7 @@ function timeAgo(date: Date): string {
   return `${years}y ago`;
 }
 
-export function SectionRenderer({ section, html }: Props) {
-  const editUrl = getGitHubEditUrl(section.startLine, section.endLine);
-
+export function SectionRenderer({ section, children }: Props) {
   if (section.level === "part") {
     return (
       <div
@@ -37,6 +36,7 @@ export function SectionRenderer({ section, html }: Props) {
     );
   }
 
+  const editUrl = getGitHubEditUrl(section.sourcePath);
   const { blame } = section;
   const otherContributors = blame.contributors.length - 1;
 
@@ -79,10 +79,7 @@ export function SectionRenderer({ section, html }: Props) {
           )}
         </div>
       )}
-      <div
-        className="prose"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      <div className="prose">{children}</div>
       <div className="section-meta">
         <span className="section-blame">
           {blame.primaryAuthor}

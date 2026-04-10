@@ -1,0 +1,111 @@
+---
+order: 9
+number: "9"
+title: "Identifying High-Value AI Use Cases"
+partId: "part-ii-strategy-deciding-where-and-how-to-use-ai"
+partTitle: "PART II: STRATEGY - DECIDING WHERE AND HOW TO USE AI"
+level: "section"
+---
+# 9. Identifying High-Value AI Use Cases
+
+You've defined your business objectives. You've decomposed them into specific challenges. You understand the three strategic postures. Now comes the question that determines whether your AI investment produces returns or becomes an expensive experiment: which specific use cases do you pursue first?
+
+This decision kills more AI programs than any technical failure. Not because the right use case is hard to identify in hindsight - it's usually obvious in retrospect - but because the selection process is corrupted by politics, excitement, and the seductive appeal of the most technically interesting option rather than the most valuable one.
+
+## 9.1 The Use Case Prioritization Matrix
+
+Every proposed AI use case can be evaluated on two dimensions. The first is business impact - how much value will this create if it works? The second is feasibility - how likely is it to actually work in your environment?
+
+**Business Impact** encompasses four factors:
+
+*Revenue effect.* Will this use case directly or indirectly increase revenue? A customer-facing recommendation engine has a direct revenue effect. An internal knowledge retrieval system has an indirect one (better-informed sales team closes more deals). Not every use case needs a revenue story, but the ones that have one are easier to get funded and easier to measure.
+
+*Cost savings.* How much does the current process cost, and how much will AI reduce that cost? This is the most straightforward value calculation and the one where the evidence is strongest. Klarna's $40 million in profit improvement from AI-powered support. ServiceNow's $5.5 million in annualized savings from form deflection. These are cost-savings stories with real numbers.
+
+*Risk reduction.* Does AI reduce exposure to compliance violations, errors, fraud, or other sources of operational risk? Document review AI that catches contract anomalies, fraud detection systems that identify suspicious patterns, compliance monitoring that flags regulatory issues - these create value by preventing loss rather than generating revenue.
+
+*Speed.* How much faster does the process become? Speed matters when it compounds - when faster analysis leads to faster decisions, which lead to faster execution, which leads to competitive advantage. Qualcomm's 2,400 hours saved per month represents both a cost saving and a speed improvement.
+
+**Feasibility** encompasses four factors:
+
+*Data availability.* Does the data this use case needs actually exist, in accessible form, with adequate quality? This is the single most common feasibility blocker. As Section 13 details, the mid-market retailer who discovered their product data was unusable after committing $187,000 to a recommendation engine is not an outlier - it's the default experience when data readiness isn't assessed upfront.
+
+*Accuracy requirements.* How wrong can the AI be before it causes problems? A meeting summarizer that occasionally misses a minor point is fine - someone will notice in the meeting follow-up. A financial analysis tool that occasionally produces wrong numbers could trigger bad investment decisions. A medical decision-support system that occasionally misdiagnoses could harm patients. The higher the accuracy requirement, the harder the use case is to deploy safely.
+
+*Integration complexity.* How many existing systems does this use case need to connect to, and how difficult are those connections? A standalone writing assistant requires almost no integration. An AI-powered customer support system that needs to query your CRM, knowledge base, billing system, and order management system requires substantial integration engineering. As discussed in Section 13.4, the integration is usually harder than the AI.
+
+*Regulatory exposure.* Does this use case operate in a regulated domain - healthcare, finance, legal, hiring - where AI errors carry legal consequences? The EU AI Act classifies AI in employment decisions as high-risk, requiring conformity assessments and documented human oversight. AI in financial advice triggers different regulatory requirements. The more regulated the domain, the higher the governance burden and the longer the deployment timeline.
+
+Plot each proposed use case on a two-by-two matrix: high impact / high feasibility (do first), high impact / low feasibility (invest to make feasible), low impact / high feasibility (do if resources allow), low impact / low feasibility (don't do).
+
+> ‼️ IMPORTANT
+>
+> The criteria that predict success, based on the evidence across MIT, McKinsey, and production case studies, are surprisingly simple: connection to a measurable business outcome, validated data readiness, a named business sponsor, and high task frequency. The criteria that sound good but don't predict success: generic "strategic alignment" scores, executive enthusiasm without executive sponsorship, and anything selected because the technology is exciting rather than because the business need is clear.
+
+## 9.2 Categories of Enterprise Use Cases
+
+To make the prioritization concrete, here are five categories of enterprise AI use cases with specific examples and the data that supports them. These are not aspirational - they're drawn from production deployments with documented results.
+
+**Internal productivity** is the largest and most proven category. Meeting summarization and action-item extraction. Email drafting and response suggestion. Internal document search and knowledge retrieval (typically via RAG). Code review, generation, and documentation. Data analysis and ad-hoc report generation. These use cases share a favorable profile: the data already exists within the organization, the accuracy requirements are moderate (a human reviews the output), the integration complexity is low to medium, and the regulatory exposure is minimal. Menlo Ventures reports that coding alone accounts for $4 billion - 55% of all departmental AI spend - making it the single largest category in enterprise AI.
+
+**Customer-facing applications** include support chatbots and intelligent triage, personalized content and recommendations, dynamic FAQ and self-service knowledge bases, and AI-assisted agent workflows (draft response, summarize ticket history, suggest resolution). These use cases have higher stakes because the AI output reaches customers directly. Klarna's results (two-thirds of chats handled, resolution time from 11 minutes to under 2 minutes) demonstrate the ceiling. But the Air Canada incident - where an AI chatbot invented a refund policy the airline had to honor - demonstrates the floor. Customer-facing AI requires robust evaluation, clear escalation paths, and ongoing monitoring.
+
+**Operations** covers demand forecasting and inventory optimization, anomaly detection in financial transactions or system performance, process automation for structured workflows (invoice processing, order routing, claims triage), and quality control and defect detection. These use cases tend to be analytical rather than generative - pattern recognition and prediction rather than content creation. They often build on traditional ML rather than LLMs, and the evaluation frameworks are more mature. They also tend to have the clearest cost-savings stories because the current cost of the manual process is well-documented.
+
+**Decision support** includes market analysis and competitive intelligence, scenario modeling and financial forecasting, risk assessment and portfolio analysis, and customer segmentation and churn prediction. The value here is not automation but augmentation - helping decision-makers process more information, consider more scenarios, and reach conclusions faster. The risk is that AI-generated analysis carries an authority it hasn't earned (recall Section 6: the more wrong the AI, the more confident it sounds), leading decision-makers to trust outputs they should verify.
+
+**Creative and content** encompasses marketing copy and campaign generation, product descriptions and catalog content, design iteration and concept exploration, social media content and brand communications. This category has the fastest time-to-value for individual tasks - give a marketing team access to a good LLM and they'll produce first drafts faster by tomorrow. It also has the most acute quality and brand-voice concerns. ContentMonk's model of 70–80% AI automation with human review at strategic checkpoints represents the mature implementation pattern.
+
+## 9.3 How to Run a Use Case Discovery Workshop
+
+The gap between "we know AI could help" and "we have a prioritized list of specific use cases ready for evaluation" is bridged by a structured discovery process. Here's how to run one in a single day.
+
+**Pre-work (one week before).** Send each department head two questions: (1) What are the three most time-consuming recurring tasks in your team? (2) Where does your team most frequently encounter errors, delays, or bottlenecks? Collect responses before the workshop. These are your raw inputs. Do not ask "where could you use AI?" - that invites technology-forward thinking. Ask about pain points and let the workshop determine which ones AI can address.
+
+**Morning session (3 hours): Objective and Challenge mapping.** Start with the four-step framework. For each business objective, decompose into specific challenges using the restaurant example as a model. Each challenge should be concrete enough that you can identify the specific data, workflow, and people involved. A challenge like "improve customer experience" is too broad. "Reduce average support response time for billing inquiries" is specific enough to evaluate.
+
+This session will generate fifteen to thirty potential challenges across the organization. That's normal. The afternoon is for prioritization.
+
+**Afternoon session (3 hours): Solution mapping and prioritization.** For each challenge, brainstorm potential solutions - including non-AI solutions. Then apply the prioritization matrix: score each on business impact and feasibility. Use a simple 1–5 scale for each factor. Plot the results.
+
+The output should be a short list of three to five use cases that score high on both dimensions, with one designated as the primary quick-win candidate. For each of the top candidates, capture: the business objective it connects to, the specific challenge it addresses, the proposed solution approach, the data sources required, the accuracy requirements, the integration points, the named sponsor, and the success criteria.
+
+**Post-workshop (one week after).** Produce a one-page business case for each top-three use case. This is the document that gets executive buy-in, secures budget, and launches the pilot. It should fit on a single page because if you can't explain the business case concisely, you haven't thought it through.
+
+## 9.4 The Use Case One-Pager Template
+
+For each candidate use case, document the following on a single page:
+
+**Business Objective:** What strategic goal does this support? (e.g., "Reduce customer support costs by 25%")
+
+**Specific Challenge:** What root-cause problem does this address? (e.g., "70% of support tickets are routine billing inquiries that consume agent time but don't require human judgment")
+
+**Proposed Solution:** What will AI do, specifically? (e.g., "AI-powered chatbot handles routine billing inquiries end-to-end, with automatic escalation to human agents for complex cases")
+
+**Data Required:** What specific data does this need and where does it live? (e.g., "Customer account data from Salesforce, billing history from SAP, knowledge base articles from Confluence")
+
+**Data Readiness:** Has the data been assessed for quality and accessibility? (e.g., "Salesforce data is clean and accessible via API. SAP billing data requires a middleware layer. Knowledge base articles need review for accuracy and completeness - estimated 3 weeks")
+
+**Success Metrics:** How will you measure success, defined before launch? (e.g., "Deflection rate >50% on routine billing inquiries, customer satisfaction score maintained above 4.2/5, average resolution time <3 minutes for deflected tickets")
+
+**Estimated Timeline:** Realistic timeline using the bands from Section 8.5? (e.g., "8–12 weeks to shadow-mode deployment, 4 additional weeks of shadow testing before autonomous deployment")
+
+**Investment Required:** What does this cost - including data preparation, integration, training, and change management, not just the tool license? (e.g., "Tool licensing: $X/year. Integration engineering: $Y one-time. Training program: $Z. Total first-year cost: $W")
+
+**Named Sponsor:** Who is the executive accountable for this outcome? (Not "the AI team" - a business leader whose performance review will reflect the results)
+
+**Risk and Mitigation:** What could go wrong and what's the plan? (e.g., "Risk: AI produces incorrect billing information. Mitigation: All responses include 'verify in your account portal' prompt; weekly accuracy audits; automatic escalation when confidence is below threshold")
+
+> ⚠️ CAUTION
+>
+> Avoid the "peanut butter" approach - spreading AI thin across thirty use cases with no depth. The Writer survey data is clear: there's a 40-percentage-point gap in success rates between companies that invest deeply in AI and those that invest lightly. Thomson Reuters found that firms with three or more AI use cases in production achieved 160% average ROI, while those with only one achieved 40% - but those three were deep, integrated deployments, not shallow experiments. Depth beats breadth. Pick fewer use cases and invest enough to actually get them to production. One use case generating measurable value is worth more than ten pilots generating impressive demos.
+
+## 9.5 What Good Use Case Selection Reveals
+
+When you run the four-step framework honestly - Objective, Challenge, Solution, Tool - two things become visible that are invisible when you start with technology.
+
+First, **tool consolidation becomes obvious.** The same knowledge management platform that powers your staff training might also enable contract review. The same analytics tool that forecasts demand might also audit purchasing history. The same LLM that assists your marketing team might also power your market research. Starting from business objectives reveals these overlaps naturally. Starting from tools creates a proliferation problem where each team buys its own AI product and the organization ends up with fifteen platforms, fifteen vendor relationships, fifteen security reviews, and no coherent strategy.
+
+Second, **non-AI solutions become visible.** Not every challenge that surfaces in the discovery workshop is best addressed by AI. A broken booking system needs replacement, not an AI wrapper. A supplier overcharging you needs contract renegotiation, not predictive analytics. A team with unclear processes needs workflow redesign, not automation of the current mess. The discipline of separating challenges from solutions prevents the hammer-nail problem where every business challenge looks like an AI opportunity because the organization just bought an AI hammer.
+
+These two outcomes - tool consolidation and honest non-AI identification - are signs that your strategy process is working. If your AI strategy exercise ends with more tools than you started with and zero non-AI recommendations, something went wrong. A good strategy tells you where AI creates value *and* where it doesn't. Both insights are equally valuable.

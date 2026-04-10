@@ -1,11 +1,9 @@
-import { unified } from "unified";
-import remarkParse from "remark-parse";
+import type { CompileOptions } from "@mdx-js/mdx";
 import remarkGfm from "remark-gfm";
-import remarkRehype from "remark-rehype";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeStringify from "rehype-stringify";
 import type { Root, Element, Text, RootContent, ElementContent } from "hast";
+import { CLAIMS, type ClaimSource } from "./claims";
 
 type CalloutType =
   | "danger"
@@ -199,32 +197,6 @@ function rehypeCallouts() {
   };
 }
 
-// Demote headings: ### -> h1 (section title), #### -> h2, etc.
-function rehypeDemoteHeadings() {
-  return (tree: Root) => {
-    function visit(node: RootContent) {
-      if (node.type === "element") {
-        const el = node as Element;
-        const headingMap: Record<string, string> = {
-          h1: "h1",
-          h2: "h2",
-          h3: "h2",
-          h4: "h3",
-          h5: "h4",
-          h6: "h5",
-        };
-        if (headingMap[el.tagName]) {
-          el.tagName = headingMap[el.tagName];
-        }
-        if ("children" in el) {
-          el.children.forEach(visit);
-        }
-      }
-    }
-    tree.children.forEach(visit);
-  };
-}
-
 const BLOCK_TAGS = new Set([
   "p", "h1", "h2", "h3", "h4", "h5", "h6",
   "li", "blockquote", "pre", "table", "tr",
@@ -260,26 +232,140 @@ function stampChildren(children: RootContent[], lineOffset: number) {
   }
 }
 
-export async function markdownToHtml(
-  markdown: string,
-  sourceLineOffset = 0,
-): Promise<string> {
-  const result = await unified()
-    .use(remarkParse)
-    .use(remarkGfm)
-    .use(remarkRehype, { allowDangerousHtml: true })
-    .use(rehypeCallouts)
-    .use(rehypeDemoteHeadings)
-    .use(rehypeSourceLines, sourceLineOffset)
-    .use(rehypeSlug)
-    .use(rehypeAutolinkHeadings, {
-      behavior: "wrap",
-      properties: {
-        className: ["heading-anchor"],
-      },
-    })
-    .use(rehypeStringify, { allowDangerousHtml: true })
-    .process(markdown);
+// [[cite:id|visible claim text]] — wraps text in hoverable span
+// [[cite:id]] — bare marker (small superscript indicator)
+const CITE_RE = /\[\[cite:([a-z0-9-]+)(?:\|([^\]]*))?\]\]/g;
 
-  return result.toString();
+function makeCiteSpan(
+  claimId: string,
+  verified: boolean,
+  children: (Text | Element)[],
+): Element {
+  const marker: Element = {
+    type: "element",
+    tagName: "sup",
+    properties: { className: ["cite-marker"] },
+    children: [{ type: "text", value: verified ? "↗" : "⚠" }],
+  };
+
+  return {
+    type: "element",
+    tagName: "span",
+    properties: {
+      className: [
+        "cite-ref",
+        verified ? "cite-verified" : "cite-unverified",
+      ],
+      dataClaim: claimId,
+      dataVerified: String(verified),
+      role: "doc-noteref",
+    },
+    children: [...children, marker],
+  };
+}
+
+function splitTextWithCitations(
+  value: string,
+  claims: Record<string, ClaimSource>,
+): (Text | Element)[] {
+  const nodes: (Text | Element)[] = [];
+  let lastIndex = 0;
+
+  for (const match of value.matchAll(CITE_RE)) {
+    const claimId = match[1];
+    const wrappedText = match[2]; // undefined for bare {{cite:id}}
+    const claim = claims[claimId];
+    const verified = claim?.verified ?? false;
+    const before = value.slice(lastIndex, match.index);
+
+    if (wrappedText !== undefined) {
+      // Wrapped syntax: text before the wrapped portion stays outside
+      if (before) {
+        nodes.push({ type: "text", value: before });
+      }
+      nodes.push(
+        makeCiteSpan(claimId, verified, [
+          { type: "text", value: wrappedText },
+        ]),
+      );
+    } else {
+      // Bare marker: insert after preceding text
+      if (before) {
+        nodes.push({ type: "text", value: before });
+      }
+      nodes.push(makeCiteSpan(claimId, verified, []));
+    }
+
+    lastIndex = match.index! + match[0].length;
+  }
+
+  const after = value.slice(lastIndex);
+  if (after) {
+    nodes.push({ type: "text", value: after });
+  }
+
+  return nodes;
+}
+
+function walkCitations(
+  children: (RootContent | ElementContent)[],
+  claims: Record<string, ClaimSource>,
+): (RootContent | ElementContent)[] {
+  const result: (RootContent | ElementContent)[] = [];
+
+  for (const child of children) {
+    if (child.type === "text") {
+      const text = child as Text;
+      if (CITE_RE.test(text.value)) {
+        CITE_RE.lastIndex = 0;
+        result.push(
+          ...(splitTextWithCitations(text.value, claims) as ElementContent[]),
+        );
+        continue;
+      }
+    }
+
+    if (child.type === "element") {
+      const el = child as Element;
+      el.children = walkCitations(
+        el.children,
+        claims,
+      ) as ElementContent[];
+    }
+
+    result.push(child);
+  }
+
+  return result;
+}
+
+function rehypeCitations() {
+  return (tree: Root) => {
+    tree.children = walkCitations(
+      tree.children,
+      CLAIMS,
+    ) as RootContent[];
+  };
+}
+
+export function createMdxOptions(sourceLineOffset = 0) {
+  return {
+    format: "mdx" as const,
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [
+      rehypeCallouts,
+      rehypeCitations,
+      [rehypeSourceLines, sourceLineOffset],
+      rehypeSlug,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: "wrap",
+          properties: {
+            className: ["heading-anchor"],
+          },
+        },
+      ],
+    ],
+  } as Omit<CompileOptions, "outputFormat" | "providerImportSource">;
 }
