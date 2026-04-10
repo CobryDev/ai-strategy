@@ -1,256 +1,266 @@
 "use client";
 
-import { useMemo, useState, type CSSProperties } from "react";
+import { useState, useCallback } from "react";
+import {
+  ScatterChart,
+  Scatter,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ReferenceArea,
+  ReferenceLine,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
-type MatrixUseCase = {
+interface UseCase {
   id: string;
-  shortLabel: string;
   name: string;
-  impact: number;
   feasibility: number;
-  quadrant:
-    | "do-first"
-    | "invest"
-    | "resources-allow"
-    | "dont-do";
+  impact: number;
+  quadrant: "do-first" | "invest" | "resources-allow" | "dont-do";
   recommendation: string;
   detail: string;
-  whyItLandsHere: string;
-};
+}
 
-const USE_CASES: MatrixUseCase[] = [
+const USE_CASES: UseCase[] = [
   {
     id: "knowledge-retrieval",
-    shortLabel: "1",
-    name: "Internal knowledge retrieval for sales and support",
-    impact: 84,
+    name: "Internal knowledge retrieval",
     feasibility: 82,
+    impact: 84,
     quadrant: "do-first",
-    recommendation: "Primary use case",
+    recommendation: "Do first",
     detail:
-      "A strong first deployment because the value is immediate, the tasks are frequent, and humans remain in the loop when the answer quality is imperfect.",
-    whyItLandsHere:
-      "Most organizations already have the source material, the integration surface is manageable, and better retrieval compounds across multiple teams.",
+      "High-frequency task, data already exists internally, humans stay in the loop. Strong first deployment.",
   },
   {
     id: "support-triage",
-    shortLabel: "2",
-    name: "Support triage and draft response assistant",
-    impact: 78,
+    name: "Support triage & draft responses",
     feasibility: 74,
+    impact: 78,
     quadrant: "do-first",
-    recommendation: "Primary use case",
+    recommendation: "Do first",
     detail:
-      "This is often the quickest path to measurable savings because ticket volume is high and the workflow is structured enough for AI to assist reliably.",
-    whyItLandsHere:
-      "The impact is high, but rollout still needs confidence thresholds, escalation logic, and clean integrations with the support stack.",
+      "Structured workflow with high ticket volume. Quickest path to measurable cost savings.",
   },
   {
     id: "contract-review",
-    shortLabel: "3",
-    name: "Contract anomaly review for legal and procurement",
+    name: "Contract anomaly review",
+    feasibility: 32,
     impact: 81,
-    feasibility: 38,
     quadrant: "invest",
     recommendation: "Invest to make feasible",
     detail:
-      "The upside is real, but the data, review standards, and governance burden usually mean this needs upfront enablement before it can scale safely.",
-    whyItLandsHere:
-      "Accuracy demands are high, the tolerance for false positives is low, and legal workflows often depend on fragmented document sources.",
+      "Real upside, but accuracy demands are high and legal document sources are usually fragmented. Needs enablement work first.",
   },
   {
     id: "marketing-drafting",
-    shortLabel: "4",
     name: "Marketing first-draft generation",
-    impact: 36,
     feasibility: 79,
+    impact: 36,
     quadrant: "resources-allow",
-    recommendation: "Useful, but not a first bet",
+    recommendation: "Do if resources allow",
     detail:
-      "Teams can get fast local productivity wins here, but the enterprise-level value is usually smaller than the excitement around the category suggests.",
-    whyItLandsHere:
-      "It is easy to trial and easy to adopt, but the strategic payoff is often modest unless content throughput is a major bottleneck.",
+      "Easy to trial, but strategic payoff is modest unless content throughput is a genuine bottleneck.",
   },
   {
     id: "legal-advice-bot",
-    shortLabel: "5",
-    name: "Autonomous legal advice bot for customers",
-    impact: 22,
+    name: "Autonomous legal advice bot",
     feasibility: 18,
+    impact: 22,
     quadrant: "dont-do",
-    recommendation: "Avoid",
+    recommendation: "Don't do",
     detail:
-      "This combines low trust tolerance, high regulatory exposure, and severe downside if the model gives a wrong answer with confidence.",
-    whyItLandsHere:
-      "Even if the concept sounds bold, the operational and legal risk is too high relative to the practical value for most organizations.",
+      "Low trust tolerance, high regulatory exposure, severe downside if the model hallucinates with confidence.",
+  },
+  {
+    id: "code-assist",
+    name: "Developer code assistance",
+    feasibility: 88,
+    impact: 72,
+    quadrant: "do-first",
+    recommendation: "Do first",
+    detail:
+      "55% of enterprise AI departmental spend. Proven gains for boilerplate, tests, and documentation. Manage review burden.",
+  },
+  {
+    id: "demand-forecasting",
+    name: "Demand forecasting",
+    feasibility: 45,
+    impact: 65,
+    quadrant: "invest",
+    recommendation: "Invest to make feasible",
+    detail:
+      "Clear cost-savings story, but requires clean historical data and integration with inventory systems.",
   },
 ];
 
-const QUADRANTS = [
-  {
-    id: "invest",
-    title: "Invest to make feasible",
-    subtitle: "High impact, low feasibility",
-  },
-  {
-    id: "do-first",
-    title: "Do first",
-    subtitle: "High impact, high feasibility",
-  },
-  {
-    id: "dont-do",
-    title: "Don't do",
-    subtitle: "Low impact, low feasibility",
-  },
-  {
-    id: "resources-allow",
-    title: "Do if resources allow",
-    subtitle: "Low impact, high feasibility",
-  },
-] as const;
+const QUADRANT_COLORS = {
+  "do-first": "rgba(0, 81, 211, 0.07)",
+  invest: "rgba(244, 180, 0, 0.07)",
+  "resources-allow": "rgba(94, 94, 98, 0.05)",
+  "dont-do": "rgba(26, 28, 32, 0.04)",
+};
 
-function pointStyle(useCase: MatrixUseCase): CSSProperties {
-  return {
-    "--matrix-x": `${useCase.feasibility}%`,
-    "--matrix-y": `${100 - useCase.impact}%`,
-  } as CSSProperties;
+const DOT_COLORS: Record<string, string> = {
+  "do-first": "#0051d3",
+  invest: "#d4960c",
+  "resources-allow": "#5e5e62",
+  "dont-do": "#7a7f8a",
+};
+
+function CustomDot(props: { cx?: number; cy?: number; payload?: UseCase; activeId?: string; [key: string]: unknown }) {
+  const { cx, cy, payload, activeId } = props;
+  if (cx == null || cy == null || !payload) return null;
+
+  const isActive = payload.id === activeId;
+  const color = DOT_COLORS[payload.quadrant] ?? "#5e5e62";
+  const r = isActive ? 9 : 7;
+
+  return (
+    <g>
+      {isActive && (
+        <circle cx={cx} cy={cy} r={16} fill={color} opacity={0.12} />
+      )}
+      <circle
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill={color}
+        stroke="#fff"
+        strokeWidth={2.5}
+        style={{ cursor: "pointer", transition: "r 0.15s ease" }}
+      />
+    </g>
+  );
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: { payload: UseCase }[];
+}
+
+function CustomTooltipContent({ active, payload }: CustomTooltipProps) {
+  if (!active || !payload?.[0]) return null;
+  const d = payload[0].payload;
+
+  return (
+    <div className="ucm-tooltip">
+      <div className="ucm-tooltip-head">
+        <span
+          className="ucm-tooltip-badge"
+          style={{ color: DOT_COLORS[d.quadrant] }}
+        >
+          {d.recommendation}
+        </span>
+      </div>
+      <div className="ucm-tooltip-title">{d.name}</div>
+      <div className="ucm-tooltip-detail">{d.detail}</div>
+      <div className="ucm-tooltip-scores">
+        <span>Impact {d.impact}</span>
+        <span>Feasibility {d.feasibility}</span>
+      </div>
+    </div>
+  );
 }
 
 export function UseCasePrioritizationMatrix() {
-  const [activeId, setActiveId] = useState(USE_CASES[0].id);
-  const activeUseCase = useMemo(
-    () => USE_CASES.find((useCase) => useCase.id === activeId) ?? USE_CASES[0],
-    [activeId],
-  );
-  const activeQuadrant = QUADRANTS.find(
-    (quadrant) => quadrant.id === activeUseCase.quadrant,
-  );
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const handleMouseEnter = useCallback((_: unknown, index: number) => {
+    setActiveId(USE_CASES[index]?.id ?? null);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setActiveId(null);
+  }, []);
 
   return (
-    <figure className="use-case-matrix">
-      <div className="use-case-matrix-shell">
-        <div className="use-case-matrix-frame">
-          <div className="use-case-matrix-axis use-case-matrix-axis-x">
-            Feasibility
-          </div>
-          <div className="use-case-matrix-axis use-case-matrix-axis-y">
-            Business impact
-          </div>
+    <figure className="ucm-figure">
+      <ResponsiveContainer width="100%" aspect={1.15}>
+        <ScatterChart margin={{ top: 24, right: 24, bottom: 48, left: 12 }}>
+          <CartesianGrid
+            stroke="rgba(26,28,32,0.06)"
+            strokeDasharray="3 3"
+          />
 
-          <div className="use-case-matrix-grid" aria-hidden="true">
-            {QUADRANTS.map((quadrant) => (
-              <div
-                key={quadrant.id}
-                className="use-case-matrix-quadrant"
-                data-quadrant={quadrant.id}
-              >
-                <div className="use-case-matrix-quadrant-label">
-                  <span>{quadrant.title}</span>
-                  <small>{quadrant.subtitle}</small>
-                </div>
-              </div>
-            ))}
-            <div className="use-case-matrix-midline use-case-matrix-midline-x" />
-            <div className="use-case-matrix-midline use-case-matrix-midline-y" />
-          </div>
+          {/* quadrant backgrounds */}
+          <ReferenceArea x1={0} x2={50} y1={50} y2={100} fill={QUADRANT_COLORS["invest"]} fillOpacity={1} ifOverflow="hidden" label={{ value: "Invest to make feasible", position: "insideTopLeft", style: { fontSize: 11, fill: "#92400e", fontFamily: "var(--font-label), var(--font-sans), sans-serif", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.04em" }, offset: 12 }} />
+          <ReferenceArea x1={50} x2={100} y1={50} y2={100} fill={QUADRANT_COLORS["do-first"]} fillOpacity={1} ifOverflow="hidden" label={{ value: "Do first", position: "insideTopRight", style: { fontSize: 11, fill: "#0051d3", fontFamily: "var(--font-label), var(--font-sans), sans-serif", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.04em" }, offset: 12 }} />
+          <ReferenceArea x1={0} x2={50} y1={0} y2={50} fill={QUADRANT_COLORS["dont-do"]} fillOpacity={1} ifOverflow="hidden" label={{ value: "Don't do", position: "insideBottomLeft", style: { fontSize: 11, fill: "#5e5e62", fontFamily: "var(--font-label), var(--font-sans), sans-serif", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.04em" }, offset: 12 }} />
+          <ReferenceArea x1={50} x2={100} y1={0} y2={50} fill={QUADRANT_COLORS["resources-allow"]} fillOpacity={1} ifOverflow="hidden" label={{ value: "Do if resources allow", position: "insideBottomRight", style: { fontSize: 11, fill: "#5e5e62", fontFamily: "var(--font-label), var(--font-sans), sans-serif", fontWeight: 700, textTransform: "uppercase" as const, letterSpacing: "0.04em" }, offset: 12 }} />
 
-          <div className="use-case-matrix-points">
-            {USE_CASES.map((useCase) => (
-              <button
-                key={useCase.id}
-                type="button"
-                className="use-case-matrix-point"
-                data-quadrant={useCase.quadrant}
-                data-active={activeUseCase.id === useCase.id}
-                style={pointStyle(useCase)}
-                onMouseEnter={() => setActiveId(useCase.id)}
-                onFocus={() => setActiveId(useCase.id)}
-                onClick={() => setActiveId(useCase.id)}
-                aria-label={`${useCase.name}. Impact ${useCase.impact}. Feasibility ${useCase.feasibility}.`}
-              >
-                <span className="use-case-matrix-dot">
-                  {useCase.shortLabel}
-                </span>
-              </button>
-            ))}
-          </div>
+          <ReferenceLine x={50} stroke="rgba(26,28,32,0.12)" strokeWidth={1} />
+          <ReferenceLine y={50} stroke="rgba(26,28,32,0.12)" strokeWidth={1} />
 
-          <div
-            className="use-case-matrix-scale use-case-matrix-scale-x"
-            aria-hidden="true"
-          >
-            <span>Low</span>
-            <span>High</span>
-          </div>
-          <div
-            className="use-case-matrix-scale use-case-matrix-scale-y"
-            aria-hidden="true"
-          >
-            <span>High</span>
-            <span>Low</span>
-          </div>
-        </div>
+          <XAxis
+            type="number"
+            dataKey="feasibility"
+            domain={[0, 100]}
+            ticks={[0, 25, 50, 75, 100]}
+            tick={{ fontSize: 11, fill: "#5e5e62", fontFamily: "var(--font-label), var(--font-sans), sans-serif" }}
+            tickLine={false}
+            axisLine={{ stroke: "rgba(26,28,32,0.12)" }}
+            label={{
+              value: "FEASIBILITY",
+              position: "insideBottom",
+              offset: -32,
+              style: {
+                fontSize: 11,
+                fill: "#5e5e62",
+                fontFamily: "var(--font-label), var(--font-sans), sans-serif",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+              },
+            }}
+          />
 
-        <aside
-          className="use-case-matrix-modal"
-          data-quadrant={activeUseCase.quadrant}
-          aria-live="polite"
-        >
-          <div className="use-case-matrix-modal-labels">
-            <span className="use-case-matrix-modal-step">
-              Point {activeUseCase.shortLabel}
-            </span>
-            <span className="use-case-matrix-modal-quadrant">
-              {activeQuadrant?.title}
-            </span>
-          </div>
+          <YAxis
+            type="number"
+            dataKey="impact"
+            domain={[0, 100]}
+            ticks={[0, 25, 50, 75, 100]}
+            tick={{ fontSize: 11, fill: "#5e5e62", fontFamily: "var(--font-label), var(--font-sans), sans-serif" }}
+            tickLine={false}
+            axisLine={{ stroke: "rgba(26,28,32,0.12)" }}
+            label={{
+              value: "BUSINESS IMPACT",
+              angle: -90,
+              position: "insideLeft",
+              offset: 4,
+              style: {
+                fontSize: 11,
+                fill: "#5e5e62",
+                fontFamily: "var(--font-label), var(--font-sans), sans-serif",
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                textAnchor: "middle",
+              },
+            }}
+          />
 
-          <h3 className="use-case-matrix-modal-title">
-            {activeUseCase.name}
-          </h3>
+          <Tooltip
+            content={<CustomTooltipContent />}
+            cursor={false}
+            wrapperStyle={{ zIndex: 50 }}
+          />
 
-          <p className="use-case-matrix-modal-summary">
-            {activeUseCase.recommendation}
-          </p>
+          <Scatter
+            data={USE_CASES}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            shape={(props: any) => (
+              <CustomDot {...props} activeId={activeId ?? undefined} />
+            )}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          />
+        </ScatterChart>
+      </ResponsiveContainer>
 
-          <div className="use-case-matrix-modal-metrics">
-            <div className="use-case-matrix-metric">
-              <div className="use-case-matrix-metric-head">
-                <span>Impact</span>
-                <strong>{activeUseCase.impact}</strong>
-              </div>
-              <div className="use-case-matrix-metric-bar">
-                <span style={{ width: `${activeUseCase.impact}%` }} />
-              </div>
-            </div>
-            <div className="use-case-matrix-metric">
-              <div className="use-case-matrix-metric-head">
-                <span>Feasibility</span>
-                <strong>{activeUseCase.feasibility}</strong>
-              </div>
-              <div className="use-case-matrix-metric-bar">
-                <span style={{ width: `${activeUseCase.feasibility}%` }} />
-              </div>
-            </div>
-          </div>
-
-          <p className="use-case-matrix-modal-body">
-            {activeUseCase.detail}
-          </p>
-          <p className="use-case-matrix-modal-why">
-            {activeUseCase.whyItLandsHere}
-          </p>
-
-          <div className="use-case-matrix-modal-note">
-            Hover or tap another point to inspect a different use case.
-          </div>
-        </aside>
-      </div>
-
-      <figcaption className="use-case-matrix-caption">
-        Example scoring for common enterprise AI use cases. Use this to
-        pressure-test candidate ideas before you commit budget, integration
-        time, and executive attention.
+      <figcaption className="ucm-caption">
+        Hover or tap a point to see the rationale. Top-right quadrant represents
+        the highest-priority use cases.
       </figcaption>
     </figure>
   );
