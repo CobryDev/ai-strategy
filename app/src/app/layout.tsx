@@ -5,6 +5,8 @@ import {
   Lexend,
   Plus_Jakarta_Sans,
 } from "next/font/google";
+import Script from "next/script";
+import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -38,14 +40,51 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "The Enterprise Guide to AI Adoption",
-  description:
-    "A comprehensive, actionable guide to building, governing, and scaling AI across your organization. Opinionated. Practical. Honest.",
+  metadataBase: new URL(siteConfig.url),
+  title: siteConfig.title,
+  description: siteConfig.description,
+  applicationName: siteConfig.name,
+  alternates: {
+    canonical: "/",
+  },
+  keywords: [...siteConfig.keywords],
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: "The Enterprise Guide to AI Adoption",
-    description:
-      "Cut through the noise. A comprehensive guide for the messy middle of enterprise AI adoption.",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: "/",
+    siteName: siteConfig.name,
+    locale: "en_US",
     type: "article",
+    images: [
+      {
+        url: siteConfig.socialImagePath,
+        alt: `${siteConfig.name} logo`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.socialImagePath],
   },
 };
 
@@ -60,7 +99,14 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${newsreader.variable} ${sourceSerif.variable} ${lexend.variable} ${jakarta.variable} h-full`}
     >
-      <body className="min-h-full bg-surface antialiased">{children}</body>
+      <body className="min-h-full bg-surface antialiased">
+        <Script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="iSECV4eHJ+EcG+w85gsfrA"
+          strategy="afterInteractive"
+        />
+        {children}
+      </body>
     </html>
   );
 }

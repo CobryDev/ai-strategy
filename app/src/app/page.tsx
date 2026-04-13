@@ -12,19 +12,71 @@ import { SelectionBlameCard } from "@/components/SelectionBlameCard";
 import { CitationTooltip } from "@/components/CitationTooltip";
 import { CalloutLegend } from "@/components/CalloutLegend";
 import { CLAIMS } from "@/lib/claims";
+import { getSocialImageUrl, siteConfig } from "@/lib/site";
 
 export default async function Home() {
   const sections = parseContentIntoSections();
   const toc = getTableOfContents();
   const revisionCount = getContentRevisionCount();
+  const contentSections = sections.filter((section) => section.level !== "part");
+  const lastModified = contentSections.reduce(
+    (latest, section) =>
+      section.blame.lastModified > latest ? section.blame.lastModified : latest,
+    new Date(0),
+  );
 
-  // Extract title and subtitle from first lines
-  const title = "The Enterprise Guide to AI Adoption";
+  const title = siteConfig.title;
   const subtitle =
     "A comprehensive, actionable guide to building, governing, and scaling AI across your organization.";
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: siteConfig.name,
+      url: siteConfig.url,
+      description: siteConfig.description,
+      inLanguage: "en",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: siteConfig.title,
+      description: siteConfig.description,
+      url: siteConfig.url,
+      mainEntityOfPage: siteConfig.url,
+      inLanguage: "en",
+      isAccessibleForFree: true,
+      image: [getSocialImageUrl()],
+      dateModified: lastModified.toISOString(),
+      author: {
+        "@type": "Organization",
+        name: siteConfig.name,
+        url: siteConfig.url,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: siteConfig.name,
+        url: siteConfig.url,
+        logo: {
+          "@type": "ImageObject",
+          url: getSocialImageUrl(),
+        },
+      },
+      articleSection: contentSections.map((section) =>
+        section.number ? `${section.number}. ${section.title}` : section.title,
+      ),
+      about: siteConfig.keywords,
+    },
+  ];
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+        }}
+      />
       <ReadingProgress />
       <Header revisionCount={revisionCount} />
       <SelectionBlameCard />

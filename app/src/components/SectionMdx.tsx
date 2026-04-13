@@ -7,11 +7,37 @@ interface Props {
   section: Section;
 }
 
+function demoteMarkdownHeadings(source: string) {
+  let insideFence = false;
+
+  return source
+    .split("\n")
+    .map((line) => {
+      if (/^(```|~~~)/.test(line.trim())) {
+        insideFence = !insideFence;
+        return line;
+      }
+
+      if (insideFence) {
+        return line;
+      }
+
+      const match = line.match(/^(#{1,5})(\s+.*)$/);
+      if (!match) {
+        return line;
+      }
+
+      return `${match[1]}#${match[2]}`;
+    })
+    .join("\n");
+}
+
 export async function SectionMdx({ section }: Props) {
-  const source = section.content.replace(
-    /\{\{cite:([^}]+)\}\}/g,
-    "[[cite:$1]]",
-  ).replace(/<(?=\d)/g, "&lt;");
+  const source = demoteMarkdownHeadings(
+    section.content
+      .replace(/\{\{cite:([^}]+)\}\}/g, "[[cite:$1]]")
+      .replace(/<(?=\d)/g, "&lt;"),
+  );
 
   const { content } = await compileMDX({
     source,

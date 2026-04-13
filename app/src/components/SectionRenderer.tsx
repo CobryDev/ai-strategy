@@ -8,20 +8,11 @@ interface Props {
   children?: ReactNode;
 }
 
-function timeAgo(date: Date): string {
-  const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (seconds < 60) return "just now";
-  const minutes = Math.floor(seconds / 60);
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days < 30) return `${days}d ago`;
-  const months = Math.floor(days / 30);
-  if (months < 12) return `${months}mo ago`;
-  const years = Math.floor(days / 365);
-  return `${years}y ago`;
-}
+const DATE_FORMATTER = new Intl.DateTimeFormat("en", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
 
 export function SectionRenderer({ section, children }: Props) {
   if (section.level === "part") {
@@ -38,7 +29,12 @@ export function SectionRenderer({ section, children }: Props) {
 
   const editUrl = getGitHubEditUrl(section.sourcePath);
   const { blame } = section;
-  const otherContributors = blame.contributors.length - 1;
+  const contributorNames = blame.contributors.map((contributor) => contributor.name);
+  const hasContributors = contributorNames.length > 0;
+  const formattedLastModified =
+    blame.lastModified.getTime() > 0
+      ? DATE_FORMATTER.format(blame.lastModified)
+      : "Unknown";
 
   const { readingTime, commonQuestions } = section;
   const showPreamble = readingTime > 0 || commonQuestions.length > 0;
@@ -81,18 +77,25 @@ export function SectionRenderer({ section, children }: Props) {
       )}
       <div className="prose">{children}</div>
       <div className="section-meta">
-        <span className="section-blame">
-          {blame.primaryAuthor}
-          {otherContributors > 0 && (
-            <span className="section-blame-extra">
-              {" "}+{otherContributors}
-            </span>
-          )}
-          <span className="section-blame-sep" aria-hidden="true">·</span>
-          <time dateTime={blame.lastModified.toISOString()}>
-            {timeAgo(blame.lastModified)}
+        <div className="section-attribution">
+          <span className="section-meta-label">Contributors</span>
+          <span className="section-blame">
+            {hasContributors ? contributorNames.join(", ") : "Unknown"}
+          </span>
+        </div>
+        <div className="section-attribution">
+          <span className="section-meta-label">Last edited</span>
+          <time
+            className="section-last-edited"
+            dateTime={
+              blame.lastModified.getTime() > 0
+                ? blame.lastModified.toISOString()
+                : undefined
+            }
+          >
+            {formattedLastModified}
           </time>
-        </span>
+        </div>
         <EditOnGitHub url={editUrl} />
       </div>
     </article>
