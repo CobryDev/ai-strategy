@@ -1,4 +1,12 @@
 # dependencies
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 app/node_modules/
 app/.pnp
 app/.pnp.*
@@ -9,13 +17,18 @@ app/.yarn/*
 !app/.yarn/versions
 
 # next.js
+.next/
+out/
 app/.next/
 app/out/
 
 # production
+build/
 app/build/
 
 # env files
+.env*
+!.env.example
 app/.env*
 !app/.env.example
 
@@ -30,10 +43,12 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # vercel
+.vercel
 app/.vercel
 
 # typescript
 *.tsbuildinfo
+next-env.d.ts
 app/next-env.d.ts
 
 # cursor / tooling

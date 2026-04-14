@@ -1,9 +1,9 @@
 import { execSync } from "child_process";
 import { createHash } from "crypto";
-import path from "path";
 
-const ROOT_DIR = path.join(process.cwd(), "..");
-const CONTENT_ROOT = "app/content";
+const ROOT_DIR = process.cwd();
+const CONTENT_ROOT = "content";
+const GIT_MAX_BUFFER = 10 * 1024 * 1024;
 
 export interface LineBlameDatum {
   author: string;
@@ -21,6 +21,20 @@ export interface BlameChunk {
   t: number; // unix timestamp
   m: string; // commit message (first line)
   av: string; // avatar URL (Gravatar)
+}
+
+export interface RecentCommit {
+  sha: string;
+  shortSha: string;
+  author: string;
+  summary: string;
+  timestamp: number;
+}
+
+export interface CommitPathChange {
+  status: string;
+  previousPath: string | null;
+  currentPath: string | null;
 }
 
 function gravatarUrl(email: string): string {
@@ -41,14 +55,52 @@ function normalizePath(targetPath: string): string {
   return trimmed.length > 0 ? trimmed : CONTENT_ROOT;
 }
 
+function quoteShellArg(value: string): string {
+  return JSON.stringify(value);
+}
+
+function runGit(command: string): string {
+  return execSync(command, {
+    cwd: ROOT_DIR,
+    encoding: "utf-8",
+    maxBuffer: GIT_MAX_BUFFER,
+  });
+}
+
+function parseRecentCommitRecords(output: string): RecentCommit[] {
+  return output
+    .split("\x1e")
+    .map((record) => record.trim())
+    .filter(Boolean)
+    .map((record) => {
+      const [sha, author, timestamp, summary] = record.split("\x1f");
+
+      return {
+        sha,
+        shortSha: sha.slice(0, 7),
+        author,
+        summary,
+        timestamp: Number(timestamp),
+      };
+    });
+}
+
+export function getAllCommits(targetPath = CONTENT_ROOT): RecentCommit[] {
+  try {
+    const output = runGit(
+      `git log --pretty=format:%H%x1f%an%x1f%at%x1f%s%x1e -- ${quoteShellArg(normalizePath(targetPath))} 2>/dev/null`,
+    );
+
+    return parseRecentCommitRecords(output);
+  } catch {
+    return [];
+  }
+}
+
 export function getRevisionCount(targetPath = CONTENT_ROOT): number {
   try {
-    const output = execSync(
-      `git log --oneline -- "${normalizePath(targetPath)}" 2>/dev/null`,
-      {
-        cwd: ROOT_DIR,
-        encoding: "utf-8",
-      },
+    const output = runGit(
+      `git log --oneline -- ${quoteShellArg(normalizePath(targetPath))} 2>/dev/null`,
     );
     return output.trim().split("\n").filter(Boolean).length;
   } catch {
@@ -56,17 +108,96 @@ export function getRevisionCount(targetPath = CONTENT_ROOT): number {
   }
 }
 
+export function getRecentCommits(
+  targetPath = CONTENT_ROOT,
+  limit = 3,
+): RecentCommit[] {
+  try {
+    const output = runGit(
+      `git log -n ${limit} --pretty=format:%H%x1f%an%x1f%at%x1f%s%x1e -- ${quoteShellArg(normalizePath(targetPath))} 2>/dev/null`,
+    );
+
+    return parseRecentCommitRecords(output);
+  } catch {
+    return [];
+  }
+}
+
+export function getFirstParentSha(sha: string): string | null {
+  try {
+    const output = runGit(
+      `git rev-list --parents -n 1 ${quoteShellArg(sha)} 2>/dev/null`,
+    ).trim();
+    const [, firstParent] = output.split(" ");
+    return firstParent || null;
+  } catch {
+    return null;
+  }
+}
+
+export function getChangedPaths(
+  currentRevision: string,
+  previousRevision: string | null,
+  targetPath = CONTENT_ROOT,
+): CommitPathChange[] {
+  try {
+    const output = previousRevision
+      ? runGit(
+          `git diff --name-status --find-renames ${quoteShellArg(previousRevision)} ${quoteShellArg(currentRevision)} -- ${quoteShellArg(normalizePath(targetPath))} 2>/dev/null`,
+        )
+      : runGit(
+          `git diff-tree --root --find-renames --no-commit-id --name-status -r ${quoteShellArg(currentRevision)} -- ${quoteShellArg(normalizePath(targetPath))} 2>/dev/null`,
+        );
+
+    return output
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const [status, ...paths] = line.split("\t");
+
+        if (status.startsWith("R") || status.startsWith("C")) {
+          const [previousPath, currentPath] = paths;
+          return {
+            status,
+            previousPath: previousPath || null,
+            currentPath: currentPath || null,
+          };
+        }
+
+        const [path] = paths;
+        const normalizedPath = path || null;
+
+        return {
+          status,
+          previousPath: status.startsWith("A") ? null : normalizedPath,
+          currentPath: status.startsWith("D") ? null : normalizedPath,
+        };
+      });
+  } catch {
+    return [];
+  }
+}
+
+export function readFileAtRevision(
+  revision: string,
+  targetPath: string,
+): string | null {
+  try {
+    return runGit(
+      `git show ${quoteShellArg(`${revision}:${targetPath}`)} 2>/dev/null`,
+    );
+  } catch {
+    return null;
+  }
+}
+
 export function getBlameData(targetPath: string): Map<number, LineBlameDatum> {
   const blameMap = new Map<number, LineBlameDatum>();
 
   try {
-    const output = execSync(
-      `git blame --porcelain -- "${normalizePath(targetPath)}" 2>/dev/null`,
-      {
-      cwd: ROOT_DIR,
-      encoding: "utf-8",
-      maxBuffer: 10 * 1024 * 1024,
-      },
+    const output = runGit(
+      `git blame --porcelain -- ${quoteShellArg(normalizePath(targetPath))} 2>/dev/null`,
     );
 
     const lines = output.split("\n");

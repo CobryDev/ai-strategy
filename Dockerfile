@@ -1,6 +1,6 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
-COPY app/package.json app/package-lock.json ./
+COPY package.json package-lock.json ./
 RUN npm ci
 
 FROM node:20-alpine AS builder
@@ -9,8 +9,7 @@ WORKDIR /repo
 
 COPY .git .git
 
-WORKDIR /repo/app
-COPY app/ .
+COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
 ENV NEXT_PUBLIC_GITHUB_REPO=CobryDev/ai-strategy
@@ -29,9 +28,9 @@ ENV HOSTNAME=0.0.0.0
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-COPY --from=builder /repo/app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /repo/app/.next/standalone/ ./
-COPY --from=builder --chown=nextjs:nodejs /repo/app/.next/static ./.next/static
+COPY --from=builder /repo/public ./public
+COPY --from=builder --chown=nextjs:nodejs /repo/.next/standalone/ ./
+COPY --from=builder --chown=nextjs:nodejs /repo/.next/static ./.next/static
 
 USER nextjs
 EXPOSE 8080

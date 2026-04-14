@@ -2,6 +2,8 @@ import {
   parseContentIntoSections,
   getTableOfContents,
   getContentRevisionCount,
+  getGitHubHistoryUrl,
+  getRecentContentCommits,
 } from "@/lib/content";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { TableOfContents } from "@/components/TableOfContents";
@@ -18,6 +20,8 @@ export default async function Home() {
   const sections = parseContentIntoSections();
   const toc = getTableOfContents();
   const revisionCount = getContentRevisionCount();
+  const recentCommits = getRecentContentCommits(3);
+  const historyUrl = getGitHubHistoryUrl();
   const contentSections = sections.filter((section) => section.level !== "part");
   const lastModified = contentSections.reduce(
     (latest, section) =>
@@ -78,7 +82,11 @@ export default async function Home() {
         }}
       />
       <ReadingProgress />
-      <Header revisionCount={revisionCount} />
+      <Header
+        revisionCount={revisionCount}
+        recentCommits={recentCommits}
+        historyUrl={historyUrl}
+      />
       <SelectionBlameCard />
       <CitationTooltip claims={CLAIMS} />
       <CalloutLegend />

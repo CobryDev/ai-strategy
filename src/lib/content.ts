@@ -4,17 +4,21 @@ import matter from "gray-matter";
 import { globSync } from "glob";
 import {
   type BlameChunk,
+  type RecentCommit,
   type SectionBlame,
+  getAllCommits,
   getBlameChunks,
   getBlameData,
-  getRevisionCount,
+  getChangedPaths,
+  getFirstParentSha,
+  readFileAtRevision,
   getSectionBlame,
 } from "./git";
 import { SECTION_QUESTIONS } from "./questions";
 
 const WORDS_PER_MINUTE = 238;
 const CONTENT_DIR = path.join(process.cwd(), "content");
-const REPO_ROOT = path.join(process.cwd(), "..");
+const REPO_ROOT = process.cwd();
 
 type SectionLevel = "part" | "section" | "appendix";
 
@@ -60,6 +64,14 @@ interface ContentRecord {
   order: number;
   section: Section;
 }
+
+const CONTENT_CHANGE_COMMITS_CACHE = new Map<
+  string,
+  Array<Pick<RecentCommit, "sha" | "shortSha" | "author" | "summary"> & {
+    committedAt: string;
+  }>
+>();
+const SECTION_BODY_CACHE = new Map<string, string>();
 
 function wordCount(text: string): number {
   return text
@@ -116,6 +128,77 @@ function getSourceLineOffset(raw: string): number {
   return index;
 }
 
+function getSectionBody(raw: string): string {
+  return matter(raw).content.replace(/^\n+/, "");
+}
+
+function isTrackedSectionPath(filePath: string | null): filePath is string {
+  return filePath !== null && /^content\/.+\/section\.mdx$/.test(filePath);
+}
+
+function getSectionBodyAtRevision(
+  revision: string | null,
+  sourcePath: string | null,
+): string {
+  if (!revision || !isTrackedSectionPath(sourcePath)) {
+    return "";
+  }
+
+  const cacheKey = `${revision}:${sourcePath}`;
+  const cachedBody = SECTION_BODY_CACHE.get(cacheKey);
+  if (cachedBody !== undefined) {
+    return cachedBody;
+  }
+
+  const raw = readFileAtRevision(revision, sourcePath);
+  const body = raw ? getSectionBody(raw) : "";
+  SECTION_BODY_CACHE.set(cacheKey, body);
+  return body;
+}
+
+function commitChangesRenderedContent(commit: RecentCommit): boolean {
+  const parentSha = getFirstParentSha(commit.sha);
+  const changedPaths = getChangedPaths(commit.sha, parentSha, "content");
+
+  return changedPaths.some(({ previousPath, currentPath }) => {
+    if (
+      !isTrackedSectionPath(previousPath) &&
+      !isTrackedSectionPath(currentPath)
+    ) {
+      return false;
+    }
+
+    const previousBody = getSectionBodyAtRevision(parentSha, previousPath);
+    const currentBody = getSectionBodyAtRevision(commit.sha, currentPath);
+    return previousBody !== currentBody;
+  });
+}
+
+function getContentChangeCommits(): Array<
+  Pick<RecentCommit, "sha" | "shortSha" | "author" | "summary"> & {
+    committedAt: string;
+  }
+> {
+  const cacheKey = process.cwd();
+  const cachedCommits = CONTENT_CHANGE_COMMITS_CACHE.get(cacheKey);
+  if (cachedCommits) {
+    return cachedCommits;
+  }
+
+  const commits = getAllCommits("content")
+    .filter(commitChangesRenderedContent)
+    .map((commit) => ({
+      sha: commit.sha,
+      shortSha: commit.shortSha,
+      author: commit.author,
+      summary: commit.summary,
+      committedAt: new Date(commit.timestamp * 1000).toISOString(),
+    }));
+
+  CONTENT_CHANGE_COMMITS_CACHE.set(cacheKey, commits);
+  return commits;
+}
+
 function toRepoRelativePath(filePath: string): string {
   return path.relative(REPO_ROOT, filePath).split(path.sep).join("/");
 }
@@ -163,6 +246,7 @@ function readContentRecords(): ContentRecord[] {
       const blameMap = getBlameData(sourcePath);
       const totalLines = raw.split("\n").length;
       const sourceLineOffset = getSourceLineOffset(raw);
+      const contentStartLine = Math.min(totalLines, sourceLineOffset + 1);
       const number = String(frontmatter.number ?? "");
       const title = String(frontmatter.title ?? "");
       const partId = String(frontmatter.partId ?? "");
@@ -194,8 +278,8 @@ function readContentRecords(): ContentRecord[] {
           readingTime,
           commonQuestions: SECTION_QUESTIONS[number] ?? [],
           subsections: extractSubsections(content),
-          blame: getSectionBlame(blameMap, 1, totalLines),
-          blameChunks: getBlameChunks(blameMap, 1, totalLines),
+          blame: getSectionBlame(blameMap, contentStartLine, totalLines),
+          blameChunks: getBlameChunks(blameMap, contentStartLine, totalLines),
         },
       };
     })
@@ -240,9 +324,17 @@ export function getGitHubEditUrl(sourcePath: string): string {
 
 export function getGitHubHistoryUrl(): string {
   const repo = process.env.NEXT_PUBLIC_GITHUB_REPO || "CobryDev/ai-strategy";
-  return `https://github.com/${repo}/commits/main/app/content`;
+  return `https://github.com/${repo}/commits/main/content`;
 }
 
 export function getContentRevisionCount(): number {
-  return getRevisionCount("app/content");
+  return getContentChangeCommits().length;
+}
+
+export function getRecentContentCommits(limit = 3): Array<
+  Pick<RecentCommit, "sha" | "shortSha" | "author" | "summary"> & {
+    committedAt: string;
+  }
+> {
+  return getContentChangeCommits().slice(0, limit);
 }
