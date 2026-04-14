@@ -22,6 +22,22 @@ const typeMatch = commitMessage.match(/^([a-z]+)(?:\([^()\r\n]+\))?!?:\s.+$/);
 const commitType = typeMatch?.[1] ?? null;
 const isPlainContentCommit = /^content:\s.+$/.test(commitMessage);
 
+function printError(lines) {
+  console.error("");
+  for (const line of lines) {
+    console.error(line);
+  }
+  console.error("");
+}
+
+function formatFileList(files, limit = 8) {
+  if (files.length <= limit) {
+    return files.join(", ");
+  }
+
+  return `${files.slice(0, limit).join(", ")}, and ${files.length - limit} more`;
+}
+
 if (!commitType) {
   process.exit(0);
 }
@@ -41,9 +57,13 @@ const nonContentFiles = stagedFiles.filter((filePath) => !isContentFile(filePath
 
 if (contentFiles.length === 0) {
   if (commitType === "content") {
-    console.error(
-      "Invalid commit message: `content:` is reserved for commits that only edit files under `content/`.",
-    );
+    printError([
+      "Commit rejected: `content:` is only for commits that stage files under `content/`.",
+      `Current message: ${commitMessage}`,
+      "What to do next:",
+      '- If this is a code or config change, use a normal type like `feat:`, `fix:`, `docs:`, or `refactor:`.',
+      '- If this should be a content commit, stage at least one file from `content/` and try again.',
+    ]);
     process.exit(1);
   }
 
@@ -51,25 +71,37 @@ if (contentFiles.length === 0) {
 }
 
 if (nonContentFiles.length > 0) {
-  console.error(
-    "Content commits must be isolated. Commit changes under `content/` separately from other files.",
-  );
-  console.error(`Mixed files: ${nonContentFiles.join(", ")}`);
+  printError([
+    "Commit rejected: `content:` commits must only include files from `content/`.",
+    `Staged non-content files: ${formatFileList(nonContentFiles)}`,
+    "What to do next:",
+    "- Split this into two commits.",
+    '- Commit content files with `content: your message`.',
+    '- Commit the remaining files with a normal type like `feat:`, `fix:`, `docs:`, or `refactor:`.',
+  ]);
   process.exit(1);
 }
 
 if (commitType !== "content") {
-  console.error(
-    "Commits that edit files under `content/` must use the Conventional Commit type `content:`.",
-  );
-  console.error("Example: content: update governance section");
+  printError([
+    "Commit rejected: staged files under `content/` require the `content:` commit type.",
+    `Current message: ${commitMessage}`,
+    `Detected content files: ${formatFileList(contentFiles)}`,
+    "Use this format instead:",
+    "content: update governance section",
+  ]);
   process.exit(1);
 }
 
 if (!isPlainContentCommit) {
-  console.error(
-    "Content commits must use the plain `content:` prefix without a scope or breaking-change marker.",
-  );
-  console.error("Example: content: update governance section");
+  printError([
+    "Commit rejected: content commits must use the plain `content:` prefix.",
+    `Current message: ${commitMessage}`,
+    "Allowed example:",
+    "content: update governance section",
+    "Not allowed:",
+    "content(scope): update governance section",
+    "content!: update governance section",
+  ]);
   process.exit(1);
 }
